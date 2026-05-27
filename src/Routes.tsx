@@ -1,27 +1,11 @@
-import { Link, Route, Routes } from "react-router";
+import { Route, Routes } from "react-router";
+import Home from "./components/pages/home/Home";
 import CharacterPage from "./components/pages/trpg/Character";
 import CreateCharacter from "./components/pages/trpg/CreateCharacter";
 import CreateTeam from "./components/pages/trpg/CreateTeam";
 import HearthstonePrinter from "./components/pages/trpg/HearthstonePrinter";
 import Team from "./components/pages/trpg/Team";
 import Teams from "./components/pages/trpg/Teams";
-
-function Home() {
-  return (
-    <main className="page trpg-home">
-      <section className="trpg-home__panel">
-        <p className="trpg-home__eyebrow">TRPG tools</p>
-        <h1>Tabletop Companion</h1>
-        <nav className="trpg-home__links" aria-label="TRPG navigation">
-          <Link to="/teams">Teams</Link>
-          <Link to="/characters/new">Create Character</Link>
-          <Link to="/teams/create">Create Team</Link>
-          <Link to="/hearthstone-printer">Hearthstone Printer</Link>
-        </nav>
-      </section>
-    </main>
-  );
-}
 
 export default function AppRoutes() {
   return (

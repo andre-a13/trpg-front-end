@@ -6,6 +6,8 @@ import "./character.scss";
 import axios from "axios";
 import type Character from "../../../models/character";
 
+const DEFAULT_DOCUMENT_TITLE = "Arnaud - A Jeu de rôle";
+
 type Props = {
   presetSlug?: string;
   portraitUrl?: string;
@@ -49,6 +51,17 @@ export default function CharacterPage({ presetSlug, portraitUrl }: Props) {
   useEffect(() => {
     fetchCharacter();
   }, [fetchCharacter]);
+
+  useEffect(() => {
+    if (!char?.name) return;
+
+    const firstCompanyName = char.teams[0]?.name;
+    document.title = firstCompanyName ? `${char.name} - ${firstCompanyName}` : char.name;
+
+    return () => {
+      document.title = DEFAULT_DOCUMENT_TITLE;
+    };
+  }, [char]);
 
   const computedPortrait = portraitUrl ?? (slug ? `/assets/${slug}_jdr.jpg` : undefined);
 

@@ -1,0 +1,20 @@
+{
+  "common": {
+    "language": {
+      "current": "Current language",
+      "switchTo": "Switch to {{language}}",
+      "fr": "French",
+      "en": "English"
+    }
+  },
+  "home": {
+    "server": {
+      "checking": "Checking server",
+      "online": "Server online",
+      "offline": "Server offline"
+    },
+    "eyebrow": "Tabletop companion",
+    "title": "Enter the country of adventures and dreams",
+    "intro": "Gather your party, shape your heroes, and keep every tale close at hand while the next chapter waits beyond the mist."
+  }
+}

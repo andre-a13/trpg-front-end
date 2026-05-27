@@ -1,0 +1,17 @@
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        VITE_TRPG_API_URL: ${VITE_TRPG_API_URL:-https://api.arnaud-a.dev}
+    container_name: trpg-frontend-app
+    restart: unless-stopped
+    expose:
+      - "80"
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
+    name: web

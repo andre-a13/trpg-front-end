@@ -1,0 +1,20 @@
+{
+  "common": {
+    "language": {
+      "current": "Langue actuelle",
+      "switchTo": "Passer en {{language}}",
+      "fr": "Français",
+      "en": "Anglais"
+    }
+  },
+  "home": {
+    "server": {
+      "checking": "Vérification du serveur",
+      "online": "Serveur en ligne",
+      "offline": "Serveur hors ligne"
+    },
+    "eyebrow": "Compagnon d'aventure",
+    "title": "Entrez dans le royaume des récits et des légendes",
+    "intro": "Rassemblez votre compagnie, façonnez vos héros et conservez chaque aventure à portée de main, tandis qu’un nouveau chapitre se dessine au-delà de la brume."
+  }
+}
