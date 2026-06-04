@@ -8,12 +8,12 @@
       "delete": "Supprimer",
       "edit": "Modifier",
       "open": "Ouvrir",
-      "returnHome": "Retourner à l'accueil",
+      "returnHome": "Revenir à l'accueil",
       "save": "Enregistrer"
     },
     "errors": {
       "network": "Erreur réseau",
-      "status": "Erreur : {{status}} {{message}}",
+      "status": "Erreur {{status}} : {{message}}",
       "wentWrong": "Une erreur est survenue"
     },
     "language": {
@@ -22,7 +22,7 @@
       "fr": "français",
       "en": "anglais"
     },
-    "loading": "Chargement..."
+    "loading": "Chargement…"
   },
   "home": {
     "server": {
@@ -31,23 +31,23 @@
       "offline": "Serveur hors ligne"
     },
     "eyebrow": "Compagnon d'aventure",
-    "title": "Entrez dans le royaume des récits et des légendes",
-    "intro": "Rassemblez votre compagnie, façonnez vos héros et gardez chaque aventure à portée de main pendant que le prochain chapitre attend au-delà de la brume.",
+    "title": "Entrez dans un royaume de récits et de légendes",
+    "intro": "Rassemblez votre compagnie, façonnez vos héros et gardez chaque aventure à portée de main pendant que le prochain chapitre vous attend au-delà de la brume.",
     "actions": {
-      "openTable": "Ouvrir la table",
-      "login": "Connexion",
-      "logout": "Déconnexion {{username}}",
-      "register": "Inscription"
+      "openTable": "Rejoindre la table",
+      "login": "Se connecter",
+      "logout": "Se déconnecter — {{username}}",
+      "register": "Créer un compte"
     }
   },
   "navigation": {
-    "home": "Retourner à l'accueil",
-    "app": "Navigation TRPG",
+    "home": "Revenir à l'accueil",
+    "app": "Navigation JDR",
     "teams": "Compagnies",
     "newCharacter": "Nouveau personnage",
     "newTeam": "Nouvelle compagnie",
-    "logout": "Déconnexion {{username}}",
-    "logoutShort": "Déconnexion"
+    "logout": "Se déconnecter — {{username}}",
+    "logoutShort": "Se déconnecter"
   },
   "auth": {
     "fields": {
@@ -55,14 +55,14 @@
       "password": "Mot de passe"
     },
     "login": {
-      "eyebrow": "Accès au compte",
-      "title": "Ouvrir la table",
+      "eyebrow": "Accès à la table",
+      "title": "Rejoindre la table",
       "description": "Connectez-vous pour gérer les personnages, les compagnies, les portraits et les outils de campagne protégés.",
       "formLabel": "Formulaire de connexion",
       "heading": "Connexion",
-      "intro": "Utilisez les identifiants de votre compte TRPG.",
+      "intro": "Utilisez les identifiants de votre compte JDR.",
       "submit": "Se connecter",
-      "submitting": "Connexion...",
+      "submitting": "Connexion…",
       "switchPrefix": "Besoin de créer le premier compte ?",
       "switchLink": "Créer un compte",
       "errors": {
@@ -74,15 +74,15 @@
       "eyebrow": "Création de compte",
       "title": "Créer un compte",
       "description": "Le premier compte initialise la table. Ensuite, un administrateur connecté crée les nouveaux comptes.",
-      "formLabel": "Formulaire d'inscription",
-      "heading": "Inscription",
+      "formLabel": "Formulaire de création de compte",
+      "heading": "Création de compte",
       "intro": "Choisissez les identifiants du compte.",
       "submit": "Créer le compte",
-      "submitting": "Création...",
+      "submitting": "Création…",
       "switchPrefix": "Vous avez déjà un compte ?",
       "switchLink": "Connexion",
       "status": {
-        "created": "Compte créé."
+        "created": "Compte créé avec succès."
       },
       "errors": {
         "adminRequired": "Connectez-vous avec un compte administrateur pour créer d'autres comptes.",
@@ -93,7 +93,7 @@
   },
   "characterPage": {
     "documentTitle": "Arnaud - Jeu de rôle",
-    "loading": "Chargement du personnage...",
+    "loading": "Chargement du personnage…",
     "error": "Une erreur est survenue pendant le chargement du personnage.",
     "notFoundTitle": "Personnage introuvable",
     "notFound": "Aucun personnage ne correspond à « {{slug}} ». Parcourez la liste ou vérifiez l'URL."
@@ -107,22 +107,22 @@
       "openControls": "Ouvrir les contrôles des points de vie",
       "closeControls": "Fermer les contrôles des points de vie",
       "increase": "Augmenter les points de vie",
-      "decrease": "Réduire les points de vie"
+      "decrease": "Diminuer les points de vie"
     },
     "actions": {
-      "resetLayout": "Réinitialiser la position des modules",
-      "enableEditMode": "Passer en mode arrangement",
-      "disableEditMode": "Revenir au mode jeu",
-      "editModeActive": "Mode arrangement actif",
+      "resetLayout": "Réinitialiser l'agencement des modules",
+      "enableEditMode": "Activer le mode organisation",
+      "disableEditMode": "Quitter le mode organisation",
+      "editModeActive": "Mode organisation actif",
       "openActionMenu": "Ouvrir les actions de la fiche"
     },
     "mode": {
       "play": "Jeu",
-      "arrange": "Arrangement"
+      "arrange": "Organisation"
     },
     "save": {
       "saved": "Enregistré",
-      "saving": "Enregistrement...",
+      "saving": "Enregistrement…",
       "unsaved": "Non enregistré",
       "failed": "Échec de l'enregistrement"
     },
@@ -131,17 +131,17 @@
       "portrait": "Portrait",
       "notes": "Notes",
       "stats": "Attributs",
-      "skills": "Talents",
-      "inventory": "Équipement"
+      "skills": "Compétences",
+      "inventory": "Inventaire"
     },
     "moduleActions": {
       "move": "Déplacer {{title}}",
-      "restore": "Restaurer {{title}}",
-      "minimize": "Réduire {{title}}",
+      "restore": "Réafficher {{title}}",
+      "minimize": "Masquer {{title}}",
       "exitFullscreen": "Quitter le plein écran {{title}}",
       "enterFullscreen": "Afficher {{title}} en plein écran",
-      "resizeLeft": "Redimensionner {{title}} depuis la gauche",
-      "resizeRight": "Redimensionner {{title}} depuis la droite"
+      "resizeLeft": "Redimensionner {{title}} par la gauche",
+      "resizeRight": "Redimensionner {{title}} par la droite"
     },
     "identity": {
       "label": "Identité",
@@ -164,7 +164,7 @@
       "secondary": "Compétences secondaires",
       "addPrimary": "Ajouter une compétence principale",
       "addSecondary": "Ajouter une compétence secondaire",
-      "delete": "Supprimer {{name}}"
+      "delete": "Supprimer la compétence {{name}}"
     },
     "inventory": {
       "label": "Inventaire",
@@ -177,28 +177,28 @@
       "pagination": "Pagination de l'inventaire",
       "previousPage": "Page précédente",
       "nextPage": "Page suivante",
-      "empty": "vide",
+      "empty": "Aucun objet",
       "modalSubtitle": "Inventaire du personnage",
       "itemName": "Nom de l'objet",
-      "itemPlaceholder": "Ex. : Épée longue",
+      "itemPlaceholder": "Ex. : épée longue",
       "editItem": "Modifier {{name}}",
       "deleteItem": "Supprimer {{name}}"
     },
     "customInventory": {
-      "createTable": "Créer une table d'inventaire",
-      "categoryName": "Nom de la table",
-      "categoryPlaceholder": "Exemple : Potions",
-      "creating": "Création...",
-      "createFailed": "Impossible de créer la table d'inventaire.",
+      "createTable": "Créer une catégorie d'inventaire",
+      "categoryName": "Nom de la catégorie",
+      "categoryPlaceholder": "Ex. : potions",
+      "creating": "Création…",
+      "createFailed": "Impossible de créer la catégorie d'inventaire.",
       "confirmDeleteCategory": "Supprimer {{name}} et tous ses objets ?",
       "itemName": "Objet",
-      "quantity": "Qté",
+      "quantity": "Quantité",
       "notes": "Notes",
       "rowActions": "Actions",
       "itemPlaceholder": "Exemple : Potion de soin",
       "empty": "Aucun objet pour le moment.",
-      "moveUp": "Monter l'objet",
-      "moveDown": "Descendre l'objet"
+      "moveUp": "Déplacer l'objet vers le haut",
+      "moveDown": "Déplacer l'objet vers le bas"
     },
     "background": {
       "upload": "Changer le fond",
@@ -206,39 +206,39 @@
       "modalSubtitle": "Image de fond de la fiche",
       "file": "Image de fond",
       "help": "JPG, PNG ou WebP. 15 Mo maximum.",
-      "uploading": "Envoi du fond..."
+      "uploading": "Envoi du fond…"
     },
     "notes": {
       "title": "Notes du personnage",
       "open": "Ouvrir les notes",
       "placeholder": "Notes du personnage...",
-      "modalPlaceholder": "Écrivez ce que vous voulez à propos de ce personnage..."
+      "modalPlaceholder": "Écrivez ici tout ce que vous voulez retenir à propos de ce personnage…"
     },
     "portrait": {
       "alt": "Portrait du personnage",
-      "label": "Illustration",
+      "label": "Portrait",
       "dropTitle": "Déposez le portrait",
       "formats": "JPG, PNG ou WebP",
       "maxSize": "5 Mo maximum",
       "recommendedRatio": "Format 4:5 recommandé",
       "hint": "Zone illustration (4:5).",
       "hintDetail": "Insérez une image ou laissez vide pour un symbole.",
-      "uploading": "Envoi du portrait..."
+      "uploading": "Envoi du portrait…"
     },
     "upload": {
       "invalidFormat": "Format accepté : JPG, PNG ou WebP.",
       "tooLarge": "Image trop lourde : 5 Mo maximum.",
       "backgroundTooLarge": "Image trop lourde : 15 Mo maximum.",
-      "removeFailed": "Impossible de retirer le fond. Reessayez plus tard.",
-      "failed": "Upload impossible. Réessayez plus tard."
+      "removeFailed": "Impossible de retirer le fond. Réessayez plus tard.",
+      "failed": "Envoi impossible. Réessayez plus tard."
     }
   },
   "teams": {
-    "loadingList": "Chargement des compagnies...",
-    "loadingDetail": "Chargement de la compagnie...",
+    "loadingList": "Chargement des compagnies…",
+    "loadingDetail": "Chargement de la compagnie…",
     "fetchListFailed": "Une erreur est survenue pendant le chargement des compagnies.",
     "fetchDetailFailed": "Une erreur est survenue pendant le chargement de la compagnie.",
-    "returnToTeams": "Retourner aux compagnies",
+    "returnToTeams": "Revenir aux compagnies",
     "title": "Compagnies",
     "create": "Créer une compagnie",
     "empty": "Aucune compagnie pour le moment.",
@@ -249,9 +249,9 @@
     "characterSlug": "Slug du personnage",
     "characterPicker": "Choisir un personnage",
     "characterPickerPlaceholder": "Rechercher par nom ou slug",
-    "characterPickerHelp": "Commencez à saisir puis choisissez un personnage disponible.",
+    "characterPickerHelp": "Commencez à saisir un nom ou un slug, puis choisissez un personnage disponible.",
     "noAvailableCharacters": "Tous les personnages sont déjà assignés à cette compagnie.",
-    "adding": "Ajout...",
+    "adding": "Ajout…",
     "memberAdded": "Membre ajouté.",
     "addMemberFailed": "Erreur réseau : impossible d'ajouter le membre"
   },
@@ -259,40 +259,40 @@
     "title": "Créer une compagnie",
     "name": "Nom",
     "uuid": "UUID",
-    "uuidPlaceholder": "Généré automatiquement si vide",
+    "uuidPlaceholder": "Généré automatiquement si laissé vide",
     "illustrationUrl": "URL de l'illustration",
-    "created": "Créée : {{uuid}} {{name}}",
+    "created": "Compagnie créée : {{uuid}} — {{name}}",
     "failed": "Erreur réseau : impossible de créer la compagnie",
     "next": {
       "openTeam": "Ouvrir la compagnie",
       "createAnother": "En créer une autre",
-      "returnTeams": "Retourner aux compagnies"
+      "returnTeams": "Revenir aux compagnies"
     }
   },
   "createCharacter": {
     "title": "Créer un personnage",
     "name": "Nom",
     "race": "Race",
-    "slug": "Slug (compatible URL)",
+    "slug": "Identifiant URL",
     "portraitUrl": "URL du portrait",
     "stats": "Attributs (0 - 100)",
-    "primarySkills": "Compétences principales (séparées par des virgules)",
-    "secondarySkills": "Compétences secondaires (séparées par des virgules)",
-    "inventory": "Inventaire (séparé par des virgules)",
-    "created": "Créé : {{id}} {{name}}",
+    "primarySkills": "Compétences principales, séparées par des virgules",
+    "secondarySkills": "Compétences secondaires, séparées par des virgules",
+    "inventory": "Inventaire, séparé par des virgules",
+    "created": "Personnage créé : {{id}} — {{name}}",
     "failed": "Erreur réseau : impossible de créer le personnage",
     "sections": {
       "identity": "Identité",
       "stats": "Attributs",
-      "play": "Détails de jeu"
+      "play": "Jeu"
     },
     "validation": {
-      "slug": "Utilisez seulement des lettres minuscules, des chiffres et des tirets."
+      "slug": "Utilisez uniquement des lettres minuscules, des chiffres et des tirets."
     },
     "next": {
       "openSheet": "Ouvrir la fiche",
       "createAnother": "En créer un autre",
-      "returnTeams": "Retourner aux compagnies"
+      "returnTeams": "Revenir aux compagnies"
     }
   }
 }
