@@ -1,5 +1,6 @@
 import React from "react";
 import { ImageUp } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface PortraitProps {
     src?: string;
@@ -16,12 +17,14 @@ const hasDraggedFiles = (event: React.DragEvent<HTMLElement>) => {
 
 export const Portrait: React.FC<PortraitProps> = ({
     src,
-    alt = "Portrait du personnage",
+    alt,
     editable = false,
     uploading = false,
     error,
     onUpload,
 }) => {
+    const { t } = useTranslation();
+    const imageAlt = alt ?? t("characterCard.portrait.alt");
     const [isDraggingFile, setIsDraggingFile] = React.useState(false);
     const dragDepthRef = React.useRef(0);
     const canDropPortrait = editable && Boolean(onUpload) && !uploading;
@@ -66,7 +69,7 @@ export const Portrait: React.FC<PortraitProps> = ({
     return (
         <figure
             className={`ccard-portrait ${editable ? "is-editable" : ""} ${isDraggingFile ? "is-dragging-file" : ""}`}
-            aria-label="Illustration"
+            aria-label={t("characterCard.portrait.label")}
             aria-busy={uploading}
             onDragEnter={startDragVisual}
             onDragOver={keepDragVisual}
@@ -76,22 +79,22 @@ export const Portrait: React.FC<PortraitProps> = ({
             {isDraggingFile ? (
                 <div className="ccard-portraitDrop" aria-live="polite">
                     <ImageUp size={24} aria-hidden="true" />
-                    <strong>Deposez le portrait</strong>
+                    <strong>{t("characterCard.portrait.dropTitle")}</strong>
                     <ul>
-                        <li>JPG, PNG ou WebP</li>
-                        <li>5 Mo maximum</li>
-                        <li>Format 4:5 recommande</li>
+                        <li>{t("characterCard.portrait.formats")}</li>
+                        <li>{t("characterCard.portrait.maxSize")}</li>
+                        <li>{t("characterCard.portrait.recommendedRatio")}</li>
                     </ul>
                 </div>
             ) : src ? (
-                <img src={src} alt={alt} />
+                <img src={src} alt={imageAlt} />
             ) : (
-                <div className="ccard-hint">Zone illustration (4:5).<br />Inserez une image ou laissez vide pour un symbole.</div>
+                <div className="ccard-hint">{t("characterCard.portrait.hint")}<br />{t("characterCard.portrait.hintDetail")}</div>
             )}
 
             {uploading && !isDraggingFile ? (
                 <figcaption className="ccard-portraitStatus" aria-live="polite">
-                    Envoi du portrait...
+                    {t("characterCard.portrait.uploading")}
                 </figcaption>
             ) : null}
 

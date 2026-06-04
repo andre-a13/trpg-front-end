@@ -1,5 +1,6 @@
 import React from "react";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface ListProps {
     title: string;
@@ -17,11 +18,13 @@ const List: React.FC<ListProps> = ({
     items,
     editable = false,
     movable = false,
-    addLabel = "Ajouter",
+    addLabel,
     onAddItem,
     onDeleteItem,
     onMoveItem,
 }) => {
+    const { t } = useTranslation();
+    const effectiveAddLabel = addLabel ?? t("common.actions.add");
     const [draft, setDraft] = React.useState("");
     const [draggingIndex, setDraggingIndex] = React.useState<number | null>(null);
     const [dragOverIndex, setDragOverIndex] = React.useState<number | null>(null);
@@ -100,8 +103,8 @@ const List: React.FC<ListProps> = ({
                             <button
                                 className="ccard-skillDelete"
                                 type="button"
-                                aria-label={`Supprimer ${it}`}
-                                title="Supprimer"
+                                aria-label={t("characterCard.skills.delete", { name: it })}
+                                title={t("common.actions.delete")}
                                 onClick={() => onDeleteItem(idx)}
                             >
                                 <Trash2 size={15} strokeWidth={2.2} aria-hidden="true" />
@@ -117,14 +120,14 @@ const List: React.FC<ListProps> = ({
                         type="text"
                         value={draft}
                         maxLength={60}
-                        placeholder={addLabel}
-                        aria-label={addLabel}
+                        placeholder={effectiveAddLabel}
+                        aria-label={effectiveAddLabel}
                         onChange={(event) => setDraft(event.target.value)}
                     />
                     <button
                         className="ccard-skillAddButton"
                         type="submit"
-                        aria-label={addLabel}
+                        aria-label={effectiveAddLabel}
                         disabled={!draft.trim()}
                     >
                         <Plus size={16} strokeWidth={2.4} aria-hidden="true" />
@@ -159,27 +162,31 @@ export const Skills: React.FC<SkillsProps> = ({
     onAddSecondarySkill,
     onDeleteSecondarySkill,
     onMoveSecondarySkill,
-}) => (
-    <section className="ccard-lists">
-        <List
-            title="Competences principales"
-            items={primary}
-            editable={editable}
-            movable={movable}
-            addLabel="Ajouter une competence principale"
-            onAddItem={onAddPrimarySkill}
-            onDeleteItem={onDeletePrimarySkill}
-            onMoveItem={onMovePrimarySkill}
-        />
-        <List
-            title="Competences secondaires"
-            items={secondary}
-            editable={editable}
-            movable={movable}
-            addLabel="Ajouter une competence secondaire"
-            onAddItem={onAddSecondarySkill}
-            onDeleteItem={onDeleteSecondarySkill}
-            onMoveItem={onMoveSecondarySkill}
-        />
-    </section>
-);
+}) => {
+    const { t } = useTranslation();
+
+    return (
+        <section className="ccard-lists">
+            <List
+                title={t("characterCard.skills.primary")}
+                items={primary}
+                editable={editable}
+                movable={movable}
+                addLabel={t("characterCard.skills.addPrimary")}
+                onAddItem={onAddPrimarySkill}
+                onDeleteItem={onDeletePrimarySkill}
+                onMoveItem={onMovePrimarySkill}
+            />
+            <List
+                title={t("characterCard.skills.secondary")}
+                items={secondary}
+                editable={editable}
+                movable={movable}
+                addLabel={t("characterCard.skills.addSecondary")}
+                onAddItem={onAddSecondarySkill}
+                onDeleteItem={onDeleteSecondarySkill}
+                onMoveItem={onMoveSecondarySkill}
+            />
+        </section>
+    );
+};

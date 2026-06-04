@@ -1,5 +1,8 @@
 import { Route, Routes } from "react-router";
+import ProtectedRoute from "./auth/ProtectedRoute";
 import Home from "./components/pages/home/Home";
+import Login from "./components/pages/auth/Login";
+import Register from "./components/pages/auth/Register";
 import CharacterPage from "./components/pages/trpg/Character";
 import CreateCharacter from "./components/pages/trpg/CreateCharacter";
 import CreateTeam from "./components/pages/trpg/CreateTeam";
@@ -11,17 +14,21 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/sylvae" element={<CharacterPage presetSlug="sylvae" portraitUrl="/assets/sylvae_jdr.jpg" />} />
-      <Route path="/aleatarius" element={<CharacterPage presetSlug="aleatarius" portraitUrl="/assets/aleatarius_jdr.jpg" />} />
-      <Route path="/jace" element={<CharacterPage presetSlug="jace" portraitUrl="/assets/jace_jdr.jpg" />} />
-      <Route path="/maribeth" element={<CharacterPage presetSlug="maribeth" portraitUrl="/assets/maribeth_jdr.jpg" />} />
-      <Route path="/characters/:slug" element={<CharacterPage />} />
-      <Route path="/characters/new" element={<CreateCharacter />} />
-      <Route path="/teams" element={<Teams />} />
-      <Route path="/teams/create" element={<CreateTeam />} />
-      <Route path="/teams/:uuid" element={<Team />} />
-      <Route path="/hearthstone-printer" element={<HearthstonePrinter />} />
-      <Route path="/:slug" element={<CharacterPage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/sylvae" element={<CharacterPage presetSlug="sylvae" portraitUrl="/assets/sylvae_jdr.jpg" />} />
+        <Route path="/aleatarius" element={<CharacterPage presetSlug="aleatarius" portraitUrl="/assets/aleatarius_jdr.jpg" />} />
+        <Route path="/jace" element={<CharacterPage presetSlug="jace" portraitUrl="/assets/jace_jdr.jpg" />} />
+        <Route path="/maribeth" element={<CharacterPage presetSlug="maribeth" portraitUrl="/assets/maribeth_jdr.jpg" />} />
+        <Route path="/characters/:slug" element={<CharacterPage />} />
+        <Route path="/characters/new" element={<CreateCharacter />} />
+        <Route path="/teams" element={<Teams />} />
+        <Route path="/teams/create" element={<CreateTeam />} />
+        <Route path="/teams/:uuid" element={<Team />} />
+        <Route path="/hearthstone-printer" element={<HearthstonePrinter />} />
+        <Route path="/:slug" element={<CharacterPage />} />
+      </Route>
     </Routes>
   );
 }

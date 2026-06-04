@@ -1,0 +1,81 @@
+import type { SkillSet } from "./character";
+
+export type AuthUser = {
+  id: number;
+  username: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type TokenPairResponse = {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  refresh_expires_in: number;
+};
+
+export type CharacterTeamDto = {
+  uuid: string;
+  name: string;
+  illustrationUrl?: string;
+};
+
+export type CharacterCreateRequest = {
+  name: string;
+  slug: string;
+  race: string;
+  portraitUrl?: string;
+  backgroundUrl?: string | null;
+  stats: SkillSet;
+  skillsPrimary: string[];
+  skillsSecondary: string[];
+  inventory: string[];
+  gold?: number;
+  notes?: string;
+  current_hp?: number;
+  bonusHealth?: number;
+};
+
+export type InventoryContentDto = {
+  id: number;
+  categoryId: number;
+  name: string;
+  quantity: number;
+  notes?: string | null;
+  sortOrder: number;
+};
+
+export type InventoryCategoryDto = {
+  id: number;
+  characterId: number;
+  name: string;
+  sortOrder: number;
+  contents: InventoryContentDto[];
+};
+
+export type CharacterDto = CharacterCreateRequest & {
+  id: number;
+  teams?: CharacterTeamDto[];
+  inventoryCategories?: InventoryCategoryDto[];
+};
+
+export type CharacterUpdateRequest = Partial<CharacterCreateRequest>;
+
+export type TeamCreateRequest = {
+  uuid?: string;
+  name: string;
+  illustrationUrl?: string;
+};
+
+export type TeamCharacterDto = {
+  id: number;
+  slug: string;
+  name: string;
+  race: string;
+  portraitUrl?: string;
+};
+
+export type TeamDto = TeamCreateRequest & {
+  uuid: string;
+  characters?: TeamCharacterDto[];
+};

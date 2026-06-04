@@ -1,0 +1,49 @@
+.inventory-category__nameInput {
+    min-width: 130px;
+    max-width: 190px;
+    padding: 6px 8px;
+    border: 1px solid color-mix(in oklab, var(--parchment-line) 34%, transparent);
+    border-radius: 8px;
+    color: var(--parchment-ink);
+    background: rgba(255, 255, 255, .42);
+    font: inherit;
+    font-weight: 800;
+}
+
+.inventory-category__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.inventory-category__actions button {
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid color-mix(in oklab, var(--parchment-line) 26%, transparent);
+    border-radius: 8px;
+    color: var(--parchment-ink);
+    background: rgba(255, 255, 255, .26);
+    cursor: pointer;
+}
+
+.inventory-category__actions button:hover {
+    filter: brightness(1.04);
+}
+
+.inventory-category__error {
+    margin: 0 0 10px;
+    color: #9f1239;
+    font-size: .82rem;
+    font-weight: 750;
+}
+
+@media (max-width: 620px) {
+    .inventory-category__actions,
+    .inventory-category__nameInput {
+        width: 100%;
+        max-width: none;
+    }
+}

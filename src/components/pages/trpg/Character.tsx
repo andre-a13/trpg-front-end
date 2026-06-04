@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router";
+import { useTranslation } from "react-i18next";
 import characterService from "../../../services/character.service";
 import CharacterCard from "../../character-card/CharacterCard";
 import "./character.scss";
 import axios from "axios";
 import type Character from "../../../models/character";
-
-const DEFAULT_DOCUMENT_TITLE = "Arnaud - A Jeu de rôle";
 
 type Props = {
   presetSlug?: string;
@@ -14,6 +13,7 @@ type Props = {
 };
 
 export default function CharacterPage({ presetSlug, portraitUrl }: Props) {
+  const { t } = useTranslation();
   const params = useParams();
   const slug = presetSlug ?? params.slug ?? "";
   const [char, setChar] = useState<Character | null>(null);
@@ -41,12 +41,12 @@ export default function CharacterPage({ presetSlug, portraitUrl }: Props) {
       if (axios.isAxiosError(err) && err.response?.status === 404) {
         setNotFound(true);
       } else {
-        setError("An error occurred while fetching the character.");
+        setError(t("characterPage.error"));
       }
     } finally {
       setLoading(false);
     }
-  }, [slug]);
+  }, [slug, t]);
 
   useEffect(() => {
     fetchCharacter();
@@ -59,9 +59,9 @@ export default function CharacterPage({ presetSlug, portraitUrl }: Props) {
     document.title = firstCompanyName ? `${char.name} - ${firstCompanyName}` : char.name;
 
     return () => {
-      document.title = DEFAULT_DOCUMENT_TITLE;
+      document.title = t("characterPage.documentTitle");
     };
-  }, [char]);
+  }, [char, t]);
 
   const computedPortrait = portraitUrl ?? (slug ? `/assets/${slug}_jdr.jpg` : undefined);
 
@@ -70,26 +70,26 @@ export default function CharacterPage({ presetSlug, portraitUrl }: Props) {
       {loading && (
         <div className="character-message loading">
           <div className="spinner" aria-hidden="true" />
-          <p>Loading character…</p>
+          <p>{t("characterPage.loading")}</p>
         </div>
       )}
 
       {error && !loading && (
         <div className="character-message error">
-          <h2>Something went wrong</h2>
+          <h2>{t("common.errors.wentWrong")}</h2>
           <p>{error}</p>
           <p>
-            <Link to="/">Return to home</Link>
+            <Link to="/">{t("common.actions.returnHome")}</Link>
           </p>
         </div>
       )}
 
       {notFound && !loading && (
         <div className="character-message not-found">
-          <h2>Character not found</h2>
-          <p>We couldn't find a character for "{slug}". Try browsing the list or check the URL.</p>
+          <h2>{t("characterPage.notFoundTitle")}</h2>
+          <p>{t("characterPage.notFound", { slug })}</p>
           <p>
-            <Link to="/">Return to home</Link>
+            <Link to="/">{t("common.actions.returnHome")}</Link>
           </p>
         </div>
       )}

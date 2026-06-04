@@ -1,47 +1,53 @@
 .ccard-list {
+    display: grid;
+    gap: 8px;
     margin: 0;
     padding: 0;
     list-style: none;
-    display: grid;
-    gap: 6px;
 }
 
-.ccard-list .ccard-listItem {
+.ccard-invItem {
     display: flex;
     align-items: center;
     gap: 8px;
-    min-height: 36px;
-    padding: 6px 10px;
+    min-height: 38px;
+    padding: 7px 10px;
+    border: 1px solid color-mix(in oklab, var(--parchment-line) 22%, transparent);
     border-radius: 8px;
-    background: transparent;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, .04)),
+        rgba(255, 255, 255, .12);
     line-height: 1.25;
+    transition: border-color .14s ease, background .14s ease, box-shadow .14s ease, transform .14s ease;
 }
 
 .ccard-itemLabel {
     flex: 1 1 auto;
     min-width: 0;
     overflow: hidden;
+    color: var(--parchment-ink);
+    font-weight: 700;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: var(--parchment-ink, #2c2417);
 }
 
-.ccard-list .ccard-listItem:hover {
+.ccard-invItem:hover {
+    border-color: color-mix(in oklab, var(--parchment-accent) 42%, var(--parchment-line) 58%);
     background:
-        linear-gradient(0deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .06)),
-        transparent;
-    border: 1px solid color-mix(in oklab, var(--parchment-line, #8b5e34) 35%, transparent);
+        linear-gradient(180deg, rgba(115, 206, 196, .12), rgba(255, 255, 255, .04)),
+        rgba(255, 255, 255, .14);
 }
 
-.ccard-list .ccard-listItem.dragging {
+.ccard-invItem.dragging {
     opacity: .6;
     transform: scale(.995);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+    box-shadow: 0 8px 20px rgba(20, 23, 26, .12);
 }
 
-.ccard-list .ccard-listItem.drag-over {
-    outline: 2px dashed color-mix(in oklab, var(--parchment-accent, #b08968) 60%, white 40%);
-    background: color-mix(in oklab, var(--parchment, #f4e8c1) 92%, white 8%);
+.ccard-invItem.drag-over {
+    border-color: #55b9b1;
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(85, 185, 177, .18);
 }
 
 .ccard-itemActions {
@@ -57,18 +63,24 @@
     place-items: center;
     width: 28px;
     height: 28px;
-    border-radius: 8px;
     border: 1px solid transparent;
+    border-radius: 6px;
+    color: color-mix(in oklab, var(--parchment-ink) 72%, transparent);
     background: transparent;
-    color: var(--parchment-ink, #2c2417);
     cursor: pointer;
-    transition: background .12s ease, border-color .12s ease, transform .06s ease;
+    transition: background .14s ease, border-color .14s ease, color .14s ease, transform .06s ease;
 }
 
-.ccard-itemEditBtn:hover,
+.ccard-itemEditBtn:hover {
+    color: #123534;
+    background: rgba(85, 185, 177, .12);
+    border-color: rgba(47, 111, 109, .26);
+}
+
 .ccard-itemDelBtn:hover {
-    background: color-mix(in oklab, var(--parchment, #f4e8c1) 85%, var(--parchment-accent, #b08968) 15%);
-    border-color: color-mix(in oklab, var(--parchment-line, #8b5e34) 70%, transparent);
+    color: #7c2d20;
+    background: rgba(124, 45, 32, .08);
+    border-color: rgba(124, 45, 32, .24);
 }
 
 .ccard-itemEditBtn:active,
@@ -78,15 +90,15 @@
 
 .ccard-itemEditBtn:focus-visible,
 .ccard-itemDelBtn:focus-visible {
-    outline: 2px solid color-mix(in oklab, var(--parchment-accent, #b08968) 70%, white 30%);
+    outline: 2px solid rgba(85, 185, 177, .72);
     outline-offset: 2px;
 }
 
 .ccard-itemEditBtn svg,
 .ccard-itemDelBtn svg {
+    display: block;
     width: 16px;
     height: 16px;
-    display: block;
     pointer-events: none;
 }
 
@@ -94,25 +106,20 @@
     flex: 1 1 auto;
     min-width: 0;
     padding: .45rem .6rem;
+    border: 1px solid color-mix(in oklab, var(--parchment-line) 28%, transparent);
     border-radius: 8px;
-    color: var(--parchment-ink, #2c2417);
-    background:
-        radial-gradient(120% 90% at 10% 5%, rgba(255, 255, 255, .18), transparent 60%),
-        linear-gradient(0deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .07)),
-        var(--parchment, #f4e8c1);
-    border: 1px solid var(--parchment-line, #8b5e34);
-    box-shadow: 0 1px 0 #b38b59 inset, 0 0 10px rgba(0, 0, 0, .06) inset;
+    color: var(--parchment-ink);
+    background: rgba(255, 255, 255, .28);
+    box-shadow: inset 0 1px 2px rgba(20, 23, 26, .1);
+    font: inherit;
+    font-weight: 700;
 
     &::placeholder {
-        color: color-mix(in oklab, var(--parchment-ink, #2c2417) 55%, transparent);
+        color: color-mix(in oklab, var(--parchment-ink) 46%, transparent);
     }
 
     &:focus {
-        outline: none;
-        border-color: color-mix(in oklab, var(--parchment-accent, #b08968) 70%, var(--parchment-line, #8b5e34) 30%);
-        box-shadow:
-            0 0 0 2px #fff,
-            0 0 0 4px color-mix(in oklab, var(--parchment-accent, #b08968) 60%, white 40%),
-            0 1px 0 #b38b59 inset;
+        outline: 2px solid rgba(85, 185, 177, .72);
+        outline-offset: 2px;
     }
 }

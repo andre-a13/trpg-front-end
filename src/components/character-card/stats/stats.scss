@@ -1,56 +1,78 @@
 .ccard-stats {
     display: grid;
-    gap: 6mm;
-    flex: 1;
+    gap: 14px;
+    min-width: 0;
 }
 
 .ccard-stat {
     display: grid;
-    grid-template-columns: minmax(72px, 100px) minmax(160px, 1fr) 56px;
+    grid-template-columns: minmax(78px, 104px) minmax(120px, 1fr) 52px;
     align-items: center;
-    gap: 18px;
+    gap: 12px;
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid color-mix(in oklab, var(--parchment-line) 24%, transparent);
+    border-radius: 8px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .06)),
+        rgba(255, 255, 255, .16);
 }
 
 .ccard-statName {
-    font-variant: small-caps;
-    letter-spacing: .7px;
-    color: #1f1309;
+    color: color-mix(in oklab, var(--parchment-ink) 82%, transparent);
+    font-size: .78rem;
+    font-weight: 850;
+    letter-spacing: 0;
+    text-transform: uppercase;
 }
 
 .ccard-bar {
-    height: 12px;
-    background: rgba(139, 94, 52, .25);
-    border-radius: 999px;
     position: relative;
+    height: 12px;
     overflow: hidden;
+    border-radius: 999px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, .18), rgba(0, 0, 0, .08)),
+        color-mix(in oklab, var(--sheet-surface) 26%, var(--parchment) 74%);
+    box-shadow: inset 0 1px 2px rgba(20, 23, 26, .2);
 }
 
 .ccard-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--parchment-line), var(--parchment-accent));
-    box-shadow: 0 0 6px rgba(139, 94, 52, .4) inset;
     width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #b67b44, #55b9b1);
+    box-shadow:
+        0 0 10px rgba(85, 185, 177, .28),
+        inset 0 1px 0 rgba(255, 255, 255, .32);
 }
 
 .ccard-val {
-    text-align: right;
+    padding: 4px 6px;
+    border: 1px solid color-mix(in oklab, var(--parchment-line) 24%, transparent);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, .22);
+    text-align: center;
     font-feature-settings: "tnum" 1;
+    font-weight: 850;
 }
 
 .ccard-statRange {
     --stat-value: 0%;
     width: 100%;
-    height: 20px;
+    height: 18px;
     margin: 0;
     appearance: none;
     cursor: pointer;
     background: linear-gradient(
         90deg,
-        var(--parchment-line) 0 var(--stat-value),
-        rgba(139, 94, 52, .26) var(--stat-value) 100%
+        #55b9b1 0 var(--stat-value),
+        color-mix(in oklab, var(--sheet-surface) 24%, var(--parchment) 76%) var(--stat-value) 100%
     );
     border-radius: 999px;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, .38), inset 0 1px 2px rgba(82, 49, 22, .16);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, .42),
+        inset 0 1px 2px rgba(20, 23, 26, .2);
 }
 
 .ccard-statRange::-webkit-slider-runnable-track {
@@ -60,16 +82,15 @@
 }
 
 .ccard-statRange::-webkit-slider-thumb {
-    appearance: none;
     width: 18px;
     height: 18px;
     margin-top: -3px;
-    background: #f9f4df;
-    border: 2px solid var(--parchment-line);
+    appearance: none;
+    border: 2px solid #f7f1e4;
     border-radius: 50%;
-    box-shadow: 0 2px 6px rgba(82, 49, 22, .28);
-    opacity: .35;
-    transition: opacity .15s ease, transform .15s ease;
+    background: #216864;
+    box-shadow: 0 2px 8px rgba(20, 23, 26, .28);
+    transition: transform .14s ease, background .14s ease;
 }
 
 .ccard-statRange::-moz-range-track {
@@ -82,42 +103,42 @@
 .ccard-statRange::-moz-range-thumb {
     width: 16px;
     height: 16px;
-    background: #f9f4df;
-    border: 2px solid var(--parchment-line);
+    border: 2px solid #f7f1e4;
     border-radius: 50%;
-    box-shadow: 0 2px 6px rgba(82, 49, 22, .28);
-    opacity: .35;
-    transition: opacity .15s ease, transform .15s ease;
+    background: #216864;
+    box-shadow: 0 2px 8px rgba(20, 23, 26, .28);
+    transition: transform .14s ease, background .14s ease;
 }
 
 .ccard-statRange:hover::-webkit-slider-thumb,
 .ccard-statRange:focus-visible::-webkit-slider-thumb {
-    opacity: 1;
     transform: scale(1.08);
+    background: #2f7f79;
 }
 
 .ccard-statRange:hover::-moz-range-thumb,
 .ccard-statRange:focus-visible::-moz-range-thumb {
-    opacity: 1;
     transform: scale(1.08);
+    background: #2f7f79;
 }
 
 .ccard-statRange:focus-visible {
-    outline: 2px solid var(--parchment-accent);
-    outline-offset: 4px;
+    outline: 2px solid rgba(85, 185, 177, .72);
+    outline-offset: 3px;
 }
 
 .ccard-statInput {
-    width: 56px;
-    height: 36px;
-    padding: 0 8px;
+    width: 52px;
+    height: 34px;
+    padding: 0 6px;
     color: inherit;
     font: inherit;
+    font-weight: 850;
     text-align: center;
-    background: rgba(255, 255, 255, .68);
-    border: 1px solid rgba(139, 94, 52, .22);
+    background: rgba(255, 255, 255, .32);
+    border: 1px solid color-mix(in oklab, var(--parchment-line) 28%, transparent);
     border-radius: 6px;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, .5), inset 0 1px 2px rgba(82, 49, 22, .08);
+    box-shadow: inset 0 1px 2px rgba(20, 23, 26, .1);
 }
 
 .ccard-statInput::-webkit-outer-spin-button,
@@ -131,13 +152,13 @@
 }
 
 .ccard-statInput:focus {
-    outline: 2px solid var(--parchment-accent);
+    outline: 2px solid rgba(85, 185, 177, .72);
     outline-offset: 2px;
 }
 
 @media (max-width: 640px) {
     .ccard-stat {
-        grid-template-columns: 76px minmax(110px, 1fr) 52px;
-        gap: 12px;
+        grid-template-columns: 76px minmax(92px, 1fr) 48px;
+        gap: 10px;
     }
 }

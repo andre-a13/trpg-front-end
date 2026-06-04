@@ -1,12 +1,5 @@
-import axios from "axios";
 import type { IAddTeam, TeamDto } from "../interface/IAddTeam";
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_TRPG_API_URL ?? "http://localhost:8000",
-  headers: {
-    "ngrok-skip-browser-warning": "true",
-  },
-});
+import api from "./api";
 
 async function create(body: IAddTeam) {
   const res = await api.post<TeamDto>("/teams", body);
