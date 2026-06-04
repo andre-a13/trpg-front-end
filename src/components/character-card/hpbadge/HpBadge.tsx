@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import "./hpbadge.scss";
 
 export interface HpBadgeProps {
@@ -58,6 +59,7 @@ const HpBadge: React.FC<HpBadgeProps> = ({
   onIncreaseHp,
   onDecreaseHp,
 }) => {
+  const { t } = useTranslation();
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
 
   // Local HP state for optimistic updates; sync to prop changes
@@ -121,7 +123,7 @@ const HpBadge: React.FC<HpBadgeProps> = ({
               type="button"
               className="hp-badge__toggle"
               onClick={togglePopup}
-              aria-label={isPopupOpen ? "Close HP controls" : "Open HP controls"}
+              aria-label={isPopupOpen ? t("characterCard.hp.closeControls") : t("characterCard.hp.openControls")}
             >
               ±
             </button>
@@ -130,7 +132,7 @@ const HpBadge: React.FC<HpBadgeProps> = ({
               <div
                 className="hp-badge__popup"
                 role="group"
-                aria-label="HP controls"
+                aria-label={t("characterCard.hp.controls")}
               >
                 <button
                   type="button"
@@ -140,7 +142,7 @@ const HpBadge: React.FC<HpBadgeProps> = ({
                     onIncreaseHp?.();
                   }}
                   disabled={!onIncreaseHp}
-                  aria-label="Increase HP"
+                  aria-label={t("characterCard.hp.increase")}
                 >
                   +
                 </button>
@@ -152,7 +154,7 @@ const HpBadge: React.FC<HpBadgeProps> = ({
                     onDecreaseHp?.();
                   }}
                   disabled={!onDecreaseHp}
-                  aria-label="Decrease HP"
+                  aria-label={t("characterCard.hp.decrease")}
                 >
                   -
                 </button>

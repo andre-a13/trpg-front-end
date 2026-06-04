@@ -1,44 +1,61 @@
 .ccard-identity {
     display: grid;
-    gap: 6mm;
-    grid-template-columns: 1fr 1fr;
-    margin-bottom: 8mm;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0;
 }
 
 .ccard-field {
     display: grid;
-    gap: 3mm;
+    gap: 6px;
+    min-width: 0;
 }
 
 .ccard-label {
-    font-variant: small-caps;
-    letter-spacing: .6px;
-    opacity: .85;
+    color: color-mix(in oklab, var(--parchment-ink) 68%, transparent);
+    font-size: .72rem;
+    font-weight: 850;
+    letter-spacing: 0;
+    text-transform: uppercase;
 }
 
 .ccard-text {
-    display: block;
-    box-sizing: border-box;
+    display: flex;
+    align-items: center;
     width: 100%;
-    min-height: 14pt;
-    padding: 10px 12px;
-    border: 1px solid color-mix(in oklab, var(--parchment-line) 52%, transparent);
-    border-radius: 6px;
+    min-height: 42px;
+    padding: 9px 11px;
+    border: 1px solid color-mix(in oklab, var(--parchment-line) 34%, transparent);
+    border-radius: 8px;
+    color: var(--parchment-ink);
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, .36), rgba(255, 255, 255, .12)),
-        color-mix(in oklab, var(--parchment) 88%, white 12%);
+        linear-gradient(180deg, rgba(255, 255, 255, .34), rgba(255, 255, 255, .08)),
+        color-mix(in oklab, var(--parchment) 84%, white 16%);
     box-shadow:
-        0 1px 0 rgba(255, 255, 255, .42) inset,
-        0 0 12px rgba(139, 94, 52, .08) inset;
+        0 1px 0 rgba(255, 255, 255, .5) inset,
+        inset 0 0 0 1px rgba(255, 255, 255, .08);
+    font-weight: 700;
+    overflow-wrap: anywhere;
 }
 
 .ccard-teamLink {
-    color: inherit;
+    color: color-mix(in oklab, var(--parchment-accent) 70%, #123 30%);
     text-decoration: none;
+    transition: border-color .14s ease, color .14s ease, background .14s ease;
 }
 
 .ccard-teamLink:hover,
 .ccard-teamLink:focus-visible {
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    color: #123534;
+    background:
+        linear-gradient(180deg, rgba(115, 206, 196, .22), rgba(255, 255, 255, .08)),
+        color-mix(in oklab, var(--parchment) 82%, white 18%);
+    border-color: color-mix(in oklab, var(--parchment-accent) 62%, var(--parchment-line) 38%);
+    outline: none;
+}
+
+@media (max-width: 620px) {
+    .ccard-identity {
+        grid-template-columns: 1fr;
+    }
 }

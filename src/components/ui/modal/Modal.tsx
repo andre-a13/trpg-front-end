@@ -1,5 +1,6 @@
 import React from "react";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 import "./modal.scss";
 
 export type ModalHandle = {
@@ -31,7 +32,7 @@ export type ModalProps = {
   subtitle?: React.ReactNode;
   icon?: React.ReactNode;
   showCloseButton?: boolean;    // default: true
-  closeButtonLabel?: string;    // default: "Fermer"
+  closeButtonLabel?: string;
   footer?: React.ReactNode;     // optional footer area
 
   /** Layout & look */
@@ -79,7 +80,7 @@ export const Modal = React.forwardRef<ModalHandle, ModalProps>(function Modal(
     subtitle,
     icon,
     showCloseButton = true,
-    closeButtonLabel = "Fermer",
+    closeButtonLabel,
     footer,
 
     size = "md",
@@ -108,7 +109,9 @@ export const Modal = React.forwardRef<ModalHandle, ModalProps>(function Modal(
   },
   ref
 ) {
+  const { t } = useTranslation();
   const [open, setOpen] = React.useState(initialOpen);
+  const effectiveCloseButtonLabel = closeButtonLabel ?? t("common.actions.close");
   const panelRef = React.useRef<HTMLDivElement | null>(null);
   const lastFocused = React.useRef<Element | null>(null);
 
@@ -228,7 +231,7 @@ export const Modal = React.forwardRef<ModalHandle, ModalProps>(function Modal(
               <button
                 type="button"
                 className={`modal__close ${closeButtonClassName ?? ""}`}
-                aria-label={closeButtonLabel}
+                aria-label={effectiveCloseButtonLabel}
                 onClick={doClose}
               >
                 <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">

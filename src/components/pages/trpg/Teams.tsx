@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import teamService from "../../../services/team.service";
 import type { TeamDto } from "../../../interface/IAddTeam";
 import "./teams.scss";
 
 export default function Teams() {
+  const { t } = useTranslation();
   const [teams, setTeams] = useState<TeamDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,33 +23,33 @@ export default function Teams() {
       } catch (err: unknown) {
         console.error("Error fetching teams:", err);
         if (axios.isAxiosError(err)) {
-          setError(`Error: ${err.response?.status ?? "network"} ${err.message}`);
+          setError(t("common.errors.status", { status: err.response?.status ?? "network", message: err.message }));
           return;
         }
-        setError("An error occurred while fetching teams.");
+        setError(t("teams.fetchListFailed"));
       } finally {
         setLoading(false);
       }
     }
 
     fetchTeams();
-  }, []);
+  }, [t]);
 
   return (
     <div className="page">
       {loading && (
         <div className="character-message loading">
           <div className="spinner" aria-hidden="true" />
-          <p>Loading teams...</p>
+          <p>{t("teams.loadingList")}</p>
         </div>
       )}
 
       {error && !loading && (
         <div className="character-message error">
-          <h2>Something went wrong</h2>
+          <h2>{t("common.errors.wentWrong")}</h2>
           <p>{error}</p>
           <p>
-            <Link to="/">Return to home</Link>
+            <Link to="/">{t("common.actions.returnHome")}</Link>
           </p>
         </div>
       )}
@@ -55,12 +57,12 @@ export default function Teams() {
       {!loading && !error && (
         <section className="teams-list">
           <div className="teams-list__header">
-            <h2>Teams</h2>
-            <Link to="/teams/create">Create team</Link>
+            <h2>{t("teams.title")}</h2>
+            <Link to="/teams/create">{t("teams.create")}</Link>
           </div>
 
           {teams.length === 0 ? (
-            <p className="teams-list__empty">No teams yet.</p>
+            <p className="teams-list__empty">{t("teams.empty")}</p>
           ) : (
             <div className="teams-list__grid">
               {teams.map((team) => (
@@ -83,7 +85,7 @@ export default function Teams() {
                         ))}
                       </div>
                     ) : (
-                      <p className="team-card__empty">No characters assigned.</p>
+                      <p className="team-card__empty">{t("teams.noCharacters")}</p>
                     )}
                   </div>
                 </article>

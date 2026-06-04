@@ -1,5 +1,6 @@
 import React from "react";
 import { Pencil, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import "./inventory-item.scss";
 
 export interface InventoryItemProps {
@@ -27,6 +28,7 @@ const InventoryItem: React.FC<InventoryItemProps> = ({
   isDragging,
   isDragOver,
 }) => {
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = React.useState(false);
   const [tempName, setTempName] = React.useState(name);
   const inputRef = React.useRef<HTMLInputElement | null>(null);
@@ -52,7 +54,7 @@ const InventoryItem: React.FC<InventoryItemProps> = ({
 
   return (
     <li
-      className={`ccard-listItem ${isDragging ? "dragging" : ""} ${isDragOver ? "drag-over" : ""}`}
+      className={`ccard-listItem ccard-invItem ${isDragging ? "dragging" : ""} ${isDragOver ? "drag-over" : ""}`}
       draggable={!!draggable}
       onDragStart={(event) => onDragStart?.(event)}
       onDragOver={(event) => onDragOver?.(event)}
@@ -90,8 +92,8 @@ const InventoryItem: React.FC<InventoryItemProps> = ({
         <button
           type="button"
           className="ccard-itemEditBtn"
-          aria-label={`Modifier ${name}`}
-          title="Modifier"
+          aria-label={t("characterCard.inventory.editItem", { name })}
+          title={t("common.actions.edit")}
           onClick={startEdit}
         >
           <Pencil size={16} aria-hidden="true" />
@@ -100,8 +102,8 @@ const InventoryItem: React.FC<InventoryItemProps> = ({
         <button
           type="button"
           className="ccard-itemDelBtn"
-          aria-label={`Supprimer ${name}`}
-          title="Supprimer"
+          aria-label={t("characterCard.inventory.deleteItem", { name })}
+          title={t("common.actions.delete")}
           onClick={onDelete}
         >
           <Trash2 size={16} aria-hidden="true" />

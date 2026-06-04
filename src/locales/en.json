@@ -1,11 +1,28 @@
 {
   "common": {
+    "actions": {
+      "add": "Add",
+      "cancel": "Cancel",
+      "close": "Close",
+      "create": "Create",
+      "delete": "Delete",
+      "edit": "Edit",
+      "open": "Open",
+      "returnHome": "Return to home",
+      "save": "Save"
+    },
+    "errors": {
+      "network": "Network error",
+      "status": "Error: {{status}} {{message}}",
+      "wentWrong": "Something went wrong"
+    },
     "language": {
       "current": "Current language",
       "switchTo": "Switch to {{language}}",
       "fr": "French",
       "en": "English"
-    }
+    },
+    "loading": "Loading..."
   },
   "home": {
     "server": {
@@ -14,7 +31,268 @@
       "offline": "Server offline"
     },
     "eyebrow": "Tabletop companion",
-    "title": "Enter the country of adventures and dreams",
-    "intro": "Gather your party, shape your heroes, and keep every tale close at hand while the next chapter waits beyond the mist."
+    "title": "Enter the realm of stories and legends",
+    "intro": "Gather your party, shape your heroes, and keep every adventure close at hand while the next chapter waits beyond the mist.",
+    "actions": {
+      "openTable": "Open table",
+      "login": "Login",
+      "logout": "Logout {{username}}",
+      "register": "Register"
+    }
+  },
+  "navigation": {
+    "home": "Return to homepage",
+    "app": "TRPG navigation",
+    "teams": "Teams",
+    "newCharacter": "New character",
+    "newTeam": "New team",
+    "logout": "Logout {{username}}",
+    "logoutShort": "Logout"
+  },
+  "auth": {
+    "fields": {
+      "username": "Username",
+      "password": "Password"
+    },
+    "login": {
+      "eyebrow": "Account access",
+      "title": "Open the table",
+      "description": "Sign in to manage characters, teams, portraits, and every protected campaign tool.",
+      "formLabel": "Login form",
+      "heading": "Login",
+      "intro": "Use your TRPG account credentials.",
+      "submit": "Login",
+      "submitting": "Logging in...",
+      "switchPrefix": "Need to create the first account?",
+      "switchLink": "Register",
+      "errors": {
+        "invalidCredentials": "Invalid username or password.",
+        "failed": "Unable to log in. Check the server and try again."
+      }
+    },
+    "register": {
+      "eyebrow": "Account creation",
+      "title": "Create an account",
+      "description": "The first account bootstraps the table. After that, a logged-in admin creates new accounts.",
+      "formLabel": "Register form",
+      "heading": "Register",
+      "intro": "Choose credentials for the account.",
+      "submit": "Create account",
+      "submitting": "Creating...",
+      "switchPrefix": "Already have an account?",
+      "switchLink": "Login",
+      "status": {
+        "created": "Account created."
+      },
+      "errors": {
+        "adminRequired": "Log in as an admin account to create more accounts.",
+        "usernameExists": "This username already exists.",
+        "failed": "Unable to create the account. Check the server and try again."
+      }
+    }
+  },
+  "characterPage": {
+    "documentTitle": "Arnaud - Roleplaying game",
+    "loading": "Loading character...",
+    "error": "An error occurred while fetching the character.",
+    "notFoundTitle": "Character not found",
+    "notFound": "We couldn't find a character for \"{{slug}}\". Try browsing the list or check the URL."
+  },
+  "characterCard": {
+    "sheetLabel": "Character sheet",
+    "statusLabel": "Character status",
+    "hp": {
+      "label": "HP",
+      "controls": "Hit point controls",
+      "openControls": "Open hit point controls",
+      "closeControls": "Close hit point controls",
+      "increase": "Increase hit points",
+      "decrease": "Decrease hit points"
+    },
+    "actions": {
+      "resetLayout": "Reset module positions",
+      "enableEditMode": "Enter arrange mode",
+      "disableEditMode": "Return to play mode",
+      "editModeActive": "Arrange mode active",
+      "openActionMenu": "Open sheet actions"
+    },
+    "mode": {
+      "play": "Play",
+      "arrange": "Arrange"
+    },
+    "save": {
+      "saved": "Saved",
+      "saving": "Saving...",
+      "unsaved": "Unsaved",
+      "failed": "Save failed"
+    },
+    "modules": {
+      "identity": "Identity",
+      "portrait": "Portrait",
+      "notes": "Notes",
+      "stats": "Attributes",
+      "skills": "Talents",
+      "inventory": "Equipment"
+    },
+    "moduleActions": {
+      "move": "Move {{title}}",
+      "restore": "Restore {{title}}",
+      "minimize": "Minimize {{title}}",
+      "exitFullscreen": "Exit fullscreen {{title}}",
+      "enterFullscreen": "Open {{title}} fullscreen",
+      "resizeLeft": "Resize {{title}} from the left",
+      "resizeRight": "Resize {{title}} from the right"
+    },
+    "identity": {
+      "label": "Identity",
+      "race": "Race",
+      "raceA11y": "Character race",
+      "company": "Company",
+      "companyA11y": "Character company",
+      "none": "None"
+    },
+    "stats": {
+      "label": "Attributes (total {{total}})",
+      "corps": "Body",
+      "mental": "Mind",
+      "social": "Social",
+      "edit": "Edit {{label}}",
+      "value": "{{label}} value"
+    },
+    "skills": {
+      "primary": "Primary skills",
+      "secondary": "Secondary skills",
+      "addPrimary": "Add a primary skill",
+      "addSecondary": "Add a secondary skill",
+      "delete": "Delete {{name}}"
+    },
+    "inventory": {
+      "label": "Inventory",
+      "gold": "Gold pieces",
+      "removeGold": "Remove 1 gold piece",
+      "addGold": "Add 1 gold piece",
+      "addItem": "Add an item",
+      "enablePagination": "Enable pagination",
+      "disablePagination": "Disable pagination",
+      "pagination": "Inventory pagination",
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "empty": "empty",
+      "modalSubtitle": "Character inventory",
+      "itemName": "Item name",
+      "itemPlaceholder": "Example: Longsword",
+      "editItem": "Edit {{name}}",
+      "deleteItem": "Delete {{name}}"
+    },
+    "customInventory": {
+      "createTable": "Create inventory table",
+      "categoryName": "Table name",
+      "categoryPlaceholder": "Example: Potions",
+      "creating": "Creating...",
+      "createFailed": "Unable to create inventory table.",
+      "confirmDeleteCategory": "Delete {{name}} and all of its items?",
+      "itemName": "Item",
+      "quantity": "Qty",
+      "notes": "Notes",
+      "rowActions": "Actions",
+      "itemPlaceholder": "Example: Healing potion",
+      "empty": "No items yet.",
+      "moveUp": "Move item up",
+      "moveDown": "Move item down"
+    },
+    "background": {
+      "upload": "Upload background",
+      "remove": "Remove background",
+      "modalSubtitle": "Character sheet background",
+      "file": "Background image",
+      "help": "JPG, PNG or WebP. 15 MB maximum.",
+      "uploading": "Uploading background..."
+    },
+    "notes": {
+      "title": "Character notes",
+      "open": "Open notes",
+      "placeholder": "Character notes...",
+      "modalPlaceholder": "Write anything about this character..."
+    },
+    "portrait": {
+      "alt": "Character portrait",
+      "label": "Illustration",
+      "dropTitle": "Drop the portrait",
+      "formats": "JPG, PNG or WebP",
+      "maxSize": "5 MB maximum",
+      "recommendedRatio": "Recommended 4:5 ratio",
+      "hint": "Illustration area (4:5).",
+      "hintDetail": "Insert an image or leave it empty for a symbol.",
+      "uploading": "Uploading portrait..."
+    },
+    "upload": {
+      "invalidFormat": "Accepted format: JPG, PNG or WebP.",
+      "tooLarge": "Image too large: 5 MB maximum.",
+      "backgroundTooLarge": "Image too large: 15 MB maximum.",
+      "removeFailed": "Unable to remove background. Try again later.",
+      "failed": "Upload failed. Try again later."
+    }
+  },
+  "teams": {
+    "loadingList": "Loading teams...",
+    "loadingDetail": "Loading team...",
+    "fetchListFailed": "An error occurred while fetching teams.",
+    "fetchDetailFailed": "An error occurred while fetching the team.",
+    "returnToTeams": "Return to teams",
+    "title": "Teams",
+    "create": "Create team",
+    "empty": "No teams yet.",
+    "noCharacters": "No characters assigned.",
+    "notFoundTitle": "Team not found",
+    "notFound": "We couldn't find a team for \"{{uuid}}\".",
+    "addMember": "Add member",
+    "characterSlug": "Character slug",
+    "characterPicker": "Choose a character",
+    "characterPickerPlaceholder": "Search by name or slug",
+    "characterPickerHelp": "Start typing and select one of the available characters.",
+    "noAvailableCharacters": "Every character is already assigned to this team.",
+    "adding": "Adding...",
+    "memberAdded": "Member added.",
+    "addMemberFailed": "Network error: unable to add member"
+  },
+  "createTeam": {
+    "title": "Create team",
+    "name": "Name",
+    "uuid": "UUID",
+    "uuidPlaceholder": "Generated automatically when empty",
+    "illustrationUrl": "Illustration URL",
+    "created": "Created: {{uuid}} {{name}}",
+    "failed": "Network error: unable to create team",
+    "next": {
+      "openTeam": "Open team",
+      "createAnother": "Create another",
+      "returnTeams": "Return to teams"
+    }
+  },
+  "createCharacter": {
+    "title": "Create character",
+    "name": "Name",
+    "race": "Race",
+    "slug": "Slug (URL-safe)",
+    "portraitUrl": "Portrait URL",
+    "stats": "Attributes (0 - 100)",
+    "primarySkills": "Primary skills (comma-separated)",
+    "secondarySkills": "Secondary skills (comma-separated)",
+    "inventory": "Inventory (comma-separated)",
+    "created": "Created: {{id}} {{name}}",
+    "failed": "Network error: unable to create character",
+    "sections": {
+      "identity": "Identity",
+      "stats": "Attributes",
+      "play": "Play details"
+    },
+    "validation": {
+      "slug": "Use only lowercase letters, numbers, and hyphens."
+    },
+    "next": {
+      "openSheet": "Open sheet",
+      "createAnother": "Create another",
+      "returnTeams": "Return to teams"
+    }
   }
 }

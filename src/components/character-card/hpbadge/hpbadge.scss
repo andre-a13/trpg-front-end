@@ -9,30 +9,20 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
+  gap: 9px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in oklab, #b95f5f 42%, var(--parchment-line) 58%);
   border-radius: 999px;
-  font-weight: 700;
-  line-height: 1;
-
-  color: var(--parchment-ink, #2c2417);
+  color: var(--parchment-ink);
   background:
-    radial-gradient(
-      120% 90% at 10% 5%,
-      rgba(255, 255, 255, 0.18),
-      transparent 60%
-    ),
-    linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.07),
-      rgba(255, 255, 255, 0.07)
-    ),
-    var(--parchment, #f4e8c1);
-  border: 1px solid var(--parchment-line, #8b5e34);
+    linear-gradient(180deg, rgba(255, 255, 255, .24), rgba(255, 255, 255, .06)),
+    rgba(185, 95, 95, .1);
   box-shadow:
-    0 1px 0 #b38b59 inset,
-    0 0 10px rgba(0, 0, 0, 0.06) inset,
-    0 4px 10px var(--shadow, rgba(0, 0, 0, 0.25));
+    0 1px 0 rgba(255, 255, 255, .42) inset,
+    0 10px 20px rgba(20, 23, 26, .14);
+  font-weight: 850;
+  line-height: 1;
 }
 
 .hp-badge__value {
@@ -41,110 +31,111 @@
   align-items: center;
   gap: 6px;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.2px;
+  letter-spacing: 0;
 }
 
 .hp-badge__icon {
   display: grid;
   place-items: center;
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   border-radius: 999px;
   background:
-    radial-gradient(
-      120% 90% at 20% 20%,
-      rgba(255, 255, 255, 0.4),
-      transparent 60%
-    ),
-    linear-gradient(180deg, #ff9ba6, #e05260);
+    radial-gradient(120% 90% at 20% 20%, rgba(255, 255, 255, .4), transparent 60%),
+    linear-gradient(180deg, #ffb0b6, #d94a5b);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    0 0 0 1px rgba(0, 0, 0, 0.06);
+    inset 0 1px 0 rgba(255, 255, 255, .42),
+    0 0 0 1px rgba(92, 27, 25, .16);
 }
 
 .hp-badge__icon-svg {
   display: block;
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   color: #7a0e1a;
 }
 
 .hp-badge__label {
-  opacity: 0.85;
+  opacity: .8;
   font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.3px;
+  font-weight: 850;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
 .hp-badge__number {
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 900;
 }
 
-/* --- Controls toggle + popup --- */
-
 .hp-badge__toggle {
-  margin-left: 4px;
-  padding: 2px 6px;
-  border: none;
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  margin-left: 2px;
+  padding: 0 6px;
+  border: 1px solid rgba(185, 95, 95, .22);
   border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1;
+  color: var(--parchment-ink);
+  background: rgba(255, 255, 255, .2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4);
   cursor: pointer;
-
-  background: rgba(0, 0, 0, 0.06);
-  color: var(--parchment-ink, #2c2417);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
 }
 
 .hp-badge__toggle:hover {
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, .34);
+}
+
+.hp-badge__toggle:focus-visible {
+  outline: 2px solid rgba(217, 74, 91, .54);
+  outline-offset: 2px;
 }
 
 .hp-badge__popup {
   position: absolute;
-  top: calc(100% + 6px);
+  top: calc(100% + 8px);
   right: 0;
-  display: inline-flex;
-  gap: 4px;
-  padding: 4px 6px;
-  border-radius: 999px;
-  background: var(--parchment, #f4e8c1);
-  border: 1px solid var(--parchment-line, #8b5e34);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
   z-index: 10;
+  display: inline-flex;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid color-mix(in oklab, var(--parchment-line) 30%, transparent);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .26), rgba(255, 255, 255, .08)),
+    var(--parchment);
+  box-shadow: 0 12px 24px rgba(20, 23, 26, .24);
 }
 
 .hp-badge__popup-btn {
-  min-width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
+  min-width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 900;
   line-height: 1;
-  color: #1c140b;
 }
 
 .hp-badge__popup-btn--minus {
-  background: linear-gradient(180deg, #f8c1c1, #e17a7a);
   color: #5e1212;
+  background: linear-gradient(180deg, #f8c1c1, #e17a7a);
 }
 
 .hp-badge__popup-btn--plus {
-  background: linear-gradient(180deg, #c8f3c5, #6fba6a);
-  color: #104016;
+  color: #123534;
+  background: linear-gradient(180deg, #c7f3ec, #55b9b1);
 }
 
 .hp-badge__popup-btn:disabled {
-  opacity: 0.5;
+  opacity: .5;
   cursor: default;
 }
