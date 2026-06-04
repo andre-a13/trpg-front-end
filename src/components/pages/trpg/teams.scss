@@ -11,12 +11,19 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .teams-list__header h2 {
   margin: 0;
+  color: #f7f1e4;
   font-size: 1.35rem;
+}
+
+.teams-list__header p {
+  margin: 0.25rem 0 0;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.92rem;
 }
 
 .teams-list__header a,
@@ -34,7 +41,7 @@
 
 .teams-list__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1rem;
 }
 
@@ -55,12 +62,22 @@
 }
 
 .team-card__body {
+  display: grid;
+  gap: 0.85rem;
   padding: 1rem;
 }
 
-.team-card h3 {
-  margin: 0 0 0.35rem 0;
+.team-card__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.team-card__heading h3 {
+  margin: 0;
   font-size: 1.1rem;
+  line-height: 1.2;
 }
 
 .team-card h3 a {
@@ -68,24 +85,72 @@
   text-decoration: none;
 }
 
-.team-card__uuid {
-  margin: 0 0 0.75rem 0;
-  color: #555;
-  font-size: 0.82rem;
-  overflow-wrap: anywhere;
+.team-card__heading span {
+  flex: 0 0 auto;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  color: #24415f;
+  background: rgba(43, 108, 176, 0.1);
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 .team-card__characters {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
   gap: 0.5rem;
 }
 
 .team-card__characters a {
-  padding: 0.25rem 0.45rem;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0.3rem 0.45rem;
   background: rgba(43, 108, 176, 0.08);
   border-radius: 6px;
   text-decoration: none;
+}
+
+.team-card__characters img {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.team-card__characters span {
+  display: grid;
+  min-width: 0;
+}
+
+.team-card__characters strong,
+.team-card__characters small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.team-card__characters strong {
+  color: #123;
+  font-size: 0.88rem;
+}
+
+.team-card__characters small {
+  color: #5c6772;
+  font-size: 0.76rem;
+  font-weight: 650;
+}
+
+.team-card__characters .team-card__more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #24415f;
+  font-weight: 800;
 }
 
 .team-card__empty {
@@ -93,9 +158,25 @@
   color: #555;
 }
 
+.team-card__open {
+  justify-self: start;
+  color: #1d5f85;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.team-card__open:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 560px) {
   .teams-list__header {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .teams-list__grid {
+    grid-template-columns: 1fr;
   }
 }
