@@ -212,7 +212,15 @@
       "title": "Notes du personnage",
       "open": "Ouvrir les notes",
       "placeholder": "Notes du personnage...",
-      "modalPlaceholder": "Écrivez ici tout ce que vous voulez retenir à propos de ce personnage…"
+      "modalPlaceholder": "Écrivez ici tout ce que vous voulez retenir à propos de ce personnage…",
+      "tabs": "Onglets de notes",
+      "editorLabel": "Contenu de la note {{title}}",
+      "addTab": "Ajouter un onglet de notes",
+      "newTabTitle": "Nom de l'onglet",
+      "renameTab": "Renommer l'onglet de notes",
+      "deleteTab": "Supprimer l'onglet de notes",
+      "reorderTab": "Glisser pour réorganiser l'onglet de notes",
+      "confirmDeleteTab": "Supprimer « {{title}} » ?"
     },
     "portrait": {
       "alt": "Portrait du personnage",

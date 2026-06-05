@@ -1,5 +1,5 @@
 import type { SkillSet } from "../types/character";
-import type { CharacterDto, CharacterTeamDto, InventoryCategoryDto } from "../interface/IAddCharacter";
+import type { CharacterDto, CharacterNoteDto, CharacterTeamDto, InventoryCategoryDto } from "../interface/IAddCharacter";
 
 export default class Character {
     id: number;
@@ -18,6 +18,7 @@ export default class Character {
     bonusHealth : number = 0;
     teams: CharacterTeamDto[] = [];
     inventoryCategories: InventoryCategoryDto[] = [];
+    noteTabs: CharacterNoteDto[] = [];
     constructor(data: CharacterDto) {
         this.id = data.id;
         this.name = data.name;
@@ -30,7 +31,8 @@ export default class Character {
         this.gold = data.gold ?? 0;
         this.portraitUrl = data.portraitUrl;
         this.backgroundUrl = data.backgroundUrl;
-        this.notes = data.notes ?? "";
+        this.noteTabs = [...(data.noteTabs ?? [])].sort((a, b) => a.sortOrder - b.sortOrder || a.id - b.id);
+        this.notes = data.notes ?? this.noteTabs[0]?.content ?? "";
         this.bonusHealth = data.bonusHealth ?? 0;
         this.current_hp = data.current_hp ?? this.getMaxHp();
         this.teams = data.teams ?? [];

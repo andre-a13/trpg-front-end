@@ -212,7 +212,15 @@
       "title": "Character notes",
       "open": "Open notes",
       "placeholder": "Character notes...",
-      "modalPlaceholder": "Write anything about this character..."
+      "modalPlaceholder": "Write anything about this character...",
+      "tabs": "Note tabs",
+      "editorLabel": "{{title}} note content",
+      "addTab": "Add note tab",
+      "newTabTitle": "Tab name",
+      "renameTab": "Rename note tab",
+      "deleteTab": "Delete note tab",
+      "reorderTab": "Drag to reorder note tab",
+      "confirmDeleteTab": "Delete \"{{title}}\"?"
     },
     "portrait": {
       "alt": "Character portrait",

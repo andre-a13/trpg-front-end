@@ -20,6 +20,14 @@ export type CharacterTeamDto = {
   illustrationUrl?: string;
 };
 
+export type CharacterNoteDto = {
+  id: number;
+  characterId: number;
+  title: string;
+  content: string;
+  sortOrder: number;
+};
+
 export type CharacterCreateRequest = {
   name: string;
   slug: string;
@@ -57,6 +65,7 @@ export type CharacterDto = CharacterCreateRequest & {
   id: number;
   teams?: CharacterTeamDto[];
   inventoryCategories?: InventoryCategoryDto[];
+  noteTabs?: CharacterNoteDto[];
 };
 
 export type CharacterUpdateRequest = Partial<CharacterCreateRequest>;

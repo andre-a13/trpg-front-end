@@ -77,6 +77,227 @@
     gap: .5rem;
 }
 
+.notes-tabs {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    min-width: 0;
+    padding: 0 0 .4rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+.notes-tabItem {
+    display: inline-flex;
+    align-items: stretch;
+    flex: 0 0 auto;
+    max-width: 220px;
+    min-height: 1.8rem;
+    border: 1px solid color-mix(in oklab, var(--parchment-line) 38%, transparent);
+    border-radius: 8px;
+    background: color-mix(in oklab, var(--parchment) 78%, white 22%);
+    overflow: hidden;
+    transition: border-color .14s ease, background .14s ease, box-shadow .14s ease, opacity .14s ease, transform .14s ease;
+}
+
+.notes-tabItem.is-active {
+    border-color: rgba(47, 111, 109, .56);
+    background: color-mix(in oklab, var(--parchment) 64%, #d8f3ee 36%);
+    box-shadow: 0 0 0 1px rgba(47, 111, 109, .12);
+}
+
+.notes-tabItem.is-dragging {
+    opacity: .55;
+    transform: scale(.99);
+}
+
+.notes-tabItem.is-drag-over {
+    border-color: #55b9b1;
+    box-shadow: 0 0 0 3px rgba(85, 185, 177, .18);
+}
+
+.notes-tabGrip {
+    display: inline-grid;
+    place-items: center;
+    width: 1.35rem;
+    min-width: 1.35rem;
+    border-right: 1px solid color-mix(in oklab, var(--parchment-line) 20%, transparent);
+    color: color-mix(in oklab, var(--parchment-accent) 70%, var(--parchment-ink) 30%);
+    cursor: grab;
+
+    &:active {
+        cursor: grabbing;
+    }
+
+    &:focus-visible {
+        outline: 2px solid rgba(85, 185, 177, .72);
+        outline-offset: -2px;
+    }
+}
+
+.notes-tab {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    max-width: 118px;
+    padding: .25rem .45rem;
+    border: 0;
+    color: var(--parchment-ink);
+    background: transparent;
+    font-size: .78rem;
+    font-weight: 780;
+    cursor: pointer;
+
+    span {
+        display: block;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &:focus-visible {
+        outline: 2px solid rgba(85, 185, 177, .72);
+        outline-offset: -2px;
+    }
+}
+
+.notes-tabActions {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    border-left: 1px solid color-mix(in oklab, var(--parchment-line) 24%, transparent);
+
+    button {
+        display: inline-grid;
+        place-items: center;
+        width: 1.5rem;
+        min-width: 1.5rem;
+        border: 0;
+        border-left: 1px solid color-mix(in oklab, var(--parchment-line) 20%, transparent);
+        color: color-mix(in oklab, var(--parchment-ink) 78%, transparent);
+        background: transparent;
+        cursor: pointer;
+
+        &:first-child {
+            border-left: 0;
+        }
+
+        &:hover:not(:disabled) {
+            color: var(--parchment-ink);
+            background: rgba(47, 111, 109, .08);
+        }
+
+        &:disabled {
+            cursor: not-allowed;
+            opacity: .36;
+        }
+
+        &:focus-visible {
+            outline: 2px solid rgba(85, 185, 177, .72);
+            outline-offset: -2px;
+        }
+    }
+}
+
+.notes-addTab,
+.notes-addForm button,
+.notes-renameForm button {
+    display: inline-grid;
+    place-items: center;
+    width: 1.8rem;
+    min-width: 1.8rem;
+    height: 1.8rem;
+    border: 1px solid color-mix(in oklab, var(--parchment-line) 36%, transparent);
+    border-radius: 8px;
+    color: var(--parchment-ink);
+    background: color-mix(in oklab, var(--parchment) 76%, white 24%);
+    cursor: pointer;
+
+    &:hover {
+        background: rgba(47, 111, 109, .1);
+    }
+
+    &:focus-visible {
+        outline: 2px solid rgba(85, 185, 177, .72);
+        outline-offset: 2px;
+    }
+}
+
+.notes-addForm,
+.notes-renameForm {
+    display: inline-flex;
+    align-items: center;
+    gap: .2rem;
+    flex: 0 0 auto;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+
+    input {
+        width: 118px;
+        height: 1.8rem;
+        padding: 0 .4rem;
+        border: 1px solid color-mix(in oklab, var(--parchment-line) 44%, transparent);
+        border-radius: 8px;
+        color: var(--parchment-ink);
+        background: rgba(255, 255, 255, .28);
+        font-size: .74rem;
+        font-weight: 720;
+        outline: none;
+
+        &:focus {
+            border-color: rgba(47, 111, 109, .62);
+            box-shadow: 0 0 0 2px rgba(47, 111, 109, .12);
+        }
+    }
+}
+
+.notes-renameForm {
+    padding: 0 .18rem;
+}
+
+.notes-renameForm input {
+    width: 104px;
+}
+
+.page .notes-addForm,
+.page .notes-renameForm {
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.page .notes-renameForm {
+    padding: 0 .18rem;
+}
+
+.page .notes-addForm input,
+.page .notes-renameForm input {
+    box-sizing: border-box;
+    padding: 0 .4rem;
+    font-size: .74rem;
+    background: rgba(255, 255, 255, .28);
+}
+
+.page .notes-addForm input {
+    width: 118px;
+}
+
+.page .notes-renameForm input {
+    width: 104px;
+}
+
 .btn.notes-save {
     padding: .35rem .6rem;
     border: 1px solid rgba(47, 111, 109, .42);
@@ -155,9 +376,10 @@
 
 .notes-moduleEditor {
     display: grid;
-    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-rows: auto minmax(0, 1fr) auto;
     height: 100%;
     min-height: 0;
+    padding: 0;
 }
 
 .notes-textarea--module {

@@ -1,6 +1,7 @@
 export type {
     CharacterCreateRequest as IAddCharacter,
     CharacterDto,
+    CharacterNoteDto,
     CharacterTeamDto,
     InventoryCategoryDto,
     InventoryContentDto,

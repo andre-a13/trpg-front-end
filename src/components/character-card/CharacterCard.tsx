@@ -252,7 +252,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 </SheetModule>
 
                 <SheetModule id="notes" title={t("characterCard.modules.notes")} layout={layout.notes} {...moduleControls}>
-                    <Notes slug={character.slug} notes={character.notes} variant="panel" saveStatus={saveStatus} />
+                    <Notes
+                        slug={character.slug}
+                        notes={character.notes}
+                        noteTabs={character.noteTabs}
+                        variant="panel"
+                        saveStatus={saveStatus}
+                        refresh={refresh}
+                    />
                 </SheetModule>
 
                 <SheetModule id="stats" title={t("characterCard.modules.stats")} layout={layout.stats} {...moduleControls}>
