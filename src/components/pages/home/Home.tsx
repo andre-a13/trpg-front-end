@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LogIn, LogOut, Sparkles, Swords, UserPlus } from "lucide-react";
+import { LogIn, LogOut, Swords, UserPlus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../../auth/useAuth";
@@ -61,18 +61,13 @@ export default function Home() {
     <main className="trpg-landing">
       <LanguageSwitch />
 
-      <div className="trpg-landing__status" title={statusText} aria-label={statusText}>
-        <span className={`trpg-landing__campfire trpg-landing__campfire--${status}`} aria-hidden="true">
-          <img src="/assets/campfire.svg" alt="" />
-        </span>
-        <span>{statusText}</span>
-      </div>
-
       <section className="trpg-landing__hero" aria-labelledby="trpg-landing-title">
-        <p className="trpg-landing__eyebrow">
-          <Sparkles size={16} aria-hidden="true" />
-          {t("home.eyebrow")}
-        </p>
+        <div className="trpg-landing__status" title={statusText} aria-label={statusText}>
+          <span className={`trpg-landing__campfire trpg-landing__campfire--${status}`} aria-hidden="true">
+            <img src="/assets/campfire.svg" alt="" />
+          </span>
+          <span>{statusText}</span>
+        </div>
         <h1 id="trpg-landing-title">{t("home.title")}</h1>
         <p className="trpg-landing__intro">{t("home.intro")}</p>
 
@@ -102,10 +97,6 @@ export default function Home() {
           )}
         </div>
       </section>
-
-      <div className="trpg-landing__sigil" aria-hidden="true">
-        <Swords size={54} />
-      </div>
     </main>
   );
 }

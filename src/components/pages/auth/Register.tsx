@@ -51,7 +51,6 @@ export default function Register() {
       <CampfireHomeButton />
 
       <section className="auth-page__hero" aria-labelledby="register-title">
-        <p className="auth-page__eyebrow">{t("auth.register.eyebrow")}</p>
         <h1 id="register-title">{t("auth.register.title")}</h1>
         <p>{t("auth.register.description")}</p>
       </section>

@@ -182,7 +182,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                         <span className={`ccard-modeLabel ${designMode ? "is-arrange" : "is-play"}`}>
                             {designMode ? t("characterCard.mode.arrange") : t("characterCard.mode.play")}
                         </span>
-                        <span className={`ccard-saveStatus ccard-saveStatus--${saveStatus.status}`}>
+                        <span className={`ccard-saveStatus ccard-saveStatus--${saveStatus.status}`} aria-busy={saveStatus.status === "saving"}>
+                            {saveStatus.status === "saving" && <span className="ccard-saveSpinner" aria-hidden="true" />}
                             {t(`characterCard.save.${saveStatus.status}`)}
                         </span>
                     </div>

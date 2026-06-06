@@ -10,15 +10,8 @@
     overflow: hidden;
     border: 1px solid color-mix(in oklab, var(--parchment-accent) 58%, var(--parchment-line) 42%);
     border-radius: 8px;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .22), rgba(255, 255, 255, 0) 42%),
-        linear-gradient(90deg, rgba(47, 111, 109, .12) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(47, 111, 109, .12) 1px, transparent 1px),
-        color-mix(in oklab, var(--parchment) 76%, var(--sheet-surface) 24%);
-    background-size: auto, 18px 18px, 18px 18px, auto;
-    box-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, .14),
-        0 10px 24px rgba(20, 23, 26, .18);
+    background: color-mix(in oklab, var(--parchment) 76%, var(--sheet-surface) 24%);
+    box-shadow: none;
 }
 
 .ccard-portrait::after {
@@ -50,21 +43,17 @@
 }
 
 .ccard-portrait.is-editable {
-    transition: border-color .14s ease, box-shadow .14s ease, filter .14s ease;
+    transition: border-color .14s ease, background .14s ease;
 }
 
 .ccard-portrait.is-editable:hover {
     border-color: color-mix(in oklab, var(--parchment-accent) 76%, white 24%);
-    box-shadow:
-        0 0 0 3px rgba(85, 185, 177, .16),
-        0 14px 28px rgba(20, 23, 26, .2);
+    background: color-mix(in oklab, var(--parchment) 82%, white 18%);
 }
 
 .ccard-portrait.is-dragging-file {
     border-color: #55b9b1;
-    box-shadow:
-        0 0 0 4px rgba(85, 185, 177, .24),
-        0 14px 28px rgba(20, 23, 26, .22);
+    background: rgba(115, 206, 196, .16);
 }
 
 .ccard-portraitDrop {
@@ -76,9 +65,7 @@
     height: 100%;
     padding: 14px 10px;
     color: var(--parchment-ink);
-    background:
-        linear-gradient(180deg, rgba(115, 206, 196, .2), rgba(255, 255, 255, .08)),
-        color-mix(in oklab, var(--parchment) 82%, white 18%);
+    background: color-mix(in oklab, var(--parchment) 82%, white 18%);
     text-align: center;
 }
 
@@ -101,7 +88,7 @@
 .ccard-portraitDrop li {
     padding: 3px 7px;
     border: 1px solid rgba(47, 111, 109, .24);
-    border-radius: 999px;
+    border-radius: 6px;
     background: rgba(255, 255, 255, .26);
 }
 
@@ -112,7 +99,7 @@
     z-index: 2;
     padding: 6px 8px;
     border-radius: 6px;
-    box-shadow: 0 8px 18px rgba(20, 23, 26, .18);
+    box-shadow: none;
     font-size: .74rem;
     font-weight: 800;
     line-height: 1.2;

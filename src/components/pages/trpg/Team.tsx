@@ -135,7 +135,11 @@ export default function Team() {
       {!loading && !error && !notFound && team && (
         <section className="team-detail">
           <header className="team-detail__header">
-            <h1>{team.name}</h1>
+            <div>
+              <Link className="team-detail__back" to="/teams">{t("teams.returnToTeams")}</Link>
+              <h1>{team.name}</h1>
+              <p>{t("teams.memberCount", { count: team.characters?.length ?? 0 })}</p>
+            </div>
             {isAdmin && (
               <button type="button" onClick={() => setIsAddingMember((value) => !value)}>
                 {t("teams.addMember")}
@@ -181,7 +185,7 @@ export default function Team() {
                       onClick={() => setMemberSlug(character.slug)}
                     >
                       <span>{character.name}</span>
-                      <small>{character.race} - {character.slug}</small>
+                      <span className="team-detail__picker-meta">{character.race} - {character.slug}</span>
                     </button>
                   ))}
                 </div>
@@ -203,7 +207,7 @@ export default function Team() {
                     <img src={portraitUrl} alt={character.name} />
                     <span>
                       <strong>{character.name}</strong>
-                      <small>{character.race}</small>
+                      <span className="team-detail__race">{character.race}</span>
                     </span>
                   </Link>
                 );

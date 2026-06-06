@@ -13,14 +13,10 @@
   min-height: 44px;
   padding: 8px 10px;
   border: 1px solid color-mix(in oklab, #b95f5f 42%, var(--parchment-line) 58%);
-  border-radius: 999px;
+  border-radius: 8px;
   color: var(--parchment-ink);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, .24), rgba(255, 255, 255, .06)),
-    rgba(185, 95, 95, .1);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, .42) inset,
-    0 10px 20px rgba(20, 23, 26, .14);
+  background: rgba(185, 95, 95, .1);
+  box-shadow: none;
   font-weight: 850;
   line-height: 1;
 }
@@ -39,13 +35,9 @@
   place-items: center;
   width: 22px;
   height: 22px;
-  border-radius: 999px;
-  background:
-    radial-gradient(120% 90% at 20% 20%, rgba(255, 255, 255, .4), transparent 60%),
-    linear-gradient(180deg, #ffb0b6, #d94a5b);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, .42),
-    0 0 0 1px rgba(92, 27, 25, .16);
+  border-radius: 6px;
+  background: #e17a7a;
+  box-shadow: 0 0 0 1px rgba(92, 27, 25, .16);
 }
 
 .hp-badge__icon-svg {
@@ -76,10 +68,10 @@
   margin-left: 2px;
   padding: 0 6px;
   border: 1px solid rgba(185, 95, 95, .22);
-  border-radius: 999px;
+  border-radius: 6px;
   color: var(--parchment-ink);
   background: rgba(255, 255, 255, .2);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4);
+  box-shadow: none;
   cursor: pointer;
   font-size: 12px;
   font-weight: 900;
@@ -104,11 +96,9 @@
   gap: 6px;
   padding: 6px;
   border: 1px solid color-mix(in oklab, var(--parchment-line) 30%, transparent);
-  border-radius: 999px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, .26), rgba(255, 255, 255, .08)),
-    var(--parchment);
-  box-shadow: 0 12px 24px rgba(20, 23, 26, .24);
+  border-radius: 8px;
+  background: var(--parchment);
+  box-shadow: 0 2px 8px rgba(20, 23, 26, .2);
 }
 
 .hp-badge__popup-btn {
@@ -118,7 +108,7 @@
   min-width: 24px;
   height: 24px;
   border: none;
-  border-radius: 999px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 900;
@@ -127,12 +117,12 @@
 
 .hp-badge__popup-btn--minus {
   color: #5e1212;
-  background: linear-gradient(180deg, #f8c1c1, #e17a7a);
+  background: #f8c1c1;
 }
 
 .hp-badge__popup-btn--plus {
   color: #123534;
-  background: linear-gradient(180deg, #c7f3ec, #55b9b1);
+  background: #c7f3ec;
 }
 
 .hp-badge__popup-btn:disabled {

@@ -23,7 +23,6 @@ interface RowProps {
 const StatRow: React.FC<RowProps> = ({ label, statKey, value, editable = false, onChange }) => {
     const { t } = useTranslation();
     const v = clamp(value);
-    const statStyle = { "--stat-value": `${v}%` } as React.CSSProperties;
 
     return (
         <div className="ccard-stat">
@@ -36,14 +35,11 @@ const StatRow: React.FC<RowProps> = ({ label, statKey, value, editable = false, 
                     max={100}
                     step={1}
                     value={v}
-                    style={statStyle}
                     aria-label={t("characterCard.stats.edit", { label })}
                     onChange={(event) => onChange?.(statKey, clamp(Number(event.target.value)))}
                 />
             ) : (
-                <div className="ccard-bar" aria-hidden="true">
-                    <div className="ccard-fill" style={{ width: `${v}%` }} />
-                </div>
+                <progress className="ccard-bar" value={v} max={100} aria-label={t("characterCard.stats.value", { label })} />
             )}
             {editable ? (
                 <input

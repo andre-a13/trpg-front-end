@@ -28,12 +28,8 @@
     border: 1px solid color-mix(in oklab, var(--parchment-line) 34%, transparent);
     border-radius: 8px;
     color: var(--parchment-ink);
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .34), rgba(255, 255, 255, .08)),
-        color-mix(in oklab, var(--parchment) 84%, white 16%);
-    box-shadow:
-        0 1px 0 rgba(255, 255, 255, .5) inset,
-        inset 0 0 0 1px rgba(255, 255, 255, .08);
+    background: color-mix(in oklab, var(--parchment) 84%, white 16%);
+    box-shadow: none;
     font-weight: 700;
     overflow-wrap: anywhere;
 }
@@ -47,9 +43,7 @@
 .ccard-teamLink:hover,
 .ccard-teamLink:focus-visible {
     color: #123534;
-    background:
-        linear-gradient(180deg, rgba(115, 206, 196, .22), rgba(255, 255, 255, .08)),
-        color-mix(in oklab, var(--parchment) 82%, white 18%);
+    background: color-mix(in oklab, var(--parchment) 82%, white 18%);
     border-color: color-mix(in oklab, var(--parchment-accent) 62%, var(--parchment-line) 38%);
     outline: none;
 }

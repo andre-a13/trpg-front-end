@@ -71,7 +71,7 @@ export default function CreateTeam() {
           />
         </div>
 
-        <div style={{ marginTop: 12 }}>
+        <div className="trpg-form__actions">
           <button type="submit">{t("common.actions.create")}</button>
         </div>
 

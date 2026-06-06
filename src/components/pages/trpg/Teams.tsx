@@ -59,13 +59,10 @@ export default function Teams() {
 
       {!loading && !error && (
         <section className="teams-list">
-          <div className="teams-list__header">
-            <div>
-              <h2>{t("teams.title")}</h2>
-              <p>{t("teams.listIntro")}</p>
-            </div>
-            {isAdmin && <Link to="/teams/create">{t("teams.create")}</Link>}
-          </div>
+          <header className="teams-list__header">
+            <h1>{t("teams.title")}</h1>
+            {isAdmin && <Link className="teams-list__create" to="/teams/create">{t("teams.create")}</Link>}
+          </header>
 
           {teams.length === 0 ? (
             <p className="teams-list__empty">{t("teams.empty")}</p>
@@ -81,7 +78,7 @@ export default function Teams() {
                       <h3>
                         <Link to={`/teams/${team.uuid}`}>{team.name}</Link>
                       </h3>
-                      <span>{t("teams.memberCount", { count: team.characters?.length ?? 0 })}</span>
+                      <span className="team-card__meta">{t("teams.memberCount", { count: team.characters?.length ?? 0 })}</span>
                     </div>
 
                     {team.characters && team.characters.length > 0 ? (
@@ -94,7 +91,7 @@ export default function Teams() {
                               <img src={portraitUrl} alt="" />
                               <span>
                                 <strong>{character.name}</strong>
-                                <small>{character.race}</small>
+                                <span className="team-card__race">{character.race}</span>
                               </span>
                             </Link>
                           );

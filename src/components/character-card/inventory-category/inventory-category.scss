@@ -10,6 +10,12 @@
     font-weight: 800;
 }
 
+.inventory-category__nameInput:focus {
+    outline: 2px solid rgba(85, 185, 177, .72);
+    outline-offset: 2px;
+    border-color: rgba(47, 111, 109, .54);
+}
+
 .inventory-category__actions {
     display: inline-flex;
     align-items: center;
@@ -30,7 +36,12 @@
 }
 
 .inventory-category__actions button:hover {
-    filter: brightness(1.04);
+    background: rgba(47, 111, 109, .1);
+}
+
+.inventory-category__actions button:focus-visible {
+    outline: 2px solid rgba(85, 185, 177, .72);
+    outline-offset: 2px;
 }
 
 .inventory-category__error {
