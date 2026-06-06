@@ -1,9 +1,14 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "./useAuth";
+import type { UserRole } from "../types/api";
 import "./auth.scss";
 
-export default function ProtectedRoute() {
-  const { isAuthenticated, isInitializing } = useAuth();
+type ProtectedRouteProps = {
+  requiredRole?: UserRole;
+};
+
+export default function ProtectedRoute({ requiredRole }: ProtectedRouteProps) {
+  const { isAuthenticated, isInitializing, user } = useAuth();
   const location = useLocation();
 
   if (isInitializing) {
@@ -18,6 +23,10 @@ export default function ProtectedRoute() {
   if (!isAuthenticated) {
     const next = `${location.pathname}${location.search}`;
     return <Navigate to={`/login?next=${encodeURIComponent(next)}`} replace />;
+  }
+
+  if (requiredRole && user?.role !== requiredRole) {
+    return <Navigate to="/teams" replace />;
   }
 
   return (

@@ -2,15 +2,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
-import { useAuth } from "../../../auth/useAuth";
+import { useAdminControls } from "../../../admin/useAdminControls";
 import teamService from "../../../services/team.service";
 import type { TeamDto } from "../../../interface/IAddTeam";
 import "./teams.scss";
 
 export default function Teams() {
   const { t } = useTranslation();
-  const { user } = useAuth();
-  const isAdmin = user?.username === "admin";
+  const { isAdmin, manageCharactersEnabled } = useAdminControls();
   const [teams, setTeams] = useState<TeamDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -61,7 +60,7 @@ export default function Teams() {
         <section className="teams-list">
           <header className="teams-list__header">
             <h1>{t("teams.title")}</h1>
-            {isAdmin && <Link className="teams-list__create" to="/teams/create">{t("teams.create")}</Link>}
+            {isAdmin && manageCharactersEnabled && <Link className="teams-list__create" to="/teams/create">{t("teams.create")}</Link>}
           </header>
 
           {teams.length === 0 ? (

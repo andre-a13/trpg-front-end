@@ -29,6 +29,7 @@ interface CharacterCardProps {
     portraitUrl?: string;
     className?: string;
     refresh: () => void;
+    canEdit?: boolean;
     designMode?: boolean;
     onToggleDesignMode?: () => void;
 }
@@ -38,6 +39,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     className,
     portraitUrl,
     refresh,
+    canEdit = false,
     designMode = false,
     onToggleDesignMode,
 }) => {
@@ -92,6 +94,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         clearBackgroundUploadError,
     } = useCharacterCardState({ character, portraitUrl, refresh, saveStatus });
     const hasCustomBackground = Boolean(localBackgroundUrl);
+    const isArrangeMode = designMode;
+    const contentEditMode = canEdit && designMode;
     const sheetBackgroundStyle = hasCustomBackground
         ? { "--ccard-background-image": `url("${localBackgroundUrl.replace(/"/g, "%22")}")` } as React.CSSProperties
         : undefined;
@@ -100,6 +104,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         workbenchRef,
         onBringToFront: bringModuleToFront,
         onLayoutChange: updateModuleLayout,
+        editable: true,
     };
 
     const openCreateCategoryModal = () => {
@@ -155,7 +160,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
     return (
         <main
-            className={`ccard-sheet ${designMode ? "is-design-mode" : ""} ${hasCustomBackground ? "is-custom-background" : ""} ${className ?? ""}`}
+            className={`ccard-sheet ${isArrangeMode ? "is-design-mode" : ""} ${hasCustomBackground ? "is-custom-background" : ""} ${className ?? ""}`}
             role="document"
             aria-label={t("characterCard.sheetLabel")}
             style={sheetBackgroundStyle}
@@ -171,8 +176,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                             showIcon
                             currentHp={currentHp}
                             maxHp={maxHp}
-                            onIncreaseHp={increaseHp}
-                            onDecreaseHp={decreaseHp}
+                            onIncreaseHp={canEdit ? increaseHp : undefined}
+                            onDecreaseHp={canEdit ? decreaseHp : undefined}
                             label={t("characterCard.hp.label")}
                         />
                     </div>
@@ -180,7 +185,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 <div className="ccard-actions">
                     <div className="ccard-sessionState" aria-live="polite">
                         <span className={`ccard-modeLabel ${designMode ? "is-arrange" : "is-play"}`}>
-                            {designMode ? t("characterCard.mode.arrange") : t("characterCard.mode.play")}
+                            {isArrangeMode ? t("characterCard.mode.arrange") : (canEdit ? t("characterCard.mode.play") : t("characterCard.mode.readOnly"))}
                         </span>
                         <span className={`ccard-saveStatus ccard-saveStatus--${saveStatus.status}`} aria-busy={saveStatus.status === "saving"}>
                             {saveStatus.status === "saving" && <span className="ccard-saveSpinner" aria-hidden="true" />}
@@ -198,42 +203,46 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                     </button>
                     <button
                         type="button"
-                        className={`ccard-modeToggle ${designMode ? "is-active" : ""}`}
-                        aria-label={designMode ? t("characterCard.actions.disableEditMode") : t("characterCard.actions.enableEditMode")}
-                        aria-pressed={designMode}
-                        title={designMode ? t("characterCard.actions.editModeActive") : t("characterCard.actions.enableEditMode")}
+                        className={`ccard-modeToggle ${isArrangeMode ? "is-active" : ""}`}
+                        aria-label={isArrangeMode ? t("characterCard.actions.disableEditMode") : t("characterCard.actions.enableEditMode")}
+                        aria-pressed={isArrangeMode}
+                        title={isArrangeMode ? t("characterCard.actions.editModeActive") : t("characterCard.actions.enableEditMode")}
                         onClick={onToggleDesignMode}
                     >
                         <Pencil size={17} strokeWidth={2.2} aria-hidden="true" />
                     </button>
-                    <div className="ccard-actionMenu">
-                        <button
-                            type="button"
-                            className="ccard-iconButton"
-                            aria-label={t("characterCard.actions.openActionMenu")}
-                            aria-expanded={actionMenuOpen}
-                            aria-haspopup="menu"
-                            title={t("characterCard.actions.openActionMenu")}
-                            onClick={() => setActionMenuOpen((open) => !open)}
-                        >
-                            <MoreVertical size={17} strokeWidth={2.2} aria-hidden="true" />
-                        </button>
-                        {actionMenuOpen && (
-                            <div className="ccard-actionMenuPanel" role="menu">
-                                <button type="button" role="menuitem" onClick={openBackgroundUploadModal}>
-                                    {t("characterCard.background.upload")}
+                    {canEdit && (
+                        <>
+                            <div className="ccard-actionMenu">
+                                <button
+                                    type="button"
+                                    className="ccard-iconButton"
+                                    aria-label={t("characterCard.actions.openActionMenu")}
+                                    aria-expanded={actionMenuOpen}
+                                    aria-haspopup="menu"
+                                    title={t("characterCard.actions.openActionMenu")}
+                                    onClick={() => setActionMenuOpen((open) => !open)}
+                                >
+                                    <MoreVertical size={17} strokeWidth={2.2} aria-hidden="true" />
                                 </button>
-                                {hasCustomBackground && (
-                                    <button type="button" role="menuitem" onClick={clearBackground}>
-                                        {t("characterCard.background.remove")}
-                                    </button>
+                                {actionMenuOpen && (
+                                    <div className="ccard-actionMenuPanel" role="menu">
+                                        <button type="button" role="menuitem" onClick={openBackgroundUploadModal}>
+                                            {t("characterCard.background.upload")}
+                                        </button>
+                                        {hasCustomBackground && (
+                                            <button type="button" role="menuitem" onClick={clearBackground}>
+                                                {t("characterCard.background.remove")}
+                                            </button>
+                                        )}
+                                        <button type="button" role="menuitem" onClick={openCreateCategoryModal}>
+                                            {t("characterCard.customInventory.createTable")}
+                                        </button>
+                                    </div>
                                 )}
-                                <button type="button" role="menuitem" onClick={openCreateCategoryModal}>
-                                    {t("characterCard.customInventory.createTable")}
-                                </button>
                             </div>
-                        )}
-                    </div>
+                        </>
+                    )}
                 </div>
             </header>
 
@@ -245,7 +254,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 <SheetModule id="portrait" title={t("characterCard.modules.portrait")} layout={layout.portrait} {...moduleControls}>
                     <Portrait
                         src={localPortraitUrl}
-                        editable={designMode}
+                        editable={contentEditMode}
                         uploading={isPortraitUploading}
                         error={portraitUploadError}
                         onUpload={uploadPortrait}
@@ -260,19 +269,20 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                         variant="panel"
                         saveStatus={saveStatus}
                         refresh={refresh}
+                        editable={canEdit}
                     />
                 </SheetModule>
 
                 <SheetModule id="stats" title={t("characterCard.modules.stats")} layout={layout.stats} {...moduleControls}>
-                    <Stats values={stats} editable={designMode} onChange={updateStat} />
+                    <Stats values={stats} editable={contentEditMode} onChange={updateStat} />
                 </SheetModule>
 
                 <SheetModule id="skills" title={t("characterCard.modules.skills")} layout={layout.skills} {...moduleControls}>
                     <Skills
                         primary={primarySkills}
                         secondary={secondarySkills}
-                        editable={designMode}
-                        movable={designMode}
+                        editable={contentEditMode}
+                        movable={contentEditMode}
                         onAddPrimarySkill={addPrimarySkill}
                         onDeletePrimarySkill={deletePrimarySkill}
                         onMovePrimarySkill={movePrimarySkill}
@@ -283,7 +293,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 </SheetModule>
 
                 <SheetModule id="inventory" title={t("characterCard.modules.inventory")} layout={layout.inventory} {...moduleControls}>
-                    <Inventory slug={character.slug} items={character.inventory ?? []} gold={character.gold} refresh={refresh} saveStatus={saveStatus} />
+                    <Inventory slug={character.slug} items={character.inventory ?? []} gold={character.gold} refresh={refresh} saveStatus={saveStatus} editable={canEdit} />
                 </SheetModule>
 
                 {inventoryCategories.map((category, index) => {
@@ -303,6 +313,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                                 category={category}
                                 saveStatus={saveStatus}
                                 refresh={refresh}
+                                editable={canEdit}
                             />
                         </SheetModule>
                     );

@@ -24,6 +24,10 @@
     },
     "loading": "Loading..."
   },
+  "roles": {
+    "admin": "Admin",
+    "player": "Player"
+  },
   "home": {
     "server": {
       "checking": "Checking server",
@@ -43,6 +47,7 @@
   "navigation": {
     "home": "Return to homepage",
     "app": "TRPG navigation",
+    "dashboard": "Dashboard",
     "teams": "Teams",
     "newCharacter": "New character",
     "newTeam": "New team",
@@ -118,7 +123,8 @@
     },
     "mode": {
       "play": "Play",
-      "arrange": "Arrange"
+      "arrange": "Arrange",
+      "readOnly": "Read-only"
     },
     "save": {
       "saved": "Saved",
@@ -287,6 +293,7 @@
     "name": "Name",
     "race": "Race",
     "slug": "Slug (URL-safe)",
+    "owner": "Owner account",
     "portraitUrl": "Portrait URL",
     "stats": "Attributes (0 - 100)",
     "primarySkills": "Primary skills (comma-separated)",
@@ -306,6 +313,39 @@
       "openSheet": "Open sheet",
       "createAnother": "Create another",
       "returnTeams": "Return to teams"
+    }
+  },
+  "dashboard": {
+    "title": "Admin dashboard",
+    "subtitle": "Manage table accounts, roles, and character ownership.",
+    "manageCharacters": "Manage Characters",
+    "manageRequired": {
+      "title": "Manage Characters is off",
+      "body": "Enable Manage Characters from the dashboard to use this admin tool."
+    },
+    "errors": {
+      "loadFailed": "Unable to load the dashboard."
+    },
+    "accounts": {
+      "title": "Accounts",
+      "createTitle": "Create account",
+      "role": "Role",
+      "roleFor": "Role for {{username}}",
+      "characters": "Characters",
+      "create": "Create account",
+      "creating": "Creating...",
+      "created": "Account created.",
+      "updated": "Account updated.",
+      "createFailed": "Unable to create account.",
+      "updateFailed": "Unable to update account."
+    },
+    "characters": {
+      "title": "Character ownership",
+      "owner": "Owner",
+      "ownerFor": "Owner for {{name}}",
+      "unassigned": "Unassigned",
+      "ownerUpdated": "Character owner updated.",
+      "ownerUpdateFailed": "Unable to update character owner."
     }
   }
 }

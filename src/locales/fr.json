@@ -24,6 +24,10 @@
     },
     "loading": "Chargement…"
   },
+  "roles": {
+    "admin": "Admin",
+    "player": "Joueur"
+  },
   "home": {
     "server": {
       "checking": "Vérification du serveur",
@@ -43,6 +47,7 @@
   "navigation": {
     "home": "Revenir à l'accueil",
     "app": "Navigation JDR",
+    "dashboard": "Dashboard",
     "teams": "Compagnies",
     "newCharacter": "Nouveau personnage",
     "newTeam": "Nouvelle compagnie",
@@ -118,7 +123,8 @@
     },
     "mode": {
       "play": "Jeu",
-      "arrange": "Organisation"
+      "arrange": "Organisation",
+      "readOnly": "Lecture seule"
     },
     "save": {
       "saved": "Enregistré",
@@ -287,6 +293,7 @@
     "name": "Nom",
     "race": "Race",
     "slug": "Identifiant URL",
+    "owner": "Compte joueur",
     "portraitUrl": "URL du portrait",
     "stats": "Attributs (0 - 100)",
     "primarySkills": "Compétences principales, séparées par des virgules",
@@ -306,6 +313,39 @@
       "openSheet": "Ouvrir la fiche",
       "createAnother": "En créer un autre",
       "returnTeams": "Revenir aux compagnies"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard admin",
+    "subtitle": "Gerez les comptes, les roles et les personnages de la table.",
+    "manageCharacters": "Gerer les personnages",
+    "manageRequired": {
+      "title": "Gestion des personnages inactive",
+      "body": "Activez Gerer les personnages depuis le dashboard pour utiliser cet outil admin."
+    },
+    "errors": {
+      "loadFailed": "Impossible de charger le dashboard."
+    },
+    "accounts": {
+      "title": "Comptes",
+      "createTitle": "Creer un compte",
+      "role": "Role",
+      "roleFor": "Role de {{username}}",
+      "characters": "Personnages",
+      "create": "Creer le compte",
+      "creating": "Creation...",
+      "created": "Compte cree.",
+      "updated": "Compte mis a jour.",
+      "createFailed": "Impossible de creer le compte.",
+      "updateFailed": "Impossible de modifier le compte."
+    },
+    "characters": {
+      "title": "Proprietaires des personnages",
+      "owner": "Compte",
+      "ownerFor": "Compte de {{name}}",
+      "unassigned": "Non assigne",
+      "ownerUpdated": "Compte du personnage mis a jour.",
+      "ownerUpdateFailed": "Impossible de modifier le compte du personnage."
     }
   }
 }

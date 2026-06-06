@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router";
 import { useTranslation } from "react-i18next";
+import { useAdminControls } from "../../../admin/useAdminControls";
+import { useAuth } from "../../../auth/useAuth";
 import characterService from "../../../services/character.service";
 import CharacterCard from "../../character-card/CharacterCard";
 import "./character.scss";
@@ -14,6 +16,8 @@ type Props = {
 
 export default function CharacterPage({ presetSlug, portraitUrl }: Props) {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const { manageCharactersEnabled } = useAdminControls();
   const params = useParams();
   const slug = presetSlug ?? params.slug ?? "";
   const [char, setChar] = useState<Character | null>(null);
@@ -64,6 +68,13 @@ export default function CharacterPage({ presetSlug, portraitUrl }: Props) {
   }, [char, t]);
 
   const computedPortrait = portraitUrl ?? (slug ? `/assets/${slug}_jdr.jpg` : undefined);
+  const canEdit = Boolean(
+    char &&
+    (
+      (user?.role === "player" && char.ownerUserId === user.id) ||
+      (user?.role === "admin" && manageCharactersEnabled)
+    )
+  );
 
   return (
     <div className="page">
@@ -99,6 +110,7 @@ export default function CharacterPage({ presetSlug, portraitUrl }: Props) {
           portraitUrl={computedPortrait}
           refresh={fetchCharacter}
           character={char}
+          canEdit={canEdit}
           designMode={isDesignMode}
           onToggleDesignMode={() => setIsDesignMode((value) => !value)}
         />

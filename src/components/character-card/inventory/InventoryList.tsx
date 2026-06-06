@@ -24,6 +24,7 @@ type InventoryListProps = {
   saveStatus: SaveStatusReporter;
   actions?: React.ReactNode;
   onSaveItems: (updatedItems: string[], shouldRefresh: boolean, change: InventoryListChange) => Promise<boolean>;
+  editable?: boolean;
 };
 
 export type InventoryListChange =
@@ -44,6 +45,7 @@ export default function InventoryList({
   saveStatus,
   actions,
   onSaveItems,
+  editable = false,
 }: InventoryListProps) {
   const { t } = useTranslation();
   const modalRef = React.useRef<ModalHandle>(null);
@@ -103,6 +105,7 @@ export default function InventoryList({
   };
 
   const onDragStart = (event: React.DragEvent, index: number) => {
+    if (!editable) return;
     dragIndexRef.current = index;
     setDraggingIdx(index);
     event.dataTransfer.effectAllowed = "move";
@@ -115,12 +118,14 @@ export default function InventoryList({
   };
 
   const onDragOverItem = (event: React.DragEvent, index: number) => {
+    if (!editable) return;
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
     if (dragOverIdx !== index) setDragOverIdx(index);
   };
 
   const onDropItem = async (event: React.DragEvent, index: number) => {
+    if (!editable) return;
     event.preventDefault();
 
     const rawSource = event.dataTransfer.getData("text/plain");
@@ -196,14 +201,16 @@ export default function InventoryList({
 
           <div className="ccard-listActions">
             {actions}
-            <button
-              type="button"
-              className="ccard-addItemBtn"
-              aria-haspopup="dialog"
-              onClick={() => modalRef.current?.open()}
-            >
-              + {t("characterCard.inventory.addItem")}
-            </button>
+            {editable && (
+              <button
+                type="button"
+                className="ccard-addItemBtn"
+                aria-haspopup="dialog"
+                onClick={() => modalRef.current?.open()}
+              >
+                + {t("characterCard.inventory.addItem")}
+              </button>
+            )}
           </div>
         </div>
 
@@ -259,7 +266,8 @@ export default function InventoryList({
                 name={item}
                 onEditContent={(newName) => updateItemLabel(index, newName)}
                 onDelete={() => deleteItem(index)}
-                draggable={canReorder}
+                editable={editable}
+                draggable={editable && canReorder}
                 onDragStart={(event) => onDragStart(event, index)}
                 onDragOver={(event) => onDragOverItem(event, index)}
                 onDrop={(event) => onDropItem(event, index)}
@@ -276,54 +284,56 @@ export default function InventoryList({
         </ul>
       </div>
 
-      <Modal
-        ref={modalRef}
-        onOpen={() => setIsAddOpen(true)}
-        onClose={() => setIsAddOpen(false)}
-        title={t("characterCard.inventory.addItem")}
-        subtitle={modalSubtitle}
-        size="sm"
-        align="center"
-        panelClassName="notes-panel invAdd-panel"
-        headerClassName="notes-header invAdd-header"
-        titleClassName="notes-title invAdd-title"
-        subtitleClassName="invAdd-subtitle"
-        footerClassName="notes-actions"
-      >
-        <form onSubmit={handleAddSubmit}>
-          <div className="modal__content invAdd-content">
-            <label htmlFor={`new-item-${listId}`} className="modal__label invAdd-label">
-              {itemNameLabel}
-            </label>
+      {editable && (
+        <Modal
+          ref={modalRef}
+          onOpen={() => setIsAddOpen(true)}
+          onClose={() => setIsAddOpen(false)}
+          title={t("characterCard.inventory.addItem")}
+          subtitle={modalSubtitle}
+          size="sm"
+          align="center"
+          panelClassName="notes-panel invAdd-panel"
+          headerClassName="notes-header invAdd-header"
+          titleClassName="notes-title invAdd-title"
+          subtitleClassName="invAdd-subtitle"
+          footerClassName="notes-actions"
+        >
+          <form onSubmit={handleAddSubmit}>
+            <div className="modal__content invAdd-content">
+              <label htmlFor={`new-item-${listId}`} className="modal__label invAdd-label">
+                {itemNameLabel}
+              </label>
 
-            <input
-              type="text"
-              id={`new-item-${listId}`}
-              name={`new-item-${listId}`}
-              className="modal__input invAdd-input"
-              placeholder={itemPlaceholder}
-              autoFocus
-              required
-              minLength={1}
-              maxLength={50}
-              disabled={!isAddOpen}
-            />
-          </div>
+              <input
+                type="text"
+                id={`new-item-${listId}`}
+                name={`new-item-${listId}`}
+                className="modal__input invAdd-input"
+                placeholder={itemPlaceholder}
+                autoFocus
+                required
+                minLength={1}
+                maxLength={50}
+                disabled={!isAddOpen}
+              />
+            </div>
 
-          <div className="modal__footer invAdd-footer">
-            <button
-              type="button"
-              className="btn-add-item-footer"
-              onClick={closeAddModal}
-            >
-              {t("common.actions.cancel")}
-            </button>
-            <button type="submit" className="btn-add-item-footer">
-              {t("common.actions.add")}
-            </button>
-          </div>
-        </form>
-      </Modal>
+            <div className="modal__footer invAdd-footer">
+              <button
+                type="button"
+                className="btn-add-item-footer"
+                onClick={closeAddModal}
+              >
+                {t("common.actions.cancel")}
+              </button>
+              <button type="submit" className="btn-add-item-footer">
+                {t("common.actions.add")}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
     </section>
   );
 }

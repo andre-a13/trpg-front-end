@@ -16,6 +16,8 @@ export default class Character {
     notes : string = "";
     current_hp : number = 0;
     bonusHealth : number = 0;
+    ownerUserId?: number | null;
+    ownerUsername?: string | null;
     teams: CharacterTeamDto[] = [];
     inventoryCategories: InventoryCategoryDto[] = [];
     noteTabs: CharacterNoteDto[] = [];
@@ -35,6 +37,8 @@ export default class Character {
         this.notes = data.notes ?? this.noteTabs[0]?.content ?? "";
         this.bonusHealth = data.bonusHealth ?? 0;
         this.current_hp = data.current_hp ?? this.getMaxHp();
+        this.ownerUserId = data.ownerUserId ?? null;
+        this.ownerUsername = data.ownerUsername ?? null;
         this.teams = data.teams ?? [];
         this.inventoryCategories = data.inventoryCategories ?? [];
 

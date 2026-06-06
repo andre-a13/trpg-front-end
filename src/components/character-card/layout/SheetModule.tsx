@@ -24,6 +24,7 @@ interface SheetModuleProps {
     workbenchRef: React.RefObject<HTMLDivElement | null>;
     onBringToFront: (id: ModuleId) => void;
     onLayoutChange: (id: ModuleId, patch: Partial<ModuleLayout>) => void;
+    editable?: boolean;
 }
 
 const clamp = (value: number, min: number, max: number) => {
@@ -46,6 +47,7 @@ export const SheetModule: React.FC<SheetModuleProps> = ({
     workbenchRef,
     onBringToFront,
     onLayoutChange,
+    editable = false,
 }) => {
     const { t } = useTranslation();
     const moduleRef = React.useRef<HTMLElement | null>(null);
@@ -115,6 +117,7 @@ export const SheetModule: React.FC<SheetModuleProps> = ({
     ]);
 
     const beginInteraction = (event: React.PointerEvent, mode: DragState["mode"], resizeEdge?: DragState["resizeEdge"]) => {
+        if (!editable) return;
         if (isFullscreen) return;
         if (event.button !== 0) return;
         if (mode === "resize" && isCollapsed) return;
@@ -136,6 +139,7 @@ export const SheetModule: React.FC<SheetModuleProps> = ({
     };
 
     const toggleMinimized = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (!editable) return;
         event.stopPropagation();
         onBringToFront(id);
         onLayoutChange(id, { minimized: !layout.minimized });
@@ -210,7 +214,7 @@ export const SheetModule: React.FC<SheetModuleProps> = ({
             )}
             <section
                 ref={moduleRef}
-                className={`ccard-module ccard-module--${id} ${isCollapsed ? "is-minimized" : ""} ${isFullscreen ? "is-fullscreen" : ""} ${className ?? ""}`}
+                className={`ccard-module ccard-module--${id} ${editable ? "is-editable" : ""} ${isCollapsed ? "is-minimized" : ""} ${isFullscreen ? "is-fullscreen" : ""} ${className ?? ""}`}
                 style={isFullscreen ? { zIndex: 1001 } : {
                     left: layout.x,
                     top: layout.y,
@@ -228,34 +232,38 @@ export const SheetModule: React.FC<SheetModuleProps> = ({
             >
                 <header
                     className="ccard-moduleHeader"
-                    onPointerDown={(event) => beginInteraction(event, "move")}
+                    onPointerDown={editable ? (event) => beginInteraction(event, "move") : undefined}
                 >
-                    <button
-                        type="button"
-                        className="ccard-moduleGrip"
-                        aria-label={t("characterCard.moduleActions.move", { title })}
-                        title={t("characterCard.moduleActions.move", { title })}
-                        onPointerDown={(event) => beginInteraction(event, "move")}
-                    >
-                        <GripVertical size={16} strokeWidth={2.2} aria-hidden="true" />
-                    </button>
+                    {editable && (
+                        <button
+                            type="button"
+                            className="ccard-moduleGrip"
+                            aria-label={t("characterCard.moduleActions.move", { title })}
+                            title={t("characterCard.moduleActions.move", { title })}
+                            onPointerDown={(event) => beginInteraction(event, "move")}
+                        >
+                            <GripVertical size={16} strokeWidth={2.2} aria-hidden="true" />
+                        </button>
+                    )}
                     <h2 className="ccard-moduleTitle">{title}</h2>
-                    <button
-                        type="button"
-                        className="ccard-moduleMinimize"
-                        aria-label={layout.minimized ? t("characterCard.moduleActions.restore", { title }) : t("characterCard.moduleActions.minimize", { title })}
-                        aria-expanded={!layout.minimized}
-                        title={layout.minimized ? t("characterCard.moduleActions.restore", { title }) : t("characterCard.moduleActions.minimize", { title })}
-                        disabled={isFullscreen}
-                        onClick={toggleMinimized}
-                        onPointerDown={(event) => event.stopPropagation()}
-                    >
-                        {layout.minimized ? (
-                            <Plus size={15} strokeWidth={2.2} aria-hidden="true" />
-                        ) : (
-                            <Minus size={15} strokeWidth={2.2} aria-hidden="true" />
-                        )}
-                    </button>
+                    {editable && (
+                        <button
+                            type="button"
+                            className="ccard-moduleMinimize"
+                            aria-label={layout.minimized ? t("characterCard.moduleActions.restore", { title }) : t("characterCard.moduleActions.minimize", { title })}
+                            aria-expanded={!layout.minimized}
+                            title={layout.minimized ? t("characterCard.moduleActions.restore", { title }) : t("characterCard.moduleActions.minimize", { title })}
+                            disabled={isFullscreen}
+                            onClick={toggleMinimized}
+                            onPointerDown={(event) => event.stopPropagation()}
+                        >
+                            {layout.minimized ? (
+                                <Plus size={15} strokeWidth={2.2} aria-hidden="true" />
+                            ) : (
+                                <Minus size={15} strokeWidth={2.2} aria-hidden="true" />
+                            )}
+                        </button>
+                    )}
                     <button
                         type="button"
                         className="ccard-moduleFullscreen"
@@ -274,26 +282,30 @@ export const SheetModule: React.FC<SheetModuleProps> = ({
                 <div className="ccard-moduleBody" aria-hidden={isCollapsed}>
                     {children}
                 </div>
-                <button
-                    type="button"
-                    className="ccard-moduleResize ccard-moduleResize--left"
-                    aria-label={t("characterCard.moduleActions.resizeLeft", { title })}
-                    title={t("characterCard.moduleActions.resizeLeft", { title })}
-                    disabled={isCollapsed || isFullscreen}
-                    onPointerDown={(event) => beginInteraction(event, "resize", "left")}
-                >
-                    <Maximize2 size={10} strokeWidth={2.4} aria-hidden="true" />
-                </button>
-                <button
-                    type="button"
-                    className="ccard-moduleResize ccard-moduleResize--right"
-                    aria-label={t("characterCard.moduleActions.resizeRight", { title })}
-                    title={t("characterCard.moduleActions.resizeRight", { title })}
-                    disabled={isCollapsed || isFullscreen}
-                    onPointerDown={(event) => beginInteraction(event, "resize", "right")}
-                >
-                    <Maximize2 size={10} strokeWidth={2.4} aria-hidden="true" />
-                </button>
+                {editable && (
+                    <>
+                        <button
+                            type="button"
+                            className="ccard-moduleResize ccard-moduleResize--left"
+                            aria-label={t("characterCard.moduleActions.resizeLeft", { title })}
+                            title={t("characterCard.moduleActions.resizeLeft", { title })}
+                            disabled={isCollapsed || isFullscreen}
+                            onPointerDown={(event) => beginInteraction(event, "resize", "left")}
+                        >
+                            <Maximize2 size={10} strokeWidth={2.4} aria-hidden="true" />
+                        </button>
+                        <button
+                            type="button"
+                            className="ccard-moduleResize ccard-moduleResize--right"
+                            aria-label={t("characterCard.moduleActions.resizeRight", { title })}
+                            title={t("characterCard.moduleActions.resizeRight", { title })}
+                            disabled={isCollapsed || isFullscreen}
+                            onPointerDown={(event) => beginInteraction(event, "resize", "right")}
+                        >
+                            <Maximize2 size={10} strokeWidth={2.4} aria-hidden="true" />
+                        </button>
+                    </>
+                )}
             </section>
         </>
     );

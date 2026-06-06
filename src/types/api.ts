@@ -1,10 +1,27 @@
 import type { SkillSet } from "./character";
 
+export type UserRole = "admin" | "player";
+
 export type AuthUser = {
   id: number;
   username: string;
+  role: UserRole;
   created_at: string;
   updated_at: string;
+};
+
+export type AccountDto = AuthUser & {
+  owned_character_count: number;
+};
+
+export type AccountCreateRequest = {
+  username: string;
+  password: string;
+  role: UserRole;
+};
+
+export type AccountUpdateRequest = {
+  role?: UserRole;
 };
 
 export type TokenPairResponse = {
@@ -42,6 +59,7 @@ export type CharacterCreateRequest = {
   notes?: string;
   current_hp?: number;
   bonusHealth?: number;
+  ownerUserId?: number | null;
 };
 
 export type InventoryContentDto = {
@@ -63,6 +81,7 @@ export type InventoryCategoryDto = {
 
 export type CharacterDto = CharacterCreateRequest & {
   id: number;
+  ownerUsername?: string | null;
   teams?: CharacterTeamDto[];
   inventoryCategories?: InventoryCategoryDto[];
   noteTabs?: CharacterNoteDto[];
@@ -82,6 +101,7 @@ export type TeamCharacterDto = {
   name: string;
   race: string;
   portraitUrl?: string;
+  ownerUserId?: number | null;
 };
 
 export type TeamDto = TeamCreateRequest & {

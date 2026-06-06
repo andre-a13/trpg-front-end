@@ -412,7 +412,7 @@
 
 .ccard-moduleHeader {
     display: grid;
-    grid-template-columns: 28px minmax(0, 1fr) 28px 28px;
+    grid-template-columns: minmax(0, 1fr) 28px;
     align-items: center;
     gap: 8px;
     min-height: 40px;
@@ -420,13 +420,18 @@
     color: #f7f1e4;
     background: color-mix(in oklab, var(--sheet-surface) 82%, var(--parchment-line) 18%);
     border-bottom: 1px solid rgba(39, 32, 25, .2);
-    cursor: grab;
+    cursor: default;
     user-select: none;
     -webkit-user-select: none;
     touch-action: none;
 }
 
-.ccard-moduleHeader:active {
+.ccard-module.is-editable .ccard-moduleHeader {
+    grid-template-columns: 28px minmax(0, 1fr) 28px 28px;
+    cursor: grab;
+}
+
+.ccard-module.is-editable .ccard-moduleHeader:active {
     cursor: grabbing;
 }
 
