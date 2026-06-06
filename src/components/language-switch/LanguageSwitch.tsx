@@ -1,7 +1,8 @@
+import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import "./language-switch.scss";
 
-type LanguageSwitchStyle = React.CSSProperties & {
+type LanguageSwitchStyle = CSSProperties & {
   "--active-index": number;
 };
 
@@ -18,25 +19,16 @@ export default function LanguageSwitch() {
     0
   );
   const switchStyle: LanguageSwitchStyle = { "--active-index": activeIndex };
-  const inactiveLanguage = languages.find((language) => language.value !== activeLanguage) ?? languages[0];
 
-  function switchLanguage() {
-    i18n.changeLanguage(inactiveLanguage.value);
+  function switchLanguage(language: string) {
+    if (language !== activeLanguage) i18n.changeLanguage(language);
   }
 
   return (
     <div
       className="language-switch"
-      aria-label={t("common.language.switchTo", { language: t(`common.language.${inactiveLanguage.value}`) })}
-      onClick={switchLanguage}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          switchLanguage();
-        }
-      }}
-      role="switch"
-      aria-checked={activeLanguage === "en"}
+      aria-label={t("common.language.current")}
+      role="group"
       tabIndex={0}
       style={switchStyle}
     >
@@ -50,13 +42,9 @@ export default function LanguageSwitch() {
           }
           key={language.value}
           type="button"
-          onClick={(event) => {
-            event.stopPropagation();
-            switchLanguage();
-          }}
+          onClick={() => switchLanguage(language.value)}
           aria-label={t("common.language.switchTo", { language: t(`common.language.${language.value}`) })}
           aria-pressed={language.value === activeLanguage}
-          tabIndex={-1}
         >
           {language.label}
         </button>

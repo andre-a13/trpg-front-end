@@ -270,7 +270,7 @@ export default function InventoryList({
             ))
           ) : (
             <li className="ccard-listItem" aria-disabled>
-              <em style={{ opacity: 0.7 }}>-- {emptyLabel} --</em>
+              <span className="ccard-emptyState">-- {emptyLabel} --</span>
             </li>
           )}
         </ul>

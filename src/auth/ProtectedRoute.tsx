@@ -1,5 +1,4 @@
 import { Navigate, Outlet, useLocation } from "react-router";
-import CampfireHomeButton from "../components/navigation/CampfireHomeButton";
 import { useAuth } from "./useAuth";
 import "./auth.scss";
 
@@ -23,7 +22,6 @@ export default function ProtectedRoute() {
 
   return (
     <>
-      <CampfireHomeButton />
       <Outlet />
     </>
   );

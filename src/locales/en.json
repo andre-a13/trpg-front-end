@@ -31,8 +31,8 @@
       "offline": "Server offline"
     },
     "eyebrow": "Tabletop companion",
-    "title": "Enter the realm of stories and legends",
-    "intro": "Gather your party, shape your heroes, and keep every adventure close at hand while the next chapter waits beyond the mist.",
+    "title": "TRPG table",
+    "intro": "Manage companies, character sheets, notes, and inventory for the campaign.",
     "actions": {
       "openTable": "Open table",
       "login": "Login",
@@ -57,7 +57,7 @@
     "login": {
       "eyebrow": "Account access",
       "title": "Open the table",
-      "description": "Sign in to manage characters, teams, portraits, and every protected campaign tool.",
+      "description": "Sign in to manage characters, teams, portraits, and campaign tools.",
       "formLabel": "Login form",
       "heading": "Login",
       "intro": "Use your TRPG account credentials.",

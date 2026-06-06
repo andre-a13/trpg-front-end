@@ -1,10 +1,9 @@
-/* Generic modal skeleton & animations, with CSS vars for easy theming from the element */
+/* Generic modal skeleton, with CSS vars for easy theming from the element */
 .modal {
-  /* Themeable vars (can be overridden on .modal or ancestors) */
   --modal-bg: #fff;
   --modal-fg: #111;
-  --modal-radius: 12px;
-  --modal-shadow: 0 10px 30px rgba(0,0,0,.25);
+  --modal-radius: 8px;
+  --modal-shadow: 0 2px 8px rgba(0,0,0,.16);
   --modal-border: 1px solid rgba(0,0,0,.08);
 
   --modal-header-bg: var(--modal-bg);
@@ -27,11 +26,9 @@
 .modal__backdrop {
   position: absolute; inset: 0;
   background: var(--modal-backdrop-bg);
-  backdrop-filter: blur(1.5px);
 }
 .modal__backdrop.is-transparent {
   background: rgba(0,0,0, .08);
-  backdrop-filter: none;
 }
 
 .modal__panel {
@@ -44,13 +41,13 @@
   display: flex; flex-direction: column;
   animation: modal-pop .16s cubic-bezier(.2,.8,.2,1);
   border: var(--modal-border);
-  outline: none; /* focus handled by ring below */
+  outline: none;
 }
 
 .modal__panel:focus-visible {
   box-shadow:
     0 0 0 2px #fff,
-    0 0 0 4px rgba(45, 140, 255, .6),
+    0 0 0 4px rgba(124, 63, 29, .45),
     var(--modal-shadow);
 }
 

@@ -164,7 +164,7 @@ export default function Form() {
         </div>
       </fieldset>
 
-      <div style={{ marginTop: 12 }}>
+      <div className="trpg-form__actions">
         <button type="submit" disabled={Boolean(slugError)}>{t("common.actions.create")}</button>
       </div>
 

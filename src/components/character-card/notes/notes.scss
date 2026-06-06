@@ -13,24 +13,14 @@
     border: 1px solid rgba(255, 255, 255, .18);
     border-radius: 8px;
     color: #f7f1e4;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .13), rgba(255, 255, 255, .04)),
-        rgba(255, 255, 255, .08);
-    box-shadow:
-        0 1px 0 rgba(255, 255, 255, .12) inset,
-        0 8px 20px rgba(0, 0, 0, .2);
-    transition: transform .06s ease, border-color .14s ease, background .14s ease, color .14s ease;
+    background: rgba(255, 255, 255, .08);
+    box-shadow: none;
+    transition: border-color .14s ease, background .14s ease, color .14s ease;
 
     &:hover {
         color: #fff;
-        background:
-            linear-gradient(180deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .06)),
-            rgba(47, 111, 109, .24);
+        background: rgba(47, 111, 109, .24);
         border-color: rgba(255, 255, 255, .34);
-    }
-
-    &:active {
-        transform: translateY(1px);
     }
 
     &:focus-visible {
@@ -41,14 +31,10 @@
 
 .modal__panel.notes-panel {
     color: var(--parchment-ink);
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .38), rgba(255, 255, 255, .08)),
-        var(--parchment);
+    background: var(--parchment);
     border: 1px solid color-mix(in oklab, var(--parchment-line) 62%, white 38%);
     border-radius: 8px;
-    box-shadow:
-        0 0 0 1px rgba(115, 206, 196, .18),
-        0 28px 80px rgba(0, 0, 0, .42);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
 }
 
 .notes-header {
@@ -59,9 +45,7 @@
     padding: .85rem 1rem;
     border-bottom: 1px solid color-mix(in oklab, var(--parchment-line) 34%, transparent);
     color: #f7f1e4;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, 0)),
-        color-mix(in oklab, var(--sheet-surface) 82%, var(--parchment-line) 18%);
+    background: color-mix(in oklab, var(--sheet-surface) 82%, var(--parchment-line) 18%);
 }
 
 .notes-title {
@@ -97,23 +81,21 @@
     border-radius: 8px;
     background: color-mix(in oklab, var(--parchment) 78%, white 22%);
     overflow: hidden;
-    transition: border-color .14s ease, background .14s ease, box-shadow .14s ease, opacity .14s ease, transform .14s ease;
+    transition: border-color .14s ease, background .14s ease, opacity .14s ease;
 }
 
 .notes-tabItem.is-active {
     border-color: rgba(47, 111, 109, .56);
     background: color-mix(in oklab, var(--parchment) 64%, #d8f3ee 36%);
-    box-shadow: 0 0 0 1px rgba(47, 111, 109, .12);
 }
 
 .notes-tabItem.is-dragging {
     opacity: .55;
-    transform: scale(.99);
 }
 
 .notes-tabItem.is-drag-over {
     border-color: #55b9b1;
-    box-shadow: 0 0 0 3px rgba(85, 185, 177, .18);
+    background: rgba(85, 185, 177, .12);
 }
 
 .notes-tabGrip {
@@ -253,7 +235,6 @@
 
         &:focus {
             border-color: rgba(47, 111, 109, .62);
-            box-shadow: 0 0 0 2px rgba(47, 111, 109, .12);
         }
     }
 }
@@ -303,10 +284,8 @@
     border: 1px solid rgba(47, 111, 109, .42);
     border-radius: 8px;
     color: #f7f1e4;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, .04)),
-        #216864;
-    box-shadow: 0 6px 14px rgba(20, 23, 26, .16);
+    background: #216864;
+    box-shadow: none;
 }
 
 .icon-btn {
@@ -318,15 +297,11 @@
     border-radius: 8px;
     color: inherit;
     background: transparent;
-    transition: background .14s ease, border-color .14s ease, transform .06s ease;
+    transition: background .14s ease, border-color .14s ease;
 
     &:hover {
         background: rgba(255, 255, 255, .1);
         border-color: rgba(255, 255, 255, .18);
-    }
-
-    &:active {
-        transform: translateY(1px);
     }
 
     &:focus-visible {
@@ -342,15 +317,9 @@
     padding: 1rem 1rem 1.2rem;
     border: none;
     color: var(--parchment-ink);
-    background:
-        repeating-linear-gradient(
-            180deg,
-            transparent 0 29px,
-            color-mix(in oklab, var(--parchment-line) 14%, transparent) 29px 30px
-        ),
-        transparent;
+    background: transparent;
     caret-color: #216864;
-    font: 500 1rem/1.6 ui-serif, Georgia, "Times New Roman", serif;
+    font: 500 .95rem/1.55 inherit;
     outline: none;
     resize: none;
 
@@ -368,7 +337,7 @@
 
     &::-webkit-scrollbar-thumb {
         border: 2px solid transparent;
-        border-radius: 999px;
+        border-radius: 6px;
         background: color-mix(in oklab, var(--parchment-line) 34%, transparent);
         background-clip: padding-box;
     }

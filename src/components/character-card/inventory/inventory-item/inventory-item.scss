@@ -14,11 +14,9 @@
     padding: 7px 10px;
     border: 1px solid color-mix(in oklab, var(--parchment-line) 22%, transparent);
     border-radius: 8px;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, .04)),
-        rgba(255, 255, 255, .12);
+    background: rgba(255, 255, 255, .12);
     line-height: 1.25;
-    transition: border-color .14s ease, background .14s ease, box-shadow .14s ease, transform .14s ease;
+    transition: border-color .14s ease, background .14s ease, opacity .14s ease;
 }
 
 .ccard-itemLabel {
@@ -33,21 +31,17 @@
 
 .ccard-invItem:hover {
     border-color: color-mix(in oklab, var(--parchment-accent) 42%, var(--parchment-line) 58%);
-    background:
-        linear-gradient(180deg, rgba(115, 206, 196, .12), rgba(255, 255, 255, .04)),
-        rgba(255, 255, 255, .14);
+    background: rgba(115, 206, 196, .1);
 }
 
 .ccard-invItem.dragging {
     opacity: .6;
-    transform: scale(.995);
-    box-shadow: 0 8px 20px rgba(20, 23, 26, .12);
 }
 
 .ccard-invItem.drag-over {
     border-color: #55b9b1;
     outline: 0;
-    box-shadow: 0 0 0 3px rgba(85, 185, 177, .18);
+    background: rgba(85, 185, 177, .12);
 }
 
 .ccard-itemActions {
@@ -68,7 +62,7 @@
     color: color-mix(in oklab, var(--parchment-ink) 72%, transparent);
     background: transparent;
     cursor: pointer;
-    transition: background .14s ease, border-color .14s ease, color .14s ease, transform .06s ease;
+    transition: background .14s ease, border-color .14s ease, color .14s ease;
 }
 
 .ccard-itemEditBtn:hover {
@@ -81,11 +75,6 @@
     color: #7c2d20;
     background: rgba(124, 45, 32, .08);
     border-color: rgba(124, 45, 32, .24);
-}
-
-.ccard-itemEditBtn:active,
-.ccard-itemDelBtn:active {
-    transform: translateY(1px);
 }
 
 .ccard-itemEditBtn:focus-visible,
@@ -110,7 +99,7 @@
     border-radius: 8px;
     color: var(--parchment-ink);
     background: rgba(255, 255, 255, .28);
-    box-shadow: inset 0 1px 2px rgba(20, 23, 26, .1);
+    box-shadow: none;
     font: inherit;
     font-weight: 700;
 

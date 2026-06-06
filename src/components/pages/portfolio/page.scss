@@ -1,11 +1,8 @@
 .page {
-  background:
-    radial-gradient(900px 520px at 14% -10%, rgba(47, 111, 109, .24), transparent 60%),
-    radial-gradient(820px 500px at 92% 6%, rgba(175, 126, 67, .16), transparent 58%),
-    #14171a;
+  background: #14171a;
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;
   justify-content: center;
   padding: 18px;
-  min-height: 100vh;
+  min-height: 100vh
 }

@@ -31,8 +31,8 @@
       "offline": "Serveur hors ligne"
     },
     "eyebrow": "Compagnon d'aventure",
-    "title": "Entrez dans un royaume de récits et de légendes",
-    "intro": "Rassemblez votre compagnie, façonnez vos héros et gardez chaque aventure à portée de main pendant que le prochain chapitre vous attend au-delà de la brume.",
+    "title": "Table JDR",
+    "intro": "Gérez les compagnies, les fiches de personnage, les notes et l'inventaire de la campagne.",
     "actions": {
       "openTable": "Rejoindre la table",
       "login": "Se connecter",
@@ -57,7 +57,7 @@
     "login": {
       "eyebrow": "Accès à la table",
       "title": "Rejoindre la table",
-      "description": "Connectez-vous pour gérer les personnages, les compagnies, les portraits et les outils de campagne protégés.",
+      "description": "Connectez-vous pour gérer les personnages, les compagnies, les portraits et les outils de campagne.",
       "formLabel": "Formulaire de connexion",
       "heading": "Connexion",
       "intro": "Utilisez les identifiants de votre compte JDR.",

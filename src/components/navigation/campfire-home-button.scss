@@ -4,64 +4,18 @@
   right: 1rem;
   z-index: 30;
   display: inline-grid;
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2.35rem;
+  height: 2.35rem;
   place-items: center;
-  border: 1px solid rgba(248, 250, 252, 0.18);
-  border-radius: 999px;
-  background: rgba(8, 13, 23, 0.68);
+  border: 1px solid rgba(248, 250, 252, 0.22);
+  border-radius: 8px;
+  background: rgba(20, 23, 26, 0.78);
   color: #f8fafc;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.24);
-  filter:
-    drop-shadow(0 0 8px rgba(52, 211, 153, 0.5))
-    drop-shadow(0 0 16px rgba(251, 191, 36, 0.42));
-}
-
-.campfire-home-button:hover {
-  border-color: rgba(251, 191, 36, 0.44);
-  background: rgba(8, 13, 23, 0.82);
   text-decoration: none;
 }
 
-.campfire-home-button img {
-  display: block;
-  width: 1.25rem;
-  height: 1.25rem;
-  animation: campfire-home-crackle 1.35s ease-in-out infinite;
+.campfire-home-button:hover {
+  border-color: rgba(243, 234, 215, 0.42);
+  background: rgba(124, 63, 29, 0.78);
+  text-decoration: none;
 }
-
-@keyframes campfire-home-crackle {
-  0%,
-  100% {
-    filter: brightness(1) saturate(1);
-    transform: translateY(0) rotate(0deg) scale(1);
-  }
-
-  18% {
-    filter: brightness(1.18) saturate(1.14);
-    transform: translateY(-1px) rotate(-1.5deg) scale(1.04);
-  }
-
-  37% {
-    filter: brightness(0.94) saturate(0.98);
-    transform: translateY(0) rotate(1deg) scale(0.98);
-  }
-
-  61% {
-    filter: brightness(1.24) saturate(1.18);
-    transform: translateY(-1px) rotate(1.6deg) scale(1.05);
-  }
-
-  82% {
-    filter: brightness(1.05) saturate(1.08);
-    transform: translateY(0) rotate(-0.8deg) scale(1.01);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .campfire-home-button img {
-    animation: none;
-  }
-}
-

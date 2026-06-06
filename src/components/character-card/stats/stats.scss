@@ -13,38 +13,40 @@
     padding: 10px;
     border: 1px solid color-mix(in oklab, var(--parchment-line) 24%, transparent);
     border-radius: 8px;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .06)),
-        rgba(255, 255, 255, .16);
+    background: rgba(255, 255, 255, .16);
 }
 
 .ccard-statName {
     color: color-mix(in oklab, var(--parchment-ink) 82%, transparent);
-    font-size: .78rem;
+    font-size: .82rem;
     font-weight: 850;
     letter-spacing: 0;
-    text-transform: uppercase;
 }
 
 .ccard-bar {
-    position: relative;
+    appearance: none;
+    width: 100%;
     height: 12px;
     overflow: hidden;
-    border-radius: 999px;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .18), rgba(0, 0, 0, .08)),
-        color-mix(in oklab, var(--sheet-surface) 26%, var(--parchment) 74%);
-    box-shadow: inset 0 1px 2px rgba(20, 23, 26, .2);
+    border: 0;
+    border-radius: 6px;
+    background: color-mix(in oklab, var(--sheet-surface) 26%, var(--parchment) 74%);
+    box-shadow: none;
 }
 
-.ccard-fill {
-    width: 0%;
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(90deg, #b67b44, #55b9b1);
-    box-shadow:
-        0 0 10px rgba(85, 185, 177, .28),
-        inset 0 1px 0 rgba(255, 255, 255, .32);
+.ccard-bar::-webkit-progress-bar {
+    border-radius: 6px;
+    background: color-mix(in oklab, var(--sheet-surface) 26%, var(--parchment) 74%);
+}
+
+.ccard-bar::-webkit-progress-value {
+    border-radius: 6px;
+    background: #b67b44;
+}
+
+.ccard-bar::-moz-progress-bar {
+    border-radius: 6px;
+    background: #b67b44;
 }
 
 .ccard-val {
@@ -58,27 +60,20 @@
 }
 
 .ccard-statRange {
-    --stat-value: 0%;
     width: 100%;
     height: 18px;
     margin: 0;
     appearance: none;
     cursor: pointer;
-    background: linear-gradient(
-        90deg,
-        #55b9b1 0 var(--stat-value),
-        color-mix(in oklab, var(--sheet-surface) 24%, var(--parchment) 76%) var(--stat-value) 100%
-    );
-    border-radius: 999px;
-    box-shadow:
-        0 1px 0 rgba(255, 255, 255, .42),
-        inset 0 1px 2px rgba(20, 23, 26, .2);
+    background: color-mix(in oklab, var(--sheet-surface) 24%, var(--parchment) 76%);
+    border-radius: 6px;
+    box-shadow: none;
 }
 
 .ccard-statRange::-webkit-slider-runnable-track {
     height: 12px;
     background: transparent;
-    border-radius: 999px;
+    border-radius: 6px;
 }
 
 .ccard-statRange::-webkit-slider-thumb {
@@ -89,15 +84,15 @@
     border: 2px solid #f7f1e4;
     border-radius: 50%;
     background: #216864;
-    box-shadow: 0 2px 8px rgba(20, 23, 26, .28);
-    transition: transform .14s ease, background .14s ease;
+    box-shadow: none;
+    transition: background .14s ease;
 }
 
 .ccard-statRange::-moz-range-track {
     height: 12px;
     background: transparent;
     border: 0;
-    border-radius: 999px;
+    border-radius: 6px;
 }
 
 .ccard-statRange::-moz-range-thumb {
@@ -106,19 +101,17 @@
     border: 2px solid #f7f1e4;
     border-radius: 50%;
     background: #216864;
-    box-shadow: 0 2px 8px rgba(20, 23, 26, .28);
-    transition: transform .14s ease, background .14s ease;
+    box-shadow: none;
+    transition: background .14s ease;
 }
 
 .ccard-statRange:hover::-webkit-slider-thumb,
 .ccard-statRange:focus-visible::-webkit-slider-thumb {
-    transform: scale(1.08);
     background: #2f7f79;
 }
 
 .ccard-statRange:hover::-moz-range-thumb,
 .ccard-statRange:focus-visible::-moz-range-thumb {
-    transform: scale(1.08);
     background: #2f7f79;
 }
 
@@ -138,7 +131,7 @@
     background: rgba(255, 255, 255, .32);
     border: 1px solid color-mix(in oklab, var(--parchment-line) 28%, transparent);
     border-radius: 6px;
-    box-shadow: inset 0 1px 2px rgba(20, 23, 26, .1);
+    box-shadow: none;
 }
 
 .ccard-statInput::-webkit-outer-spin-button,

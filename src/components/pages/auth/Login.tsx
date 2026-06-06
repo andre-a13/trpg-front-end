@@ -53,7 +53,6 @@ export default function Login() {
       <CampfireHomeButton />
 
       <section className="auth-page__hero" aria-labelledby="login-title">
-        <p className="auth-page__eyebrow">{t("auth.login.eyebrow")}</p>
         <h1 id="login-title">{t("auth.login.title")}</h1>
         <p>{t("auth.login.description")}</p>
       </section>

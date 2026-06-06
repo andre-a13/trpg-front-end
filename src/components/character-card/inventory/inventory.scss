@@ -20,21 +20,15 @@
     border: 1px solid rgba(47, 111, 109, .42);
     border-radius: 8px;
     color: #f7f1e4;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, .04)),
-        #216864;
-    box-shadow: 0 6px 14px rgba(20, 23, 26, .14);
+    background: #216864;
+    box-shadow: none;
     font-size: .88rem;
     font-weight: 750;
     cursor: pointer;
-    transition: transform .06s ease, filter .14s ease, opacity .14s ease;
+    transition: background .14s ease, opacity .14s ease;
 
     &:hover {
-        filter: brightness(1.08);
-    }
-
-    &:active {
-        transform: translateY(1px);
+        background: #2f6f6d;
     }
 
     &:disabled {
@@ -58,12 +52,10 @@
     justify-content: center;
     border: 1px solid color-mix(in oklab, var(--parchment-line) 28%, transparent);
     color: var(--parchment-ink);
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .22), rgba(255, 255, 255, .06)),
-        rgba(255, 255, 255, .16);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, .38) inset;
+    background: rgba(255, 255, 255, .16);
+    box-shadow: none;
     cursor: pointer;
-    transition: filter .14s ease, border-color .14s ease, transform .06s ease, opacity .14s ease;
+    transition: background .14s ease, border-color .14s ease, opacity .14s ease;
 }
 
 .ccard-pageToggle {
@@ -79,19 +71,12 @@
 
 .ccard-pageToggle.is-active {
     border-color: rgba(47, 111, 109, .42);
-    background:
-        linear-gradient(180deg, rgba(115, 206, 196, .18), rgba(255, 255, 255, .06)),
-        rgba(255, 255, 255, .18);
+    background: rgba(115, 206, 196, .14);
 }
 
 .ccard-pageToggle:hover,
 .ccard-pageBtn:hover:not(:disabled) {
-    filter: brightness(1.04);
-}
-
-.ccard-pageToggle:active,
-.ccard-pageBtn:active:not(:disabled) {
-    transform: translateY(1px);
+    background: rgba(255, 255, 255, .26);
 }
 
 .ccard-pageToggle:focus-visible,
@@ -117,6 +102,12 @@
 .ccard-invList {
     align-content: start;
     min-height: calc((38px * 5) + (8px * 4));
+}
+
+.ccard-emptyState {
+    color: color-mix(in oklab, var(--parchment-ink) 56%, transparent);
+    font-size: .88rem;
+    font-weight: 650;
 }
 
 .ccard-pageBtn {
@@ -153,17 +144,15 @@
     border: 1px solid rgba(182, 123, 68, .44);
     border-radius: 8px;
     color: var(--parchment-ink);
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .28), rgba(255, 255, 255, .06)),
-        rgba(182, 123, 68, .18);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, .38) inset;
+    background: rgba(182, 123, 68, .18);
+    box-shadow: none;
     cursor: pointer;
     font-size: 17px;
     line-height: 1;
 }
 
 .ccard-coinBtn:hover {
-    filter: brightness(1.04);
+    background: rgba(182, 123, 68, .28);
 }
 
 .ccard-coinBtn:disabled {
@@ -178,10 +167,8 @@
     min-height: 28px;
     padding: 2px 8px;
     border: 1px solid rgba(182, 123, 68, .46);
-    border-radius: 999px;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .04)),
-        rgba(182, 123, 68, .14);
+    border-radius: 8px;
+    background: rgba(182, 123, 68, .14);
 }
 
 .ccard-coinIcon {

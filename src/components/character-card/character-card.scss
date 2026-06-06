@@ -26,9 +26,7 @@
     background:
         linear-gradient(90deg, var(--sheet-grid) 1px, transparent 1px),
         linear-gradient(0deg, var(--sheet-grid) 1px, transparent 1px),
-        radial-gradient(120% 90% at 18% 0%, rgba(47, 111, 109, .28), transparent 46%),
-        radial-gradient(90% 70% at 100% 16%, rgba(175, 126, 67, .18), transparent 45%),
-        linear-gradient(135deg, var(--sheet-surface), var(--sheet-surface-2));
+        var(--sheet-surface);
     background-size:
         32px 32px,
         32px 32px,
@@ -37,14 +35,12 @@
         auto;
     border: 1px solid rgba(255, 255, 255, .16);
     border-radius: 8px;
-    box-shadow:
-        0 24px 70px rgba(6, 8, 10, .36),
-        inset 0 1px 0 rgba(255, 255, 255, .1);
+    box-shadow: 0 2px 8px rgba(6, 8, 10, .22);
 }
 
 .ccard-sheet.is-custom-background {
     background:
-        linear-gradient(180deg, rgba(8, 10, 12, .18), rgba(8, 10, 12, .3)),
+        linear-gradient(180deg, rgba(8, 10, 12, .2), rgba(8, 10, 12, .34)),
         var(--ccard-background-image);
     background-position: center;
     background-repeat: no-repeat;
@@ -75,8 +71,8 @@
 .ccard-title {
     margin: 0;
     color: #fff8e9;
-    font-size: 2.8rem;
-    line-height: .95;
+    font-size: 2.45rem;
+    line-height: 1;
     letter-spacing: 0;
     overflow-wrap: anywhere;
 }
@@ -85,24 +81,17 @@
     display: flex;
     align-items: center;
     flex: 0 0 auto;
-    padding: 5px;
+    padding: 4px;
     border: 1px solid rgba(255, 255, 255, .14);
-    border-radius: 999px;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .03)),
-        rgba(8, 10, 12, .18);
-    box-shadow:
-        0 1px 0 rgba(255, 255, 255, .08) inset,
-        0 10px 24px rgba(0, 0, 0, .18);
+    border-radius: 8px;
+    background: rgba(8, 10, 12, .2);
 }
 
 .ccard-statusDock .hp-badge__pill {
     min-height: 38px;
     padding: 6px 9px;
     color: #f7f1e4;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .03)),
-        rgba(185, 95, 95, .22);
+    background: rgba(185, 95, 95, .22);
     border-color: rgba(255, 176, 182, .34);
     box-shadow: none;
 }
@@ -135,7 +124,7 @@
     align-items: center;
     min-height: 28px;
     padding: 0 10px;
-    border-radius: 999px;
+    border-radius: 6px;
     font-size: .78rem;
     font-weight: 850;
     line-height: 1;
@@ -150,14 +139,26 @@
 
 .ccard-modeLabel.is-arrange {
     color: #10201f;
-    background: #73cec4;
-    border-color: rgba(197, 255, 247, .72);
+    background: #c7f3ec;
+    border-color: rgba(115, 206, 196, .56);
 }
 
 .ccard-saveStatus {
+    gap: 6px;
+    min-width: 96px;
+    justify-content: center;
     color: rgba(247, 241, 228, .78);
     background: rgba(8, 10, 12, .2);
     border: 1px solid rgba(255, 255, 255, .12);
+}
+
+.ccard-saveSpinner {
+    width: .72rem;
+    height: .72rem;
+    border: 2px solid rgba(255, 248, 233, .34);
+    border-top-color: #fff8e9;
+    border-radius: 50%;
+    animation: ccard-save-spin .7s linear infinite;
 }
 
 .ccard-saveStatus--saving,
@@ -170,6 +171,18 @@
     color: #ffe4e6;
     border-color: rgba(251, 113, 133, .55);
     background: rgba(127, 29, 29, .24);
+}
+
+@keyframes ccard-save-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ccard-saveSpinner {
+        animation: none;
+    }
 }
 
 .ccard-modeToggle,
@@ -185,29 +198,18 @@
     box-sizing: border-box;
     z-index: 1;
     color: #f7f1e4;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .13), rgba(255, 255, 255, .04)),
-        rgba(255, 255, 255, .08);
+    background: rgba(255, 255, 255, .08);
     border: 1px solid rgba(255, 255, 255, .18);
     border-radius: 8px;
-    box-shadow:
-        0 1px 0 rgba(255, 255, 255, .12) inset,
-        0 8px 20px rgba(0, 0, 0, .2);
-    transition: transform .06s ease, border-color .14s ease, background .14s ease, color .14s ease;
+    box-shadow: none;
+    transition: border-color .14s ease, background .14s ease, color .14s ease;
 }
 
 .ccard-modeToggle:hover,
 .ccard-iconButton:hover {
     color: #ffffff;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .06)),
-        rgba(47, 111, 109, .24);
+    background: rgba(47, 111, 109, .24);
     border-color: rgba(255, 255, 255, .34);
-}
-
-.ccard-modeToggle:active,
-.ccard-iconButton:active {
-    transform: translateY(1px);
 }
 
 .ccard-modeToggle:focus-visible,
@@ -218,9 +220,7 @@
 
 .ccard-modeToggle.is-active {
     color: #10201f;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .32), rgba(255, 255, 255, .08)),
-        #73cec4;
+    background: #c7f3ec;
     border-color: rgba(197, 255, 247, .72);
 }
 
@@ -237,10 +237,8 @@
     padding: 6px;
     border: 1px solid rgba(255, 255, 255, .18);
     border-radius: 8px;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .04)),
-        #20252a;
-    box-shadow: 0 16px 38px rgba(0, 0, 0, .32);
+    background: #20252a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
 }
 
 .ccard-actionMenuPanel button {
@@ -319,9 +317,7 @@
     border: 1px solid rgba(47, 111, 109, .42);
     border-radius: 8px;
     color: #f7f1e4;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, .04)),
-        #216864;
+    background: #216864;
     font-weight: 750;
     cursor: pointer;
 }
@@ -346,7 +342,7 @@
     background:
         linear-gradient(90deg, rgba(255, 255, 255, .03) 1px, transparent 1px),
         linear-gradient(0deg, rgba(255, 255, 255, .03) 1px, transparent 1px),
-        rgba(8, 10, 12, .14);
+        rgba(8, 10, 12, .12);
     background-size: 24px 24px;
 }
 
@@ -363,14 +359,11 @@
     overflow: hidden;
     color: var(--parchment-ink);
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, .48), rgba(255, 255, 255, .12)),
         repeating-linear-gradient(0deg, rgba(39, 32, 25, .018), rgba(39, 32, 25, .018) 2px, transparent 2px, transparent 5px),
         var(--parchment);
     border: 1px solid color-mix(in oklab, var(--parchment-line) 78%, white 22%);
     border-radius: 8px;
-    box-shadow:
-        0 1px 0 rgba(255, 255, 255, .58) inset,
-        0 12px 28px var(--shadow);
+    box-shadow: 0 2px 8px rgba(10, 12, 14, .18);
     transition: border-color .14s ease, box-shadow .14s ease, filter .14s ease;
 }
 
@@ -378,10 +371,7 @@
     position: fixed;
     inset: 0;
     z-index: 1000;
-    background:
-        radial-gradient(900px 520px at 50% 10%, rgba(47, 111, 109, .22), transparent 60%),
-        rgba(8, 10, 12, .68);
-    backdrop-filter: blur(8px);
+    background: rgba(8, 10, 12, .68);
 }
 
 .ccard-module.is-fullscreen {
@@ -396,7 +386,7 @@
     border-color: rgba(255, 255, 255, .32);
     box-shadow:
         0 0 0 1px rgba(115, 206, 196, .28),
-        0 28px 90px rgba(0, 0, 0, .52);
+        0 2px 8px rgba(0, 0, 0, .32);
 }
 
 .ccard-module.is-minimized {
@@ -411,13 +401,13 @@
 .ccard-sheet.is-design-mode .ccard-module {
     box-shadow:
         0 0 0 1px rgba(115, 206, 196, .2),
-        0 16px 34px rgba(6, 8, 10, .38);
+        0 2px 8px rgba(6, 8, 10, .24);
 }
 
 .ccard-sheet.is-design-mode .ccard-module.is-fullscreen {
     box-shadow:
         0 0 0 1px rgba(115, 206, 196, .28),
-        0 28px 90px rgba(0, 0, 0, .52);
+        0 2px 8px rgba(0, 0, 0, .32);
 }
 
 .ccard-moduleHeader {
@@ -428,9 +418,7 @@
     min-height: 40px;
     padding: 6px 10px 5px 6px;
     color: #f7f1e4;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, 0)),
-        color-mix(in oklab, var(--sheet-surface) 82%, var(--parchment-line) 18%);
+    background: color-mix(in oklab, var(--sheet-surface) 82%, var(--parchment-line) 18%);
     border-bottom: 1px solid rgba(39, 32, 25, .2);
     cursor: grab;
     user-select: none;
@@ -587,7 +575,7 @@
 .ccard-moduleBody::-webkit-scrollbar-thumb {
     background: color-mix(in oklab, var(--parchment-line) 35%, transparent);
     border: 2px solid transparent;
-    border-radius: 999px;
+    border-radius: 6px;
     background-clip: padding-box;
 }
 
