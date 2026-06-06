@@ -2,7 +2,7 @@ import { type FormEvent, useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router";
-import { useAuth } from "../../../auth/useAuth";
+import { useAdminControls } from "../../../admin/useAdminControls";
 import type Character from "../../../models/character";
 import characterService from "../../../services/character.service";
 import teamService from "../../../services/team.service";
@@ -12,8 +12,7 @@ import "./team.scss";
 export default function Team() {
   const { t } = useTranslation();
   const { uuid } = useParams();
-  const { user } = useAuth();
-  const isAdmin = user?.username === "admin";
+  const { isAdmin, manageCharactersEnabled } = useAdminControls();
   const [team, setTeam] = useState<TeamDto | null>(null);
   const [availableCharacters, setAvailableCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +37,7 @@ export default function Team() {
     try {
       const [data, roster] = await Promise.all([
         teamService.getByUuid(uuid),
-        isAdmin ? characterService.list() : Promise.resolve([]),
+        isAdmin && manageCharactersEnabled ? characterService.list() : Promise.resolve([]),
       ]);
       setTeam(data);
       setAvailableCharacters(roster);
@@ -54,7 +53,7 @@ export default function Team() {
     } finally {
       setLoading(false);
     }
-  }, [isAdmin, t, uuid]);
+  }, [isAdmin, manageCharactersEnabled, t, uuid]);
 
   const assignedSlugs = new Set((team?.characters ?? []).map((character) => character.slug));
   const charactersToAdd = availableCharacters.filter((character) => !assignedSlugs.has(character.slug));
@@ -140,14 +139,14 @@ export default function Team() {
               <h1>{team.name}</h1>
               <p>{t("teams.memberCount", { count: team.characters?.length ?? 0 })}</p>
             </div>
-            {isAdmin && (
+            {isAdmin && manageCharactersEnabled && (
               <button type="button" onClick={() => setIsAddingMember((value) => !value)}>
                 {t("teams.addMember")}
               </button>
             )}
           </header>
 
-          {isAdmin && isAddingMember && (
+          {isAdmin && manageCharactersEnabled && isAddingMember && (
             <form className="team-detail__member-form" onSubmit={handleAddMember}>
               <label htmlFor="team-member-picker">{t("teams.characterPicker")}</label>
               <div className="team-detail__member-row">

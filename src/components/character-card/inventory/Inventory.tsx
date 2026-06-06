@@ -14,6 +14,7 @@ interface InventoryProps {
   gold?: number;
   refresh: () => void;
   saveStatus: SaveStatusReporter;
+  editable?: boolean;
 }
 
 export const Inventory: React.FC<InventoryProps> = ({
@@ -23,6 +24,7 @@ export const Inventory: React.FC<InventoryProps> = ({
   gold,
   refresh,
   saveStatus,
+  editable = false,
 }) => {
   const { t } = useTranslation();
   const inventoryTitle = title ?? t("characterCard.inventory.label");
@@ -40,6 +42,7 @@ export const Inventory: React.FC<InventoryProps> = ({
 
   React.useEffect(() => {
     if (!slug || localGold === lastSentGoldRef.current) return;
+    if (!editable) return;
 
     if (goldTimerRef.current) clearTimeout(goldTimerRef.current);
 
@@ -57,7 +60,7 @@ export const Inventory: React.FC<InventoryProps> = ({
     return () => {
       if (goldTimerRef.current) clearTimeout(goldTimerRef.current);
     };
-  }, [localGold, runSave, slug]);
+  }, [editable, localGold, runSave, slug]);
 
   const dec = () => {
     markUnsaved();
@@ -123,8 +126,9 @@ export const Inventory: React.FC<InventoryProps> = ({
       itemPlaceholder={t("characterCard.inventory.itemPlaceholder")}
       emptyLabel={t("characterCard.inventory.empty")}
       saveStatus={saveStatus}
-      actions={goldControls}
+      actions={editable ? goldControls : undefined}
       onSaveItems={saveInventory}
+      editable={editable}
     />
   );
 };

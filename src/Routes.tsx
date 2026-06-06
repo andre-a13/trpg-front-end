@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Home from "./components/pages/home/Home";
+import Dashboard from "./components/pages/admin/Dashboard";
 import Login from "./components/pages/auth/Login";
 import Register from "./components/pages/auth/Register";
 import CharacterPage from "./components/pages/trpg/Character";
@@ -22,11 +23,14 @@ export default function AppRoutes() {
         <Route path="/jace" element={<CharacterPage presetSlug="jace" portraitUrl="/assets/jace_jdr.jpg" />} />
         <Route path="/maribeth" element={<CharacterPage presetSlug="maribeth" portraitUrl="/assets/maribeth_jdr.jpg" />} />
         <Route path="/characters/:slug" element={<CharacterPage />} />
-        <Route path="/characters/new" element={<CreateCharacter />} />
         <Route path="/teams" element={<Teams />} />
-        <Route path="/teams/create" element={<CreateTeam />} />
         <Route path="/teams/:uuid" element={<Team />} />
         <Route path="/hearthstone-printer" element={<HearthstonePrinter />} />
+        <Route element={<ProtectedRoute requiredRole="admin" />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/characters/new" element={<CreateCharacter />} />
+          <Route path="/teams/create" element={<CreateTeam />} />
+        </Route>
         <Route path="/:slug" element={<CharacterPage />} />
       </Route>
     </Routes>

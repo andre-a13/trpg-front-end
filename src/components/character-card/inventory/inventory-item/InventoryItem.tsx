@@ -14,6 +14,7 @@ export interface InventoryItemProps {
   onDragEnd?: () => void;
   isDragging?: boolean;
   isDragOver?: boolean;
+  editable?: boolean;
 }
 
 const InventoryItem: React.FC<InventoryItemProps> = ({
@@ -27,6 +28,7 @@ const InventoryItem: React.FC<InventoryItemProps> = ({
   onDragEnd,
   isDragging,
   isDragOver,
+  editable = false,
 }) => {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = React.useState(false);
@@ -88,27 +90,29 @@ const InventoryItem: React.FC<InventoryItemProps> = ({
         <span className="ccard-itemLabel">{name}</span>
       )}
 
-      <div className="ccard-itemActions">
-        <button
-          type="button"
-          className="ccard-itemEditBtn"
-          aria-label={t("characterCard.inventory.editItem", { name })}
-          title={t("common.actions.edit")}
-          onClick={startEdit}
-        >
-          <Pencil size={16} aria-hidden="true" />
-        </button>
+      {editable && (
+        <div className="ccard-itemActions">
+          <button
+            type="button"
+            className="ccard-itemEditBtn"
+            aria-label={t("characterCard.inventory.editItem", { name })}
+            title={t("common.actions.edit")}
+            onClick={startEdit}
+          >
+            <Pencil size={16} aria-hidden="true" />
+          </button>
 
-        <button
-          type="button"
-          className="ccard-itemDelBtn"
-          aria-label={t("characterCard.inventory.deleteItem", { name })}
-          title={t("common.actions.delete")}
-          onClick={onDelete}
-        >
-          <Trash2 size={16} aria-hidden="true" />
-        </button>
-      </div>
+          <button
+            type="button"
+            className="ccard-itemDelBtn"
+            aria-label={t("characterCard.inventory.deleteItem", { name })}
+            title={t("common.actions.delete")}
+            onClick={onDelete}
+          >
+            <Trash2 size={16} aria-hidden="true" />
+          </button>
+        </div>
+      )}
     </li>
   );
 };

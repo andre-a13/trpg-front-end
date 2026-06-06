@@ -1,9 +1,11 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import accountService from "../../services/account.service";
 import characterService from "../../services/character.service";
 import type { IAddCharacter } from "../../interface/IAddCharacter";
+import type { AccountDto } from "../../types/api";
 
 type Stats = { corps: number; mental: number; social: number };
 
@@ -20,6 +22,8 @@ export default function Form() {
   const [skillsPrimary, setSkillsPrimary] = useState("");
   const [skillsSecondary, setSkillsSecondary] = useState("");
   const [inventory, setInventory] = useState("");
+  const [ownerUserId, setOwnerUserId] = useState("");
+  const [accounts, setAccounts] = useState<AccountDto[]>([]);
   const [status, setStatus] = useState<string | null>(null);
   const [createdCharacter, setCreatedCharacter] = useState<{ id: number; name: string; slug: string } | null>(null);
 
@@ -45,6 +49,23 @@ export default function Form() {
       .filter(Boolean);
   }
 
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchAccounts() {
+      try {
+        const rows = await accountService.list();
+        if (isMounted) setAccounts(rows);
+      } catch (error) {
+        console.error("Failed to fetch accounts:", error);
+      }
+    }
+
+    fetchAccounts();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus(null);
@@ -60,6 +81,7 @@ export default function Form() {
       skillsPrimary: csvToList(skillsPrimary),
       skillsSecondary: csvToList(skillsSecondary),
       inventory: csvToList(inventory),
+      ownerUserId: ownerUserId ? Number(ownerUserId) : null,
     };
 
     try {
@@ -78,6 +100,7 @@ export default function Form() {
       setSkillsPrimary("");
       setSkillsSecondary("");
       setInventory("");
+      setOwnerUserId("");
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setStatus(t("common.errors.status", { status: err.response?.status ?? "network", message: err.message }));
@@ -127,6 +150,17 @@ export default function Form() {
         <div>
           <label htmlFor="character-portrait">{t("createCharacter.portraitUrl")}</label>
           <input id="character-portrait" value={portraitUrl} onChange={(e) => setPortraitUrl(e.target.value)} />
+        </div>
+        <div>
+          <label htmlFor="character-owner">{t("createCharacter.owner")}</label>
+          <select id="character-owner" value={ownerUserId} onChange={(e) => setOwnerUserId(e.target.value)}>
+            <option value="">{t("dashboard.characters.unassigned")}</option>
+            {accounts.map((account) => (
+              <option key={account.id} value={account.id}>
+                {account.username} ({t(`roles.${account.role}`)})
+              </option>
+            ))}
+          </select>
         </div>
       </fieldset>
 

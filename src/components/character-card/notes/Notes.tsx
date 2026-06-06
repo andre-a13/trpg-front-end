@@ -18,6 +18,7 @@ type NotesProps = {
   variant?: "button" | "panel";
   saveStatus?: SaveStatusReporter;
   refresh?: () => void;
+  editable?: boolean;
 };
 
 const sortTabs = (tabs: CharacterNoteDto[]) => (
@@ -44,6 +45,7 @@ export const Notes: React.FC<NotesProps> = ({
   variant = "button",
   saveStatus,
   refresh,
+  editable = false,
 }) => {
   const { t } = useTranslation();
   const modalRef = React.useRef<ModalHandle>(null);
@@ -110,6 +112,7 @@ export const Notes: React.FC<NotesProps> = ({
 
   const saveTabContent = React.useCallback(
     async (tab: CharacterNoteDto, payload: string) => {
+      if (!editable) return true;
       try {
         if (tab.id === FALLBACK_NOTE_ID) {
           await runSave(() => characterService.patch(slug, { notes: payload }));
@@ -132,17 +135,18 @@ export const Notes: React.FC<NotesProps> = ({
         return false;
       }
     },
-    [runSave, slug, t],
+    [editable, runSave, slug, t],
   );
 
   const flushActiveNote = React.useCallback(async () => {
     clearSaveTimer();
+    if (!editable) return true;
     if (!activeTab || text === initialRef.current) return true;
     return saveTabContent(activeTab, text);
-  }, [activeTab, clearSaveTimer, saveTabContent, text]);
+  }, [activeTab, clearSaveTimer, editable, saveTabContent, text]);
 
   React.useEffect(() => {
-    if (!isEditorActive || !activeTab) return;
+    if (!editable || !isEditorActive || !activeTab) return;
     clearSaveTimer();
 
     timer.current = window.setTimeout(() => {
@@ -152,7 +156,7 @@ export const Notes: React.FC<NotesProps> = ({
     }, 800);
 
     return () => clearSaveTimer();
-  }, [activeTab, clearSaveTimer, isEditorActive, saveTabContent, text]);
+  }, [activeTab, clearSaveTimer, editable, isEditorActive, saveTabContent, text]);
 
   const onEditorKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
@@ -169,6 +173,7 @@ export const Notes: React.FC<NotesProps> = ({
 
   const createTab: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
+    if (!editable) return;
     const title = newTitle.trim();
     if (!title) return;
 
@@ -190,6 +195,7 @@ export const Notes: React.FC<NotesProps> = ({
 
   const saveTabTitle = async (tab: CharacterNoteDto) => {
     const title = editingTitle.trim();
+    if (!editable) return;
     if (!title || title === tab.title) {
       setEditingId(null);
       setEditingTitle("");
@@ -220,6 +226,7 @@ export const Notes: React.FC<NotesProps> = ({
 
   const deleteTab = async (tab: CharacterNoteDto) => {
     if (tabs.length <= 1 || tab.id === FALLBACK_NOTE_ID) return;
+    if (!editable) return;
     const confirmed = window.confirm(t("characterCard.notes.confirmDeleteTab", { title: tab.title }));
     if (!confirmed) return;
 
@@ -246,6 +253,7 @@ export const Notes: React.FC<NotesProps> = ({
 
   const reorderTabs = async (fromIndex: number, toIndex: number) => {
     if (fromIndex < 0 || toIndex < 0 || fromIndex >= tabs.length || toIndex >= tabs.length) return;
+    if (!editable) return;
     if (fromIndex === toIndex || tabs[fromIndex].id === FALLBACK_NOTE_ID) return;
 
     await flushActiveNote();
@@ -274,6 +282,7 @@ export const Notes: React.FC<NotesProps> = ({
 
   const startTabDrag = (event: React.DragEvent, index: number) => {
     const tab = tabs[index];
+    if (!editable) return;
     if (!tab || tab.id === FALLBACK_NOTE_ID || editingId === tab.id) return;
 
     dragIndexRef.current = index;
@@ -364,7 +373,7 @@ export const Notes: React.FC<NotesProps> = ({
               </form>
             ) : (
               <>
-                {isPersisted && (
+                {editable && isPersisted && (
                   <span
                     className="notes-tabGrip"
                     draggable
@@ -387,33 +396,35 @@ export const Notes: React.FC<NotesProps> = ({
                 >
                   <span>{tab.title}</span>
                 </button>
-                <div className="notes-tabActions">
-                  <button
-                    type="button"
-                    title={t("characterCard.notes.renameTab")}
-                    aria-label={t("characterCard.notes.renameTab")}
-                    disabled={!isPersisted}
-                    onClick={() => beginRename(tab)}
-                  >
-                    <Pencil size={13} aria-hidden="true" />
-                  </button>
-                  <button
-                    type="button"
-                    title={t("characterCard.notes.deleteTab")}
-                    aria-label={t("characterCard.notes.deleteTab")}
-                    disabled={!isPersisted || tabs.length <= 1}
-                    onClick={() => void deleteTab(tab)}
-                  >
-                    <Trash2 size={13} aria-hidden="true" />
-                  </button>
-                </div>
+                {editable && (
+                  <div className="notes-tabActions">
+                    <button
+                      type="button"
+                      title={t("characterCard.notes.renameTab")}
+                      aria-label={t("characterCard.notes.renameTab")}
+                      disabled={!isPersisted}
+                      onClick={() => beginRename(tab)}
+                    >
+                      <Pencil size={13} aria-hidden="true" />
+                    </button>
+                    <button
+                      type="button"
+                      title={t("characterCard.notes.deleteTab")}
+                      aria-label={t("characterCard.notes.deleteTab")}
+                      disabled={!isPersisted || tabs.length <= 1}
+                      onClick={() => void deleteTab(tab)}
+                    >
+                      <Trash2 size={13} aria-hidden="true" />
+                    </button>
+                  </div>
+                )}
               </>
             )}
           </div>
         );
       })}
 
-      {isAdding ? (
+      {editable && isAdding ? (
         <form className="notes-addForm" onSubmit={createTab}>
           <input
             value={newTitle}
@@ -437,7 +448,7 @@ export const Notes: React.FC<NotesProps> = ({
             <X size={14} aria-hidden="true" />
           </button>
         </form>
-      ) : (
+      ) : editable ? (
         <button
           type="button"
           className="notes-addTab"
@@ -447,7 +458,7 @@ export const Notes: React.FC<NotesProps> = ({
         >
           <Plus size={15} aria-hidden="true" />
         </button>
-      )}
+      ) : null}
     </div>
   );
 
@@ -458,6 +469,7 @@ export const Notes: React.FC<NotesProps> = ({
         className={`notes-textarea ${variant === "panel" ? "notes-textarea--module" : ""}`}
         placeholder={t("characterCard.notes.placeholder")}
         value={text}
+        readOnly={!editable}
         aria-label={activeTab ? t("characterCard.notes.editorLabel", { title: activeTab.title }) : t("characterCard.notes.title")}
         onFocus={() => setIsEditorActive(true)}
         onBlur={() => {
@@ -465,6 +477,7 @@ export const Notes: React.FC<NotesProps> = ({
           void flushActiveNote();
         }}
         onChange={(e) => {
+          if (!editable) return;
           saveStatus?.markUnsaved();
           setText(e.target.value);
         }}

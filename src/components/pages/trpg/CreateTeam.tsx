@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import { useAdminControls } from "../../../admin/useAdminControls";
 import teamService from "../../../services/team.service";
 import type { IAddTeam } from "../../../interface/IAddTeam";
 import "./create-team.scss";
 
 export default function CreateTeam() {
   const { t } = useTranslation();
+  const { manageCharactersEnabled } = useAdminControls();
   const [uuid, setUuid] = useState("");
   const [name, setName] = useState("");
   const [illustrationUrl, setIllustrationUrl] = useState("");
@@ -39,6 +41,20 @@ export default function CreateTeam() {
       }
       setStatus(t("createTeam.failed"));
     }
+  }
+
+  if (!manageCharactersEnabled) {
+    return (
+      <div className="page">
+        <div className="character-message">
+          <h2>{t("dashboard.manageRequired.title")}</h2>
+          <p>{t("dashboard.manageRequired.body")}</p>
+          <p>
+            <Link to="/dashboard">{t("navigation.dashboard")}</Link>
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (

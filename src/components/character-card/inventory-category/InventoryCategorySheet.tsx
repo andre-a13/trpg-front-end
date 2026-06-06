@@ -12,6 +12,7 @@ type InventoryCategorySheetProps = {
     category: InventoryCategoryDto;
     saveStatus: SaveStatusReporter;
     refresh: () => void;
+    editable?: boolean;
 };
 
 const sortItems = (category: InventoryCategoryDto) => (
@@ -24,6 +25,7 @@ export default function InventoryCategorySheet({
     category,
     saveStatus,
     refresh,
+    editable = false,
 }: InventoryCategorySheetProps) {
     const { t } = useTranslation();
     const { markUnsaved, runSave } = saveStatus;
@@ -124,7 +126,7 @@ export default function InventoryCategorySheet({
         }
     };
 
-    const categoryActions = (
+    const categoryActions = editable ? (
         <div className="inventory-category__actions">
             {editingName ? (
                 <input
@@ -153,7 +155,7 @@ export default function InventoryCategorySheet({
                 <Trash2 size={15} aria-hidden="true" />
             </button>
         </div>
-    );
+    ) : undefined;
 
     return (
         <>
@@ -170,6 +172,7 @@ export default function InventoryCategorySheet({
                 saveStatus={saveStatus}
                 actions={categoryActions}
                 onSaveItems={saveCategoryItems}
+                editable={editable}
             />
         </>
     );
