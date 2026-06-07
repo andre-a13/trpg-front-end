@@ -230,10 +230,7 @@ export const SheetModule: React.FC<SheetModuleProps> = ({
                 onPointerUp={endInteraction}
                 onPointerCancel={endInteraction}
             >
-                <header
-                    className="ccard-moduleHeader"
-                    onPointerDown={editable ? (event) => beginInteraction(event, "move") : undefined}
-                >
+                <header className="ccard-moduleHeader">
                     {editable && (
                         <button
                             type="button"

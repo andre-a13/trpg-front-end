@@ -116,14 +116,14 @@
     },
     "actions": {
       "resetLayout": "Reset module positions",
-      "enableEditMode": "Enter arrange mode",
+      "enableEditMode": "Enter edit mode",
       "disableEditMode": "Return to play mode",
-      "editModeActive": "Arrange mode active",
+      "editModeActive": "Edit mode active",
       "openActionMenu": "Open sheet actions"
     },
     "mode": {
       "play": "Play",
-      "arrange": "Arrange",
+      "arrange": "Edit",
       "readOnly": "Read-only"
     },
     "save": {
@@ -272,7 +272,22 @@
     "noAvailableCharacters": "Every character is already assigned to this team.",
     "adding": "Adding...",
     "memberAdded": "Member added.",
-    "addMemberFailed": "Network error: unable to add member"
+    "addMemberFailed": "Network error: unable to add member",
+    "removeMember": "Remove {{name}} from team",
+    "removeMemberConfirm": "Remove {{name}} from this team?",
+    "removeMemberFailed": "Network error: unable to remove member",
+    "upload": {
+      "target": "Team",
+      "currentTeam": "{{team}} image",
+      "choose": "Choose image",
+      "dropHint": "Drop an image anywhere on the rail",
+      "invalidFormat": "Accepted format: JPG, PNG or WebP.",
+      "tooLarge": "Image too large: 15 MB maximum.",
+      "uploading": "Uploading {{team}} image...",
+      "uploadingShort": "Uploading...",
+      "success": "{{team}} image updated.",
+      "failed": "Upload failed. Try again later."
+    }
   },
   "createTeam": {
     "title": "Create team",

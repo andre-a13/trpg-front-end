@@ -108,3 +108,10 @@ export type TeamDto = TeamCreateRequest & {
   uuid: string;
   characters?: TeamCharacterDto[];
 };
+
+export type TeamIllustrationUploadResponse = {
+  upload_url: string;
+  object_key: string;
+  public_url: string;
+  expires_in: number;
+};

@@ -94,7 +94,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         clearBackgroundUploadError,
     } = useCharacterCardState({ character, portraitUrl, refresh, saveStatus });
     const hasCustomBackground = Boolean(localBackgroundUrl);
-    const isArrangeMode = designMode;
     const contentEditMode = canEdit && designMode;
     const sheetBackgroundStyle = hasCustomBackground
         ? { "--ccard-background-image": `url("${localBackgroundUrl.replace(/"/g, "%22")}")` } as React.CSSProperties
@@ -160,7 +159,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
     return (
         <main
-            className={`ccard-sheet ${isArrangeMode ? "is-design-mode" : ""} ${hasCustomBackground ? "is-custom-background" : ""} ${className ?? ""}`}
+            className={`ccard-sheet ${contentEditMode ? "is-design-mode" : ""} ${hasCustomBackground ? "is-custom-background" : ""} ${className ?? ""}`}
             role="document"
             aria-label={t("characterCard.sheetLabel")}
             style={sheetBackgroundStyle}
@@ -184,8 +183,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 </div>
                 <div className="ccard-actions">
                     <div className="ccard-sessionState" aria-live="polite">
-                        <span className={`ccard-modeLabel ${designMode ? "is-arrange" : "is-play"}`}>
-                            {isArrangeMode ? t("characterCard.mode.arrange") : (canEdit ? t("characterCard.mode.play") : t("characterCard.mode.readOnly"))}
+                        <span className={`ccard-modeLabel ${contentEditMode ? "is-arrange" : "is-play"}`}>
+                            {contentEditMode ? t("characterCard.mode.arrange") : (canEdit ? t("characterCard.mode.play") : t("characterCard.mode.readOnly"))}
                         </span>
                         <span className={`ccard-saveStatus ccard-saveStatus--${saveStatus.status}`} aria-busy={saveStatus.status === "saving"}>
                             {saveStatus.status === "saving" && <span className="ccard-saveSpinner" aria-hidden="true" />}
@@ -201,16 +200,18 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                     >
                         <RotateCcw size={17} strokeWidth={2.2} aria-hidden="true" />
                     </button>
-                    <button
-                        type="button"
-                        className={`ccard-modeToggle ${isArrangeMode ? "is-active" : ""}`}
-                        aria-label={isArrangeMode ? t("characterCard.actions.disableEditMode") : t("characterCard.actions.enableEditMode")}
-                        aria-pressed={isArrangeMode}
-                        title={isArrangeMode ? t("characterCard.actions.editModeActive") : t("characterCard.actions.enableEditMode")}
-                        onClick={onToggleDesignMode}
-                    >
-                        <Pencil size={17} strokeWidth={2.2} aria-hidden="true" />
-                    </button>
+                    {canEdit && (
+                        <button
+                            type="button"
+                            className={`ccard-modeToggle ${contentEditMode ? "is-active" : ""}`}
+                            aria-label={contentEditMode ? t("characterCard.actions.disableEditMode") : t("characterCard.actions.enableEditMode")}
+                            aria-pressed={contentEditMode}
+                            title={contentEditMode ? t("characterCard.actions.editModeActive") : t("characterCard.actions.enableEditMode")}
+                            onClick={onToggleDesignMode}
+                        >
+                            <Pencil size={17} strokeWidth={2.2} aria-hidden="true" />
+                        </button>
+                    )}
                     {canEdit && (
                         <>
                             <div className="ccard-actionMenu">

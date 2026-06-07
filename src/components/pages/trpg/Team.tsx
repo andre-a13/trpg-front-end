@@ -1,4 +1,4 @@
-import { type FormEvent, useCallback, useEffect, useState } from "react";
+import { type ChangeEvent, type DragEvent, type FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router";
@@ -8,6 +8,10 @@ import characterService from "../../../services/character.service";
 import teamService from "../../../services/team.service";
 import type { TeamCharacterDto, TeamDto } from "../../../interface/IAddTeam";
 import "./team.scss";
+
+const ALLOWED_TEAM_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+const TEAM_IMAGE_MAX_SIZE_BYTES = 15 * 1024 * 1024;
+const SHOW_TEAM_ILLUSTRATION_UPLOAD = false;
 
 export default function Team() {
   const { t } = useTranslation();
@@ -22,6 +26,10 @@ export default function Team() {
   const [memberSlug, setMemberSlug] = useState("");
   const [memberStatus, setMemberStatus] = useState<string | null>(null);
   const [memberSubmitting, setMemberSubmitting] = useState(false);
+  const [isDraggingUpload, setIsDraggingUpload] = useState(false);
+  const [illustrationStatus, setIllustrationStatus] = useState<string | null>(null);
+  const [isUploadingIllustration, setIsUploadingIllustration] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const fetchTeam = useCallback(async () => {
     if (!uuid) {
@@ -100,6 +108,63 @@ export default function Team() {
     } finally {
       setMemberSubmitting(false);
     }
+  }
+
+  function validateIllustrationFile(file: File) {
+    if (!ALLOWED_TEAM_IMAGE_TYPES.has(file.type)) {
+      return t("teams.upload.invalidFormat");
+    }
+    if (file.size > TEAM_IMAGE_MAX_SIZE_BYTES) {
+      return t("teams.upload.tooLarge");
+    }
+    return null;
+  }
+
+  async function uploadIllustrationFile(file: File) {
+    if (!team) return;
+
+    const validationError = validateIllustrationFile(file);
+    if (validationError) {
+      setIllustrationStatus(validationError);
+      return;
+    }
+
+    setIllustrationStatus(t("teams.upload.uploading", { team: team.name }));
+    setIsUploadingIllustration(true);
+
+    try {
+      const updatedTeam = await teamService.uploadIllustration(team.uuid, file);
+      setTeam(updatedTeam);
+      setIllustrationStatus(t("teams.upload.success", { team: updatedTeam.name }));
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        setIllustrationStatus(t("common.errors.status", { status: err.response?.status ?? "network", message: err.message }));
+        return;
+      }
+      setIllustrationStatus(t("teams.upload.failed"));
+    } finally {
+      setIsUploadingIllustration(false);
+      setIsDraggingUpload(false);
+    }
+  }
+
+  function handleIllustrationInputChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (file) void uploadIllustrationFile(file);
+    event.target.value = "";
+  }
+
+  function handleIllustrationDragOver(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "copy";
+    setIsDraggingUpload(true);
+  }
+
+  function handleIllustrationDrop(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    setIsDraggingUpload(false);
+    const file = event.dataTransfer.files?.[0];
+    if (file) void uploadIllustrationFile(file);
   }
 
   return (
@@ -193,6 +258,41 @@ export default function Team() {
           )}
 
           {memberStatus && <p className="team-detail__member-status">{memberStatus}</p>}
+
+          {SHOW_TEAM_ILLUSTRATION_UPLOAD && (
+            <>
+              <section
+                className={`team-detail__upload-rail ${isDraggingUpload ? "is-dragging" : ""}`}
+                onDragOver={handleIllustrationDragOver}
+                onDragLeave={() => setIsDraggingUpload(false)}
+                onDrop={handleIllustrationDrop}
+              >
+                <div className="team-detail__upload-track" aria-hidden="true" />
+                {team.illustrationUrl && (
+                  <img className="team-detail__upload-preview" src={team.illustrationUrl} alt="" />
+                )}
+                <div className="team-detail__upload-controls">
+                  <span>{t("teams.upload.currentTeam", { team: team.name })}</span>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploadingIllustration}
+                  >
+                    {isUploadingIllustration ? t("teams.upload.uploadingShort") : t("teams.upload.choose")}
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={handleIllustrationInputChange}
+                  />
+                </div>
+                <p>{t("teams.upload.dropHint")}</p>
+              </section>
+
+              {illustrationStatus && <p className="team-detail__member-status">{illustrationStatus}</p>}
+            </>
+          )}
 
           {(team.characters ?? []).length === 0 ? (
             <p className="team-detail__empty">{t("teams.noCharacters")}</p>

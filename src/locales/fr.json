@@ -116,14 +116,14 @@
     },
     "actions": {
       "resetLayout": "Réinitialiser l'agencement des modules",
-      "enableEditMode": "Activer le mode organisation",
-      "disableEditMode": "Quitter le mode organisation",
-      "editModeActive": "Mode organisation actif",
+      "enableEditMode": "Activer le mode édition",
+      "disableEditMode": "Quitter le mode édition",
+      "editModeActive": "Mode édition actif",
       "openActionMenu": "Ouvrir les actions de la fiche"
     },
     "mode": {
       "play": "Jeu",
-      "arrange": "Organisation",
+      "arrange": "Édition",
       "readOnly": "Lecture seule"
     },
     "save": {
@@ -272,7 +272,22 @@
     "noAvailableCharacters": "Tous les personnages sont déjà assignés à cette compagnie.",
     "adding": "Ajout…",
     "memberAdded": "Membre ajouté.",
-    "addMemberFailed": "Erreur réseau : impossible d'ajouter le membre"
+    "addMemberFailed": "Erreur réseau : impossible d'ajouter le membre",
+    "removeMember": "Retirer {{name}} de la compagnie",
+    "removeMemberConfirm": "Retirer {{name}} de cette compagnie ?",
+    "removeMemberFailed": "Erreur réseau : impossible de retirer le membre",
+    "upload": {
+      "target": "Compagnie",
+      "currentTeam": "Image de {{team}}",
+      "choose": "Choisir une image",
+      "dropHint": "Déposez une image sur le rail",
+      "invalidFormat": "Format accepté : JPG, PNG ou WebP.",
+      "tooLarge": "Image trop lourde : 15 Mo maximum.",
+      "uploading": "Envoi de l'image de {{team}}…",
+      "uploadingShort": "Envoi…",
+      "success": "Image de {{team}} mise à jour.",
+      "failed": "Envoi impossible. Réessayez plus tard."
+    }
   },
   "createTeam": {
     "title": "Créer une compagnie",

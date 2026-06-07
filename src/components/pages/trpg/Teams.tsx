@@ -13,6 +13,8 @@ export default function Teams() {
   const [teams, setTeams] = useState<TeamDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [memberStatus, setMemberStatus] = useState<string | null>(null);
+  const [removingMemberKey, setRemovingMemberKey] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchTeams() {
@@ -36,6 +38,29 @@ export default function Teams() {
 
     fetchTeams();
   }, [t]);
+
+  async function removeCharacterFromTeam(teamUuid: string, characterSlug: string, characterName: string) {
+    if (!window.confirm(t("teams.removeMemberConfirm", { name: characterName }))) return;
+
+    const key = `${teamUuid}:${characterSlug}`;
+    setRemovingMemberKey(key);
+    setMemberStatus(null);
+
+    try {
+      const updatedTeam = await teamService.removeMember(teamUuid, characterSlug);
+      setTeams((currentTeams) => (
+        currentTeams.map((team) => (team.uuid === updatedTeam.uuid ? updatedTeam : team))
+      ));
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        setMemberStatus(t("common.errors.status", { status: err.response?.status ?? "network", message: err.message }));
+        return;
+      }
+      setMemberStatus(t("teams.removeMemberFailed"));
+    } finally {
+      setRemovingMemberKey(null);
+    }
+  }
 
   return (
     <div className="page">
@@ -66,52 +91,70 @@ export default function Teams() {
           {teams.length === 0 ? (
             <p className="teams-list__empty">{t("teams.empty")}</p>
           ) : (
-            <div className="teams-list__grid">
-              {teams.map((team) => (
-                <article className="team-card" key={team.uuid}>
-                  {team.illustrationUrl && (
-                    <img className="team-card__image" src={team.illustrationUrl} alt="" />
-                  )}
-                  <div className="team-card__body">
-                    <div className="team-card__heading">
-                      <h3>
-                        <Link to={`/teams/${team.uuid}`}>{team.name}</Link>
-                      </h3>
-                      <span className="team-card__meta">{t("teams.memberCount", { count: team.characters?.length ?? 0 })}</span>
-                    </div>
+            <>
+              {memberStatus && <p className="teams-list__status">{memberStatus}</p>}
 
-                    {team.characters && team.characters.length > 0 ? (
-                      <div className="team-card__characters">
-                        {team.characters.slice(0, 6).map((character) => {
-                          const portraitUrl = character.portraitUrl || `/assets/${character.slug}_jdr.jpg`;
-
-                          return (
-                            <Link key={character.id} to={`/characters/${character.slug}`}>
-                              <img src={portraitUrl} alt="" />
-                              <span>
-                                <strong>{character.name}</strong>
-                                <span className="team-card__race">{character.race}</span>
-                              </span>
-                            </Link>
-                          );
-                        })}
-                        {team.characters.length > 6 && (
-                          <Link className="team-card__more" to={`/teams/${team.uuid}`}>
-                            {t("teams.moreMembers", { count: team.characters.length - 6 })}
-                          </Link>
-                        )}
-                      </div>
-                    ) : (
-                      <p className="team-card__empty">{t("teams.noCharacters")}</p>
+              <div className="teams-list__grid">
+                {teams.map((team) => (
+                  <article className="team-card" key={team.uuid}>
+                    {team.illustrationUrl && (
+                      <img className="team-card__image" src={team.illustrationUrl} alt="" />
                     )}
+                    <div className="team-card__body">
+                      <div className="team-card__heading">
+                        <h3>
+                          <Link to={`/teams/${team.uuid}`}>{team.name}</Link>
+                        </h3>
+                        <span className="team-card__meta">{t("teams.memberCount", { count: team.characters?.length ?? 0 })}</span>
+                      </div>
 
-                    <Link className="team-card__open" to={`/teams/${team.uuid}`}>
-                      {t("teams.openTeam")}
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
+                      {team.characters && team.characters.length > 0 ? (
+                        <div className="team-card__characters">
+                          {team.characters.slice(0, 6).map((character) => {
+                            const portraitUrl = character.portraitUrl || `/assets/${character.slug}_jdr.jpg`;
+                            const removeKey = `${team.uuid}:${character.slug}`;
+
+                            return (
+                              <div className="team-card__character-row" key={character.id}>
+                                <Link to={`/characters/${character.slug}`}>
+                                  <img src={portraitUrl} alt="" />
+                                  <span>
+                                    <strong>{character.name}</strong>
+                                    <span className="team-card__race">{character.race}</span>
+                                  </span>
+                                </Link>
+                                {isAdmin && manageCharactersEnabled && (
+                                  <button
+                                    type="button"
+                                    className="team-card__remove"
+                                    onClick={() => void removeCharacterFromTeam(team.uuid, character.slug, character.name)}
+                                    disabled={removingMemberKey === removeKey}
+                                    aria-label={t("teams.removeMember", { name: character.name })}
+                                  >
+                                    {t("common.actions.delete")}
+                                  </button>
+                                )}
+                              </div>
+                            );
+                          })}
+                          {team.characters.length > 6 && (
+                            <Link className="team-card__more" to={`/teams/${team.uuid}`}>
+                              {t("teams.moreMembers", { count: team.characters.length - 6 })}
+                            </Link>
+                          )}
+                        </div>
+                      ) : (
+                        <p className="team-card__empty">{t("teams.noCharacters")}</p>
+                      )}
+
+                      <Link className="team-card__open" to={`/teams/${team.uuid}`}>
+                        {t("teams.openTeam")}
+                      </Link>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </>
           )}
         </section>
       )}
