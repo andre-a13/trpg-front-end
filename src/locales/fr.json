@@ -384,7 +384,9 @@
       "illustrationAlt": "Illustration de {{name}}",
       "manaValue": "Coût en mana : {{value}}",
       "attackValue": "Attaque : {{value}}",
-      "healthValue": "Vie : {{value}}"
+      "healthValue": "Vie : {{value}}",
+      "rarityValue": "Rareté : {{rarity}}",
+      "minionType": "Créature"
     },
     "design": {
       "eyebrow": "Registre des intentions douteuses",
