@@ -141,13 +141,12 @@ describe("HearthstoneForge", () => {
     expect(screen.getByText(/score de 5/)).toBeInTheDocument();
   });
 
-  it("shows the common gem bonus in the retouch threshold", () => {
+  it("keeps rarity modifiers hidden until their adjusted retouch threshold matters", () => {
     renderForge([3]);
 
     fireEvent.click(screen.getByRole("button", { name: /Allumer la presse/ }));
     fillCard();
-    expect(screen.getByText(/Stable à ±1 de la cible/)).toBeInTheDocument();
-    expect(screen.getByText(/Modificateur appliqué aux tests de retouche : \+10/)).toBeInTheDocument();
+    expect(screen.queryByText(/Retouche \+10|Modificateur appliqué|Stable à ±1/)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Engager le parchemin" }));
     fireEvent.click(screen.getByRole("radio", { name: /Main soutenue/ }));
     fireEvent.click(screen.getByRole("button", { name: "Actionner la presse" }));
