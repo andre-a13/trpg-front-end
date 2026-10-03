@@ -8,6 +8,7 @@ import CharacterPage from "./components/pages/trpg/Character";
 import CreateCharacter from "./components/pages/trpg/CreateCharacter";
 import CreateTeam from "./components/pages/trpg/CreateTeam";
 import HearthstonePrinter from "./components/pages/trpg/HearthstonePrinter";
+import HearthstoneForge from "./components/pages/trpg/hearthstone-forge/HearthstoneForge";
 import Team from "./components/pages/trpg/Team";
 import Teams from "./components/pages/trpg/Teams";
 
@@ -26,6 +27,7 @@ export default function AppRoutes() {
         <Route path="/teams" element={<Teams />} />
         <Route path="/teams/:uuid" element={<Team />} />
         <Route path="/hearthstone-printer" element={<HearthstonePrinter />} />
+        <Route path="/hearthstone-forge" element={<HearthstoneForge />} />
         <Route element={<ProtectedRoute requiredRole="admin" />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/characters/new" element={<CreateCharacter />} />

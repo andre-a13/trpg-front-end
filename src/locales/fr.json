@@ -362,5 +362,194 @@
       "ownerUpdated": "Compte du personnage mis a jour.",
       "ownerUpdateFailed": "Impossible de modifier le compte du personnage."
     }
+  },
+  "hearthstoneForge": {
+    "title": "La Forge des Cartes",
+    "actions": {
+      "leave": "Quitter l'atelier",
+      "back": "Revenir en arrière"
+    },
+    "landing": {
+      "eyebrow": "Presse arcanique no 13",
+      "title": "La Forge des Cartes",
+      "intro": "Ici, l'encre brûle, les pinceaux protestent et les gemmes ont toujours le dernier mot. Entrez votre idée dans la machine et tâchez de ressortir avec une carte entière.",
+      "newCard": "Allumer la presse",
+      "collection_one": "Cabinet des cartes — {{count}} création",
+      "collection_other": "Cabinet des cartes — {{count}} créations"
+    },
+    "card": {
+      "previewLabel": "Aperçu de la carte {{name}}",
+      "unnamed": "Créature sans nom",
+      "noEffect": "Le parchemin attend encore son prodige.",
+      "illustrationAlt": "Illustration de {{name}}",
+      "manaValue": "Coût en mana : {{value}}",
+      "attackValue": "Attaque : {{value}}",
+      "healthValue": "Vie : {{value}}"
+    },
+    "design": {
+      "eyebrow": "Registre des intentions douteuses",
+      "title": "Dessinez le monstre",
+      "name": "Nom de la créature",
+      "namePlaceholder": "Ex. : Le Bouc qui savait trop de choses",
+      "effect": "Prodige inscrit sur la carte",
+      "effectPlaceholder": "Décrivez ce que la créature déclenche lorsqu'elle est invoquée…",
+      "mana": "Mana",
+      "attack": "Attaque",
+      "health": "Vie",
+      "ambition": "Ambition de l'œuvre",
+      "ambitionHint": "Annoncez jusqu'où vous comptez défier les lois de la magie.",
+      "masteries": "Talents de l'artisan",
+      "masteriesHint": "Indiquez honnêtement les disciplines que votre artisan maîtrise.",
+      "illustration": "Portrait du futur problème",
+      "imageUrl": "Adresse d'une illustration",
+      "or": "ou",
+      "chooseFile": "Confier un fichier à la presse",
+      "processingImage": "La presse mâchouille l'image…",
+      "preview": "Ce que la machine croit avoir compris",
+      "begin": "Engager le parchemin",
+      "requiredError": "Le nom et le prodige doivent contenir autre chose que du vide cosmique.",
+      "imageErrors": {
+        "invalid-format": "La presse n'accepte que les images JPG, PNG ou WebP.",
+        "too-large": "Cette image dépasse 10 Mo et menace de coincer la presse.",
+        "processing-failed": "La presse n'a pas réussi à digérer cette illustration."
+      }
+    },
+    "rarities": {
+      "common": "Commune",
+      "rare": "Rare",
+      "epic": "Épique",
+      "legendary": "Légendaire"
+    },
+    "masteries": {
+      "ink": "Runologie",
+      "paint": "Art et calligraphie",
+      "gem": "Gemmologie et enchantement"
+    },
+    "phases": {
+      "ink": {
+        "short": "Encre",
+        "eyebrow": "Premier tour de manivelle",
+        "title": "Éveillez l'encre",
+        "prompt": "L'huile de mana frémit dans le bassin. Choisissez comment pousser l'encre à reconnaître le parchemin sans lui apprendre de mauvaises habitudes."
+      },
+      "paint": {
+        "short": "Peinture",
+        "eyebrow": "Deuxième tour de manivelle",
+        "title": "Donnez-lui une forme",
+        "prompt": "Le dessin vous observe déjà. Décidez avec quelle ferveur imposer votre intention avant qu'il ne se forge la sienne."
+      },
+      "gem": {
+        "short": "Gemme",
+        "eyebrow": "Dernier tour de manivelle",
+        "title": "Enfoncez la gemme",
+        "prompt": "La pierre résonne entre les pinces. Dosez le dernier afflux de magie ; la presse possède une opinion très personnelle sur les excès."
+      }
+    },
+    "postures": {
+      "precise": {
+        "name": "Main précise",
+        "description": "Un geste retenu, presque raisonnable."
+      },
+      "steady": {
+        "name": "Main soutenue",
+        "description": "Une pression franche et bien nourrie."
+      },
+      "forced": {
+        "name": "Main forcée",
+        "description": "Tout ce que la machine peut avaler."
+      }
+    },
+    "ritual": {
+      "progressLabel": "Progression de la fabrication",
+      "choosePosture": "Choisissez une manière d'agir",
+      "roll": "Actionner la presse",
+      "continue": "Poursuivre le rituel",
+      "seal": "Sceller l'œuvre",
+      "dieResult": "Résultat du dé : {{value}}",
+      "reactions": {
+        "ink": {
+          "low": "L'encre hésite, renifle le parchemin et consent à y poser une patte.",
+          "mid": "Les runes s'enroulent proprement autour des fibres avec un petit soupir satisfait.",
+          "high": "Le bassin crache une vague de glyphes qui s'agrippent au parchemin avec enthousiasme."
+        },
+        "paint": {
+          "low": "Le trait demeure mince, mais la silhouette cligne déjà des yeux.",
+          "mid": "Les couleurs se disputent brièvement avant de former une image presque disciplinée.",
+          "high": "Le portrait bondit sous le pinceau et réclame aussitôt un meilleur éclairage."
+        },
+        "gem": {
+          "low": "La pierre émet un petit tintement vexé, puis accepte son logement.",
+          "mid": "La gemme pulse au rythme de la presse et les boulons cessent de trembler.",
+          "high": "Un éclair traverse l'atelier ; quelque part, une théière prend feu sans raison."
+        }
+      }
+    },
+    "resolving": {
+      "eyebrow": "La presse retient son souffle",
+      "title": "Quelque chose vit là-dedans",
+      "body": "Les pinces se retirent. La gemme murmure, le parchemin grogne et le sceau attend votre main.",
+      "reveal": "Rompre le sceau"
+    },
+    "unstable": {
+      "eyebrow": "Presque magnifique, presque sûr",
+      "title": "La carte refuse de choisir",
+      "body": "La création fonctionne, mais pas gratuitement. Décidez quel compromis imposer avant qu'elle ne le fasse à votre place.",
+      "singleUse": {
+        "title": "Un prodige, une seule fois",
+        "body": "La carte déchaînera tout son effet, puis se consumera."
+      },
+      "flawed": {
+        "title": "La garder avec son caractère",
+        "body": "La carte restera, accompagnée d'une imperfection imprévisible."
+      }
+    },
+    "result": {
+      "stable": {
+        "eyebrow": "Le miracle administratif",
+        "title": "La carte tient debout",
+        "body": "L'encre, l'image et la gemme résonnent d'une seule voix. Même la presse semble momentanément professionnelle."
+      },
+      "unstable": {
+        "eyebrow": "Chef-d'œuvre à manipuler de loin",
+        "title": "Vivante, à sa façon",
+        "body": "La carte a rejoint votre cabinet. Elle fonctionne parfaitement, pour une définition suffisamment souple de « parfaitement »."
+      },
+      "undercharged": {
+        "eyebrow": "Un silence très poli",
+        "title": "La magie n'a pas suivi",
+        "body": "La créature reste dessinée sur le parchemin et prétend que tout cela était volontaire. L'encre est perdue, mais vous pouvez recommencer."
+      },
+      "overcharged": {
+        "eyebrow": "Rapport d'incident provisoire",
+        "title": "La presse a éternué",
+        "body": "Trop de magie a traversé la carte. Le résultat fume, ricane et ne sera pas rangé dans le cabinet."
+      },
+      "seals": {
+        "stable": "Stable",
+        "unstable": "Instable"
+      },
+      "singleUse": "Cette carte accomplira son prodige une seule fois avant de se consumer.",
+      "openCollection": "Voir dans le cabinet",
+      "createAnother": "Forger une autre carte",
+      "retry": "Relancer la fabrication",
+      "edit": "Repenser la créature"
+    },
+    "flaws": {
+      "noise": "Défaut : son activation produit un vacarme impossible à dissimuler.",
+      "light": "Défaut : la carte rayonne comme un phare dès qu'elle est manipulée.",
+      "incantation": "Défaut : une incantation courte et embarrassante doit être prononcée.",
+      "recharge": "Défaut : la carte exige un long repos après chaque utilisation.",
+      "temperament": "Défaut : la créature invoquée possède un caractère franchement discutable.",
+      "condition": "Défaut : l'effet ne répond que lorsqu'une condition particulière est réunie."
+    },
+    "collection": {
+      "eyebrow": "Archives des réussites improbables",
+      "title": "Cabinet des cartes",
+      "empty": "Les étagères sont vides. La bonne nouvelle : rien n'a encore explosé ici.",
+      "singleUse": "Usage unique",
+      "delete": "Retirer du cabinet",
+      "deleteConfirm": "Retirer définitivement « {{name}} » du cabinet ?",
+      "storageError": "La carte reste visible pour cette session, mais le navigateur n'a plus assez de place pour l'enregistrer. Supprimez une ancienne carte ou utilisez une illustration par URL."
+    }
   }
 }
