@@ -2,6 +2,7 @@ import { type FormEvent, useEffect, useReducer, useState } from "react";
 import {
   ArrowLeft,
   BookOpen,
+  CheckCircle2,
   ChevronRight,
   Flame,
   Gem,
@@ -251,6 +252,7 @@ export default function HearthstoneForge({
   const { t } = useTranslation();
   const [state, dispatch] = useReducer(reducer, storage, initialState);
   const [imageError, setImageError] = useState<string | null>(null);
+  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
   const [designError, setDesignError] = useState<string | null>(null);
   const [processingImage, setProcessingImage] = useState(false);
 
@@ -307,12 +309,19 @@ export default function HearthstoneForge({
     try {
       const value = await normalizeIllustration(file);
       updateDraft({ illustration: { kind: "dataUrl", value } });
+      setUploadedFileName(file.name);
     } catch (error) {
       const code = error instanceof Error ? error.message : "processing-failed";
       setImageError(t(`hearthstoneForge.design.imageErrors.${code}`));
     } finally {
       setProcessingImage(false);
     }
+  }
+
+  function removeUploadedIllustration() {
+    setImageError(null);
+    setUploadedFileName(null);
+    updateDraft({ illustration: { kind: "fallback" } });
   }
 
   function handleRoll() {
@@ -435,14 +444,20 @@ export default function HearthstoneForge({
       {state.view === "design" && (
         <section className="forge-design" aria-labelledby="forge-design-title">
           <form className="forge-design__form" onSubmit={submitDesign}>
-            <div className="forge-section-heading">
-              <button type="button" className="forge-icon-button" onClick={() => dispatch({ type: "RETURN_LANDING" })} aria-label={t("hearthstoneForge.actions.back")}>
-                <ArrowLeft size={20} />
-              </button>
-              <div>
-                <p className="forge-eyebrow">{t("hearthstoneForge.design.eyebrow")}</p>
-                <h1 id="forge-design-title">{t("hearthstoneForge.design.title")}</h1>
+            <div className="forge-design__toolbar">
+              <div className="forge-section-heading">
+                <button type="button" className="forge-icon-button" onClick={() => dispatch({ type: "RETURN_LANDING" })} aria-label={t("hearthstoneForge.actions.back")}>
+                  <ArrowLeft size={20} />
+                </button>
+                <div>
+                  <p className="forge-eyebrow">{t("hearthstoneForge.design.eyebrow")}</p>
+                  <h1 id="forge-design-title">{t("hearthstoneForge.design.title")}</h1>
+                </div>
               </div>
+              <button type="submit" className="forge-button forge-button--primary forge-design__submit" disabled={processingImage}>
+                <Flame size={20} aria-hidden="true" />
+                {t("hearthstoneForge.design.begin")}
+              </button>
             </div>
 
             <div className="forge-form-grid">
@@ -550,24 +565,49 @@ export default function HearthstoneForge({
                 <input
                   type="url"
                   value={state.draft.illustration.kind === "url" ? state.draft.illustration.value ?? "" : ""}
-                  onChange={(event) => updateDraft({ illustration: event.target.value ? { kind: "url", value: event.target.value } : { kind: "fallback" } })}
+                  onChange={(event) => {
+                    setUploadedFileName(null);
+                    updateDraft({ illustration: event.target.value ? { kind: "url", value: event.target.value } : { kind: "fallback" } });
+                  }}
                   placeholder="https://…"
                 />
               </label>
               <span>{t("hearthstoneForge.design.or")}</span>
               <label className="forge-file-button">
                 <ImagePlus size={18} aria-hidden="true" />
-                {processingImage ? t("hearthstoneForge.design.processingImage") : t("hearthstoneForge.design.chooseFile")}
-                <input type="file" accept="image/jpeg,image/png,image/webp" disabled={processingImage} onChange={(event) => void handleImageFile(event.target.files?.[0])} />
+                {processingImage
+                  ? t("hearthstoneForge.design.processingImage")
+                  : state.draft.illustration.kind === "dataUrl"
+                    ? t("hearthstoneForge.design.replaceFile")
+                    : t("hearthstoneForge.design.chooseFile")}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  disabled={processingImage}
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    event.target.value = "";
+                    void handleImageFile(file);
+                  }}
+                />
               </label>
+              {state.draft.illustration.kind === "dataUrl" && (
+                <div className="forge-file-status" role="status" aria-live="polite">
+                  <CheckCircle2 size={20} aria-hidden="true" />
+                  <span>
+                    <strong>{t("hearthstoneForge.design.fileLoaded")}</strong>
+                    <small title={uploadedFileName ?? undefined}>{uploadedFileName ?? t("hearthstoneForge.design.fileReady")}</small>
+                  </span>
+                  <button type="button" onClick={removeUploadedIllustration}>
+                    <Trash2 size={16} aria-hidden="true" />
+                    {t("hearthstoneForge.design.removeFile")}
+                  </button>
+                </div>
+              )}
               {imageError && <p className="forge-field-error" role="alert">{imageError}</p>}
             </fieldset>
 
             {designError && <p className="forge-field-error" role="alert">{designError}</p>}
-            <button type="submit" className="forge-button forge-button--primary forge-design__submit" disabled={processingImage}>
-              <Flame size={20} aria-hidden="true" />
-              {t("hearthstoneForge.design.begin")}
-            </button>
           </form>
 
           <aside className="forge-design__preview">
@@ -842,6 +882,10 @@ export default function HearthstoneForge({
                   <button type="button" className="forge-button forge-button--primary" onClick={() => dispatch({ type: "RETRY_SAME_CARD" })}>
                     <RotateCcw size={19} aria-hidden="true" />
                     {t("hearthstoneForge.result.retrySame")}
+                  </button>
+                  <button type="button" className="forge-button" onClick={() => dispatch({ type: "RETURN_LANDING" })}>
+                    <Home size={19} aria-hidden="true" />
+                    {t("hearthstoneForge.result.backToPress")}
                   </button>
                 </>
               )}

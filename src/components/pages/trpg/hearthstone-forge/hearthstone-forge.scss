@@ -10,7 +10,7 @@
   position: relative;
   isolation: isolate;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
   background:
     radial-gradient(circle at 50% 110%, rgba(255, 91, 13, 0.34), transparent 37rem),
     radial-gradient(circle at 8% 30%, rgba(130, 45, 17, 0.22), transparent 26rem),
@@ -268,17 +268,55 @@
   border-radius: 22px 7px 22px 7px;
 }
 
+.forge-design__toolbar {
+  position: sticky;
+  z-index: 15;
+  top: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: -0.55rem -0.55rem 0;
+  padding: 0.65rem;
+  border: 1px solid rgba(255, 210, 139, 0.16);
+  border-radius: 14px 5px 14px 5px;
+  background: rgba(24, 18, 15, 0.94);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(14px);
+}
+
+.forge-design__toolbar .forge-section-heading {
+  min-width: 0;
+}
+
+.forge-design__toolbar h1 {
+  font-size: clamp(1.75rem, 3vw, 2.55rem);
+}
+
+.forge-design__toolbar .forge-eyebrow {
+  margin-bottom: 0.3rem;
+}
+
 .forge-design__preview {
   position: sticky;
-  top: 5rem;
+  top: 1rem;
   display: grid;
+  max-height: calc(100dvh - 2rem);
   justify-items: center;
   padding: 1.25rem;
+  overflow-y: auto;
   border-radius: 7px 22px 7px 22px;
+  overscroll-behavior: contain;
+  scrollbar-color: rgba(255, 200, 112, 0.35) transparent;
+  scrollbar-width: thin;
 }
 
 .forge-design__preview > .forge-eyebrow {
   justify-self: start;
+}
+
+.forge-design__preview .forge-card {
+  width: min(360px, 100%, calc((100dvh - 8rem) * 0.69));
 }
 
 .forge-form-grid {
@@ -447,7 +485,8 @@
 }
 
 .forge-illustration-picker legend,
-.forge-illustration-picker .forge-field-error {
+.forge-illustration-picker .forge-field-error,
+.forge-file-status {
   grid-column: 1 / -1;
 }
 
@@ -480,6 +519,60 @@
   opacity: 0;
 }
 
+.forge-file-status {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid rgba(119, 211, 150, 0.28);
+  border-radius: 9px;
+  background: rgba(44, 112, 66, 0.12);
+  color: #9cdda9;
+  font-family: Aptos, "Helvetica Neue", sans-serif;
+}
+
+.forge-file-status > span {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 0.18rem;
+}
+
+.forge-file-status strong {
+  color: #d9f8df;
+  font-size: 0.82rem;
+}
+
+.forge-file-status small {
+  overflow: hidden;
+  color: #9fbc9f;
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.forge-file-status button {
+  display: inline-flex;
+  min-height: 2.3rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0 0.7rem;
+  border: 1px solid rgba(255, 162, 139, 0.26);
+  border-radius: 8px;
+  background: rgba(104, 34, 27, 0.2);
+  color: #e4aa9d;
+  font: 800 0.75rem/1 Aptos, sans-serif;
+}
+
+.forge-file-status button:hover {
+  border-color: rgba(255, 162, 139, 0.52);
+  background: rgba(122, 38, 29, 0.42);
+  color: #ffd2c8;
+}
+
 .forge-field-error {
   margin: 0;
   color: #ffad98;
@@ -487,7 +580,7 @@
 }
 
 .forge-design__submit {
-  justify-self: end;
+  flex: 0 0 auto;
 }
 
 .forge-card {
@@ -1546,7 +1639,13 @@
 
   .forge-design__preview {
     position: static;
+    max-height: none;
     grid-row: 1;
+    overflow: visible;
+  }
+
+  .forge-design__preview .forge-card {
+    width: min(360px, 100%);
   }
 
   .forge-ritual {
@@ -1639,6 +1738,37 @@
   .forge-illustration-picker > span {
     padding: 0;
     text-align: center;
+  }
+
+  .forge-design__toolbar {
+    position: static;
+    align-items: stretch;
+    flex-direction: column;
+    margin: 0;
+    padding: 0 0 0.85rem;
+    border: 0;
+    border-bottom: 1px solid var(--forge-line);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .forge-design__submit {
+    width: 100%;
+  }
+
+  .forge-file-status {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .forge-file-status > span {
+    align-self: center;
+  }
+
+  .forge-file-status button {
+    width: 100%;
   }
 
   .forge-postures button,

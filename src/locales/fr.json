@@ -408,7 +408,11 @@
       "imageUrl": "Adresse d'une illustration",
       "or": "ou",
       "chooseFile": "Confier un fichier à la presse",
+      "replaceFile": "Remplacer le fichier",
       "processingImage": "La presse mâchouille l'image…",
+      "fileLoaded": "Illustration chargée",
+      "fileReady": "Fichier prêt à imprimer",
+      "removeFile": "Retirer l'illustration",
       "preview": "Ce que la machine croit avoir compris",
       "begin": "Engager le parchemin",
       "requiredError": "Le nom et le prodige doivent contenir autre chose que du vide cosmique.",
@@ -566,7 +570,8 @@
       "singleUse": "Cette carte accomplira son prodige une seule fois avant de se consumer.",
       "openCollection": "Voir dans le cabinet",
       "createAnother": "Imprimer une autre carte",
-      "retrySame": "Retenter la même carte"
+      "retrySame": "Retenter la même carte",
+      "backToPress": "Revenir à l'imprimerie"
     },
     "flaws": {
       "noise": "Défaut : son activation produit un vacarme impossible à dissimuler.",

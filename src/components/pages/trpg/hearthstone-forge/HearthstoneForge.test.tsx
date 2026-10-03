@@ -5,6 +5,10 @@ import i18n from "../../../../config/i18n";
 import { FORGE_SKILLS_STORAGE_KEY, FORGE_STORAGE_KEY } from "./storage";
 import HearthstoneForge from "./HearthstoneForge";
 
+vi.mock("./image", () => ({
+  normalizeIllustration: vi.fn(async () => "data:image/webp;base64,normalized"),
+}));
+
 function renderForge(rolls: number[], skillRolls: number[] = [], chaosRolls: number[] = []) {
   return render(
     <MemoryRouter>
@@ -184,12 +188,33 @@ describe("HearthstoneForge", () => {
     playPhase("Poursuivre l'impression");
     playPhase("Achever l'impression");
     fireEvent.click(screen.getByRole("button", { name: "Inspecter le tirage" }));
+    expect(screen.getByRole("button", { name: "Revenir à l'imprimerie" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Retenter la même carte" }));
 
     expect(screen.getByRole("heading", { name: "Composez la carte" })).toBeInTheDocument();
     expect(screen.getByLabelText("Nom de la carte")).toHaveValue("Diablotin comptable");
     expect(screen.getByLabelText(/Type de créature/)).toHaveValue("Démon");
     expect(screen.getByLabelText("Runologie")).toHaveValue(60);
+  });
+
+  it("keeps the print action visible at the top and confirms uploaded illustrations", async () => {
+    renderForge([]);
+
+    fireEvent.click(screen.getByRole("button", { name: /Allumer la presse/ }));
+
+    const submit = screen.getByRole("button", { name: "Engager le parchemin" });
+    expect(submit.closest(".forge-design__toolbar")).not.toBeNull();
+
+    const file = new File(["portrait"], "jimmy.jpg", { type: "image/jpeg" });
+    fireEvent.change(screen.getByLabelText("Confier un fichier à la presse"), { target: { files: [file] } });
+
+    expect(await screen.findByText("Illustration chargée")).toBeInTheDocument();
+    expect(screen.getByText("jimmy.jpg")).toBeInTheDocument();
+    expect(screen.getByLabelText("Remplacer le fichier")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Retirer l'illustration" }));
+    expect(screen.queryByText("Illustration chargée")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Confier un fichier à la presse")).toBeInTheDocument();
   });
 
   it("loads remembered skills and only prints a creature type when one is provided", () => {
