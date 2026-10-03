@@ -13,6 +13,7 @@ import type { CardDraft, PhaseResult } from "./types";
 function draft(overrides: Partial<CardDraft> = {}): CardDraft {
   return {
     name: "Sujet de test",
+    minionType: "Méca",
     illustration: { kind: "fallback" },
     manaCost: 2,
     attack: 2,

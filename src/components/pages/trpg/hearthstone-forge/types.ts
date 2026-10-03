@@ -28,6 +28,7 @@ export type Illustration = {
 
 export type CardDraft = {
   name: string;
+  minionType: string;
   illustration: Illustration;
   manaCost: number;
   attack: number;
@@ -65,6 +66,7 @@ export type ForgeResolution = {
 export type StoredForgeCardV1 = {
   id: string;
   name: string;
+  minionType?: string;
   illustration: Illustration;
   manaCost: number;
   attack: number;

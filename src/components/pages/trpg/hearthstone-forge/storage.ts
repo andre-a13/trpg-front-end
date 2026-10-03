@@ -1,6 +1,7 @@
-import type { FlawId, GemColor, Illustration, Rarity, StoredForgeCardV1 } from "./types";
+import type { FlawId, GemColor, Illustration, Rarity, SkillScores, StoredForgeCardV1 } from "./types";
 
 export const FORGE_STORAGE_KEY = "trpg.hearthstoneForge.cards.v1";
+export const FORGE_SKILLS_STORAGE_KEY = "trpg.hearthstoneForge.skills.v1";
 
 type StoredEnvelopeV1 = {
   version: 1;
@@ -29,6 +30,7 @@ function isStoredCard(value: unknown): value is StoredForgeCardV1 {
   return (
     typeof card.id === "string" &&
     typeof card.name === "string" && card.name.trim().length >= 1 && card.name.length <= 80 &&
+    (card.minionType === undefined || (typeof card.minionType === "string" && card.minionType.length <= 40)) &&
     isIllustration(card.illustration) &&
     isIntegerInRange(card.manaCost, 0, 20) &&
     isIntegerInRange(card.attack, 0, 99) &&
@@ -60,5 +62,33 @@ export function loadForgeCards(storage: Storage = window.localStorage): StoredFo
 export function saveForgeCards(cards: StoredForgeCardV1[], storage: Storage = window.localStorage): void {
   const envelope: StoredEnvelopeV1 = { version: 1, cards };
   storage.setItem(FORGE_STORAGE_KEY, JSON.stringify(envelope));
+}
+
+export function loadForgeSkills(storage: Storage = window.localStorage): SkillScores {
+  const empty: SkillScores = { runology: null, artCalligraphy: null, gemologyEnchantment: null };
+
+  try {
+    const raw = storage.getItem(FORGE_SKILLS_STORAGE_KEY);
+    if (!raw) return empty;
+
+    const parsed = JSON.parse(raw) as { version?: unknown; skills?: Partial<SkillScores> };
+    if (parsed.version !== 1 || !parsed.skills) return empty;
+
+    const { runology, artCalligraphy, gemologyEnchantment } = parsed.skills;
+    if (
+      !isIntegerInRange(runology, 0, 100) ||
+      !isIntegerInRange(artCalligraphy, 0, 100) ||
+      !isIntegerInRange(gemologyEnchantment, 0, 100)
+    ) return empty;
+
+    return { runology, artCalligraphy, gemologyEnchantment };
+  } catch {
+    return empty;
+  }
+}
+
+export function saveForgeSkills(skills: SkillScores, storage: Storage = window.localStorage): void {
+  if (Object.values(skills).some((score) => !isIntegerInRange(score, 0, 100))) return;
+  storage.setItem(FORGE_SKILLS_STORAGE_KEY, JSON.stringify({ version: 1, skills }));
 }
 

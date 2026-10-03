@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Sword } from "lucide-react";
 import { GEM_RULES } from "./game";
 import type { CardDraft, StoredForgeCardV1 } from "./types";
 
@@ -7,6 +8,7 @@ type PreviewCard = Pick<
   CardDraft,
   "name" | "illustration" | "manaCost" | "attack" | "health" | "effect" | "rarity"
 > &
+  { minionType?: string } &
   Partial<Pick<StoredForgeCardV1, "gemColor" | "stability" | "unstableMode" | "flaw">>;
 
 type CardPreviewProps = {
@@ -44,6 +46,7 @@ export default function CardPreview({ card, compact = false }: CardPreviewProps)
   const gemColor = card.gemColor ?? GEM_RULES[card.rarity].color;
   const displayName = card.name.trim() || t("hearthstoneForge.card.unnamed");
   const displayEffect = card.effect.trim() || t("hearthstoneForge.card.noEffect");
+  const displayMinionType = card.minionType?.trim();
   const rarityLabel = t(`hearthstoneForge.rarities.${card.rarity}`);
   const densityClass = displayEffect.length > 190
     ? "forge-card__text--very-dense"
@@ -88,10 +91,13 @@ export default function CardPreview({ card, compact = false }: CardPreviewProps)
       <div className={`forge-card__text ${densityClass}`}>
         <p>{renderEffectText(displayEffect)}</p>
       </div>
-      <div className="forge-card__type">
-        <span>{t("hearthstoneForge.card.minionType")}</span>
-      </div>
+      {displayMinionType && (
+        <div className="forge-card__type">
+          <span>{displayMinionType}</span>
+        </div>
+      )}
       <div className="forge-card__attack" aria-label={t("hearthstoneForge.card.attackValue", { value: card.attack })}>
+        <Sword className="forge-card__attack-icon" aria-hidden="true" />
         <span>{card.attack}</span>
       </div>
       <div className="forge-card__health" aria-label={t("hearthstoneForge.card.healthValue", { value: card.health })}>

@@ -180,6 +180,7 @@ export function createStoredCard(
   return {
     id: crypto.randomUUID(),
     name: draft.name.trim(),
+    ...(draft.minionType.trim() ? { minionType: draft.minionType.trim() } : {}),
     illustration: draft.illustration,
     manaCost: draft.manaCost,
     attack: draft.attack,

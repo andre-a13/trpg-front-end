@@ -364,44 +364,46 @@
     }
   },
   "hearthstoneForge": {
-    "title": "La Forge des Cartes",
+    "title": "L'Imprimerie Arcanique",
     "actions": {
       "leave": "Quitter l'atelier",
       "back": "Revenir en arrière"
     },
     "landing": {
       "eyebrow": "Presse arcanique no 13",
-      "title": "La Forge des Cartes",
-      "intro": "Ici, l'encre brûle, les pinceaux protestent et les gemmes ont toujours le dernier mot. Entrez votre idée dans la machine et tâchez de ressortir avec une carte entière.",
+      "title": "L'Imprimerie des Cartes",
+      "intro": "Ici, l'encre brûle, les rouleaux protestent et les gemmes ont toujours le dernier mot. Glissez votre projet dans la presse et tâchez de récupérer une carte entière.",
       "newCard": "Allumer la presse",
-      "collection_one": "Cabinet des cartes — {{count}} création",
-      "collection_other": "Cabinet des cartes — {{count}} créations"
+      "collection_one": "Cabinet des cartes — {{count}} carte",
+      "collection_other": "Cabinet des cartes — {{count}} cartes"
     },
     "card": {
       "previewLabel": "Aperçu de la carte {{name}}",
-      "unnamed": "Créature sans nom",
+      "unnamed": "Carte sans nom",
       "noEffect": "Le parchemin attend encore son prodige.",
       "illustrationAlt": "Illustration de {{name}}",
       "manaValue": "Coût en mana : {{value}}",
       "attackValue": "Attaque : {{value}}",
       "healthValue": "Vie : {{value}}",
-      "rarityValue": "Rareté : {{rarity}}",
-      "minionType": "Créature"
+      "rarityValue": "Rareté : {{rarity}}"
     },
     "design": {
-      "eyebrow": "Registre des intentions douteuses",
-      "title": "Dessinez le monstre",
-      "name": "Nom de la créature",
+      "eyebrow": "Bon à tirer provisoire",
+      "title": "Composez la carte",
+      "name": "Nom de la carte",
       "namePlaceholder": "Ex. : Le Bouc qui savait trop de choses",
+      "minionType": "Type de créature (facultatif)",
+      "minionTypePlaceholder": "Ex. : Bête, Méca, Pirate…",
       "effect": "Prodige inscrit sur la carte",
-      "effectPlaceholder": "Décrivez ce que la créature déclenche lorsqu'elle est invoquée…",
+      "effectPlaceholder": "Décrivez l'effet imprimé sur la carte…",
       "mana": "Mana",
       "attack": "Attaque",
       "health": "Vie",
-      "ambition": "Ambition de l'œuvre",
-      "ambitionHint": "Annoncez jusqu'où vous comptez défier les lois de la magie.",
-      "skills": "Compétences de l'artisan",
-      "skillsHint": "Inscrivez les trois valeurs de votre artisan, de 0 à 100. La presse prétend qu'elle ne triche jamais.",
+      "ambition": "Qualité du tirage",
+      "ambitionHint": "Chaque rareté fixe le score exact que la presse devra atteindre.",
+      "targetScore": "Cible : {{value}}",
+      "skills": "Compétences de l'imprimeur",
+      "skillsHint": "Inscrivez vos trois valeurs de 0 à 100. Elles seront mémorisées pour la prochaine impression.",
       "illustration": "Portrait du futur problème",
       "imageUrl": "Adresse d'une illustration",
       "or": "ou",
@@ -432,20 +434,20 @@
       "ink": {
         "short": "Encre",
         "eyebrow": "Premier tour de manivelle",
-        "title": "Éveillez l'encre",
-        "prompt": "L'huile de mana frémit dans le bassin. Choisissez comment pousser l'encre à reconnaître le parchemin sans lui apprendre de mauvaises habitudes."
+        "title": "Préparez l'encrage",
+        "prompt": "L'huile de mana frémit dans le bassin. Choisissez comment engager l'encre dans les rouleaux sans lui apprendre de mauvaises habitudes."
       },
       "paint": {
         "short": "Peinture",
         "eyebrow": "Deuxième tour de manivelle",
-        "title": "Donnez-lui une forme",
-        "prompt": "Le dessin vous observe déjà. Décidez avec quelle ferveur imposer votre intention avant qu'il ne se forge la sienne."
+        "title": "Imprimez l'illustration",
+        "prompt": "Le dessin vous observe déjà. Décidez avec quelle ferveur presser l'image sur le support avant qu'elle ne choisisse elle-même ses couleurs."
       },
       "gem": {
         "short": "Gemme",
         "eyebrow": "Dernier tour de manivelle",
-        "title": "Enfoncez la gemme",
-        "prompt": "La pierre résonne entre les pinces. Dosez le dernier afflux de magie ; la presse possède une opinion très personnelle sur les excès."
+        "title": "Sertissez la gemme",
+        "prompt": "La pierre résonne entre les pinces. Dosez le dernier afflux avant le tirage final ; la presse possède une opinion très personnelle sur les excès."
       }
     },
     "postures": {
@@ -464,16 +466,23 @@
     },
     "ritual": {
       "progressLabel": "Progression de la fabrication",
+      "currentScore": "Score actuel",
+      "targetScore": "Cible",
+      "scoreAria": "Score actuel {{current}}, cible {{target}}",
+      "scoreSummary": "Score final : {{current}} — cible : {{target}}",
       "choosePosture": "Choisissez une manière d'agir",
       "roll": "Actionner la presse",
-      "continue": "Poursuivre le rituel",
-      "seal": "Sceller l'œuvre",
+      "continue": "Poursuivre l'impression",
+      "seal": "Achever l'impression",
       "dieResult": "Résultat du dé : {{value}}",
       "phaseScore": "Score de la phase",
       "retouch": {
         "eyebrow": "Réglage fin, conséquences grossières",
         "title": "Tenter une retouche ?",
         "body": "Choisissez le sens et l'ampleur de la correction. Plus vous exigez de la presse, plus le test devient difficile.",
+        "decrease": "Réduire",
+        "increase": "Augmenter",
+        "noAdjustment": "0 — Ne rien modifier",
         "skillValue": "{{skill}} : {{value}}/100",
         "optionsLabel": "Retouche à tenter",
         "optionLabel": "Modifier de {{adjustment}}, seuil {{threshold}} sur 100",
@@ -512,14 +521,14 @@
     },
     "resolving": {
       "eyebrow": "La presse retient son souffle",
-      "title": "Quelque chose vit là-dedans",
-      "body": "Les pinces se retirent. La gemme murmure, le parchemin grogne et le sceau attend votre main.",
-      "reveal": "Rompre le sceau"
+      "title": "Le tirage sort de presse",
+      "body": "Les pinces se retirent. La gemme murmure, le parchemin grogne et le résultat attend votre inspection.",
+      "reveal": "Inspecter le tirage"
     },
     "unstable": {
       "eyebrow": "Presque magnifique, presque sûr",
       "title": "La carte refuse de choisir",
-      "body": "La création fonctionne, mais pas gratuitement. Décidez quel compromis imposer avant qu'elle ne le fasse à votre place.",
+      "body": "L'impression fonctionne, mais pas gratuitement. Décidez quel compromis imposer avant qu'elle ne le fasse à votre place.",
       "singleUse": {
         "title": "Un prodige, une seule fois",
         "body": "La carte déchaînera tout son effet, puis se consumera."
@@ -543,7 +552,7 @@
       "undercharged": {
         "eyebrow": "Un silence très poli",
         "title": "La magie n'a pas suivi",
-        "body": "La créature reste dessinée sur le parchemin et prétend que tout cela était volontaire. L'encre est perdue, mais vous pouvez recommencer."
+        "body": "L'effet reste plat sur le parchemin et prétend que tout cela était volontaire. L'encre est perdue, mais vous pouvez relancer le tirage."
       },
       "overcharged": {
         "eyebrow": "Rapport d'incident provisoire",
@@ -556,9 +565,8 @@
       },
       "singleUse": "Cette carte accomplira son prodige une seule fois avant de se consumer.",
       "openCollection": "Voir dans le cabinet",
-      "createAnother": "Forger une autre carte",
-      "retry": "Relancer la fabrication",
-      "edit": "Repenser la créature"
+      "createAnother": "Imprimer une autre carte",
+      "retrySame": "Retenter la même carte"
     },
     "flaws": {
       "noise": "Défaut : son activation produit un vacarme impossible à dissimuler.",

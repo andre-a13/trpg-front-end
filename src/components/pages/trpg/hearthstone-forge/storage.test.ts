@@ -1,5 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { FORGE_STORAGE_KEY, loadForgeCards, saveForgeCards } from "./storage";
+import {
+  FORGE_SKILLS_STORAGE_KEY,
+  FORGE_STORAGE_KEY,
+  loadForgeCards,
+  loadForgeSkills,
+  saveForgeCards,
+  saveForgeSkills,
+} from "./storage";
 import type { StoredForgeCardV1 } from "./types";
 
 const card: StoredForgeCardV1 = {
@@ -44,6 +51,25 @@ describe("forge collection storage", () => {
     } as unknown as Storage;
 
     expect(() => saveForgeCards([card], failingStorage)).toThrow();
+  });
+
+  it("remembers the last complete set of skill scores", () => {
+    const skills = { runology: 61, artCalligraphy: 52, gemologyEnchantment: 73 };
+    saveForgeSkills(skills);
+
+    expect(loadForgeSkills()).toEqual(skills);
+    expect(window.localStorage.getItem(FORGE_SKILLS_STORAGE_KEY)).toContain('"runology":61');
+  });
+
+  it("ignores incomplete or malformed remembered skills", () => {
+    saveForgeSkills({ runology: 50, artCalligraphy: null, gemologyEnchantment: 70 });
+    expect(window.localStorage.getItem(FORGE_SKILLS_STORAGE_KEY)).toBeNull();
+
+    window.localStorage.setItem(FORGE_SKILLS_STORAGE_KEY, JSON.stringify({
+      version: 1,
+      skills: { runology: 120, artCalligraphy: 50, gemologyEnchantment: 70 },
+    }));
+    expect(loadForgeSkills()).toEqual({ runology: null, artCalligraphy: null, gemologyEnchantment: null });
   });
 });
 
