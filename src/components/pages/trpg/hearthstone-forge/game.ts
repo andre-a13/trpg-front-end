@@ -17,11 +17,17 @@ import type {
 
 export const PHASE_ORDER: PhaseKey[] = ["ink", "paint", "gem"];
 
-export const GEM_RULES: Record<Rarity, { color: GemColor; target: number }> = {
-  common: { color: "white", target: 10 },
-  rare: { color: "blue", target: 7 },
-  epic: { color: "violet", target: 4 },
-  legendary: { color: "orange", target: 1 },
+export const GEM_RULES: Record<Rarity, {
+  color: GemColor;
+  target: number;
+  stableMargin: number;
+  unstableMargin: number;
+  retouchModifier: number;
+}> = {
+  common: { color: "white", target: 10, stableMargin: 1, unstableMargin: 3, retouchModifier: 10 },
+  rare: { color: "blue", target: 7, stableMargin: 0, unstableMargin: 2, retouchModifier: 0 },
+  epic: { color: "violet", target: 4, stableMargin: 0, unstableMargin: 1, retouchModifier: -10 },
+  legendary: { color: "orange", target: 1, stableMargin: 0, unstableMargin: 0, retouchModifier: -20 },
 };
 
 export const POSTURE_SCORES: Record<Posture, readonly [number, number, number]> = {
@@ -85,13 +91,13 @@ export function pickFlaw(roller: () => number = rollD6): FlawId {
   return FLAWS[roll - 1];
 }
 
-export function getRetouchThreshold(skillScore: number, adjustment: RetouchAdjustment): number {
+export function getRetouchThreshold(skillScore: number, adjustment: RetouchAdjustment, rarity: Rarity): number {
   if (!Number.isInteger(skillScore) || skillScore < 0 || skillScore > 100) {
     throw new RangeError("A skill score must be an integer between 0 and 100.");
   }
 
   const magnitude = Math.abs(adjustment) as 1 | 2 | 3;
-  return Math.max(0, skillScore - RETOUCH_PENALTIES[magnitude]);
+  return Math.min(100, Math.max(0, skillScore - RETOUCH_PENALTIES[magnitude] + GEM_RULES[rarity].retouchModifier));
 }
 
 function adjustedScore(score: number, adjustment: number): { score: number; appliedAdjustment: number } {
@@ -103,6 +109,7 @@ export function evaluateRetouch(
   score: number,
   skill: SkillKey,
   skillScore: number,
+  rarity: Rarity,
   requestedAdjustment: RetouchAdjustment,
   roll: number,
   criticalFailureDirection: -1 | 1 = 1,
@@ -114,7 +121,7 @@ export function evaluateRetouch(
     throw new RangeError("A skill roll must be an integer between 1 and 100.");
   }
 
-  const threshold = getRetouchThreshold(skillScore, requestedAdjustment);
+  const threshold = getRetouchThreshold(skillScore, requestedAdjustment, rarity);
   let outcome: RetouchAttempt["outcome"];
   let resolved = { score, appliedAdjustment: 0 };
 
@@ -151,9 +158,11 @@ export function applyCriticalRetouch(score: number, adjustment: CriticalAdjustme
   return adjustedScore(score, adjustment);
 }
 
-function outcomeFromDelta(delta: number): ForgeOutcome {
-  if (delta === 0) return "stable";
-  if (Math.abs(delta) === 1) return "unstable";
+function outcomeFromDelta(rarity: Rarity, delta: number): ForgeOutcome {
+  const distance = Math.abs(delta);
+  const rule = GEM_RULES[rarity];
+  if (distance <= rule.stableMargin) return "stable";
+  if (distance <= rule.unstableMargin) return "unstable";
   return delta < 0 ? "undercharged" : "overcharged";
 }
 
@@ -166,7 +175,7 @@ export function resolveForge(draft: CardDraft, results: PhaseResult[]): ForgeRes
   const total = results.reduce((sum, result) => sum + result.score, 0);
 
   return {
-    outcome: outcomeFromDelta(total - target),
+    outcome: outcomeFromDelta(draft.rarity, total - target),
     total,
     target,
   };

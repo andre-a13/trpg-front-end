@@ -343,6 +343,7 @@ export default function HearthstoneForge({
       currentPhaseResult.score,
       skill,
       skillScore,
+      state.draft.rarity,
       state.selectedRetouch,
       roll,
       chaosDirection,
@@ -505,10 +506,23 @@ export default function HearthstoneForge({
                       <span>
                         {t(`hearthstoneForge.rarities.${rarity}`)}
                         <small>{t("hearthstoneForge.design.targetScore", { value: GEM_RULES[rarity].target })}</small>
+                        <small>{t("hearthstoneForge.design.retouchShort", {
+                          modifier: GEM_RULES[rarity].retouchModifier > 0
+                            ? `+${GEM_RULES[rarity].retouchModifier}`
+                            : GEM_RULES[rarity].retouchModifier,
+                        })}</small>
                       </span>
                     </label>
                   );
                 })}
+              </div>
+              <div className={`forge-rarity-rule forge-rarity-rule--${gemColor}`} aria-live="polite">
+                <strong>{t(`hearthstoneForge.design.rarityRules.${state.draft.rarity}`)}</strong>
+                <span>{t("hearthstoneForge.design.retouchModifier", {
+                  modifier: GEM_RULES[state.draft.rarity].retouchModifier > 0
+                    ? `+${GEM_RULES[state.draft.rarity].retouchModifier}`
+                    : GEM_RULES[state.draft.rarity].retouchModifier,
+                })}</span>
               </div>
             </fieldset>
 
@@ -675,7 +689,7 @@ export default function HearthstoneForge({
                         <div className={`forge-retouch__column forge-retouch__column--${direction}`} key={direction}>
                           <p>{t(`hearthstoneForge.ritual.retouch.${direction}`)}</p>
                           {options.map((adjustment) => {
-                            const threshold = getRetouchThreshold(currentSkillScore, adjustment);
+                            const threshold = getRetouchThreshold(currentSkillScore, adjustment, state.draft.rarity);
                             return (
                               <button
                                 type="button"

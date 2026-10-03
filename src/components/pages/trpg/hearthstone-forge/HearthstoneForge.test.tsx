@@ -141,6 +141,20 @@ describe("HearthstoneForge", () => {
     expect(screen.getByText(/score de 5/)).toBeInTheDocument();
   });
 
+  it("shows the common gem bonus in the retouch threshold", () => {
+    renderForge([3]);
+
+    fireEvent.click(screen.getByRole("button", { name: /Allumer la presse/ }));
+    fillCard();
+    expect(screen.getByText(/Stable à ±1 de la cible/)).toBeInTheDocument();
+    expect(screen.getByText(/Modificateur appliqué aux tests de retouche : \+10/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Engager le parchemin" }));
+    fireEvent.click(screen.getByRole("radio", { name: /Main soutenue/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Actionner la presse" }));
+
+    expect(screen.getByRole("radio", { name: /Modifier de \+1, seuil 70/ })).toBeInTheDocument();
+  });
+
   it("keeps working in memory when browser storage is full", async () => {
     const failingStorage = {
       getItem: () => null,

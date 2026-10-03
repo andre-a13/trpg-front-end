@@ -54,42 +54,57 @@ describe("forge game engine", () => {
     })).toBe(100);
   });
 
-  it("uses skill, skill minus 20 and skill minus 40 as retouch thresholds", () => {
-    expect(getRetouchThreshold(68, 1)).toBe(68);
-    expect(getRetouchThreshold(68, -2)).toBe(48);
-    expect(getRetouchThreshold(68, 3)).toBe(28);
-    expect(getRetouchThreshold(25, -3)).toBe(0);
+  it("combines retouch magnitude with the rarity modifier", () => {
+    expect(getRetouchThreshold(68, 1, "common")).toBe(78);
+    expect(getRetouchThreshold(68, -1, "rare")).toBe(68);
+    expect(getRetouchThreshold(68, 1, "epic")).toBe(58);
+    expect(getRetouchThreshold(68, 1, "legendary")).toBe(48);
+    expect(getRetouchThreshold(68, -2, "rare")).toBe(48);
+    expect(getRetouchThreshold(68, 3, "rare")).toBe(28);
+    expect(getRetouchThreshold(25, -3, "legendary")).toBe(0);
+    expect(getRetouchThreshold(100, 1, "common")).toBe(100);
   });
 
   it("applies a successful retouch and leaves the score unchanged on an ordinary failure", () => {
-    expect(evaluateRetouch(2, "runology", 60, 2, 40).score).toBe(4);
-    expect(evaluateRetouch(2, "runology", 60, 2, 41)).toMatchObject({
+    expect(evaluateRetouch(2, "runology", 60, "rare", 2, 40).score).toBe(4);
+    expect(evaluateRetouch(2, "runology", 60, "rare", 2, 41)).toMatchObject({
       score: 2,
       attempt: { outcome: "failure", threshold: 40, appliedAdjustment: 0 },
     });
   });
 
-  it("treats 01 to 05 as critical successes with a freely chosen correction", () => {
-    const evaluation = evaluateRetouch(2, "runology", 0, 3, 5);
+  it("treats 01 to 05 as critical successes even when the theoretical threshold is zero", () => {
+    const evaluation = evaluateRetouch(2, "runology", 0, "legendary", 3, 5);
     expect(evaluation).toMatchObject({ score: 2, attempt: { outcome: "criticalSuccess", threshold: 0 } });
     expect(applyCriticalRetouch(evaluation.score, -2)).toEqual({ score: 0, appliedAdjustment: -2 });
   });
 
   it("treats 96 to 100 as critical failures and changes the score randomly by three", () => {
-    expect(evaluateRetouch(4, "runology", 100, -1, 96, 1)).toMatchObject({
+    expect(evaluateRetouch(4, "runology", 100, "rare", -1, 96, 1)).toMatchObject({
       score: 7,
       attempt: { outcome: "criticalFailure", appliedAdjustment: 3 },
     });
-    expect(evaluateRetouch(1, "runology", 100, 1, 100, -1)).toMatchObject({
+    expect(evaluateRetouch(1, "runology", 100, "rare", 1, 100, -1)).toMatchObject({
       score: 0,
       attempt: { outcome: "criticalFailure", appliedAdjustment: -1 },
     });
   });
 
-  it("distinguishes stable, unstable, undercharged and overcharged results after retouches", () => {
+  it("applies progressively tighter result margins from common to legendary", () => {
+    expect(resolveForge(draft({ rarity: "common" }), results([3, 3, 3])).outcome).toBe("stable");
+    expect(resolveForge(draft({ rarity: "common" }), results([2, 2, 3])).outcome).toBe("unstable");
+    expect(resolveForge(draft({ rarity: "common" }), results([2, 2, 2])).outcome).toBe("undercharged");
+
     expect(resolveForge(draft(), results([2, 2, 3])).outcome).toBe("stable");
-    expect(resolveForge(draft(), results([2, 2, 2])).outcome).toBe("unstable");
-    expect(resolveForge(draft(), results([1, 1, 1])).outcome).toBe("undercharged");
-    expect(resolveForge(draft(), results([4, 4, 4])).outcome).toBe("overcharged");
+    expect(resolveForge(draft(), results([1, 2, 2])).outcome).toBe("unstable");
+    expect(resolveForge(draft(), results([1, 1, 2])).outcome).toBe("undercharged");
+
+    expect(resolveForge(draft({ rarity: "epic" }), results([1, 1, 2])).outcome).toBe("stable");
+    expect(resolveForge(draft({ rarity: "epic" }), results([1, 1, 1])).outcome).toBe("unstable");
+    expect(resolveForge(draft({ rarity: "epic" }), results([0, 1, 1])).outcome).toBe("undercharged");
+
+    expect(resolveForge(draft({ rarity: "legendary" }), results([0, 0, 1])).outcome).toBe("stable");
+    expect(resolveForge(draft({ rarity: "legendary" }), results([0, 0, 0])).outcome).toBe("undercharged");
+    expect(resolveForge(draft({ rarity: "legendary" }), results([0, 0, 2])).outcome).toBe("overcharged");
   });
 });

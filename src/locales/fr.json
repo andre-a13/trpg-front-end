@@ -400,8 +400,16 @@
       "attack": "Attaque",
       "health": "Vie",
       "ambition": "Qualité du tirage",
-      "ambitionHint": "Chaque rareté fixe le score exact que la presse devra atteindre.",
+      "ambitionHint": "Chaque rareté fixe une cible, une marge de stabilité et la difficulté des retouches.",
       "targetScore": "Cible : {{value}}",
+      "retouchShort": "Retouche {{modifier}}",
+      "retouchModifier": "Modificateur appliqué aux tests de retouche : {{modifier}}.",
+      "rarityRules": {
+        "common": "Stable à ±1 de la cible · Instable jusqu’à ±3",
+        "rare": "Stable sur la cible · Instable jusqu’à ±2",
+        "epic": "Stable sur la cible · Instable à ±1",
+        "legendary": "La cible exacte est obligatoire"
+      },
       "skills": "Compétences de l'imprimeur",
       "skillsHint": "Inscrivez vos trois valeurs de 0 à 100. Elles seront mémorisées pour la prochaine impression.",
       "illustration": "Portrait du futur problème",
