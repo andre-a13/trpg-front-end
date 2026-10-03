@@ -197,13 +197,10 @@ describe("HearthstoneForge", () => {
     expect(screen.getByLabelText("Runologie")).toHaveValue(60);
   });
 
-  it("keeps the print action visible at the top and confirms uploaded illustrations", async () => {
+  it("confirms uploaded illustrations and lets the player remove them", async () => {
     renderForge([]);
 
     fireEvent.click(screen.getByRole("button", { name: /Allumer la presse/ }));
-
-    const submit = screen.getByRole("button", { name: "Engager le parchemin" });
-    expect(submit.closest(".forge-design__toolbar")).not.toBeNull();
 
     const file = new File(["portrait"], "jimmy.jpg", { type: "image/jpeg" });
     fireEvent.change(screen.getByLabelText("Confier un fichier à la presse"), { target: { files: [file] } });

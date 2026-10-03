@@ -268,35 +268,6 @@
   border-radius: 22px 7px 22px 7px;
 }
 
-.forge-design__toolbar {
-  position: sticky;
-  z-index: 15;
-  top: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin: -0.55rem -0.55rem 0;
-  padding: 0.65rem;
-  border: 1px solid rgba(255, 210, 139, 0.16);
-  border-radius: 14px 5px 14px 5px;
-  background: rgba(24, 18, 15, 0.94);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
-  backdrop-filter: blur(14px);
-}
-
-.forge-design__toolbar .forge-section-heading {
-  min-width: 0;
-}
-
-.forge-design__toolbar h1 {
-  font-size: clamp(1.75rem, 3vw, 2.55rem);
-}
-
-.forge-design__toolbar .forge-eyebrow {
-  margin-bottom: 0.3rem;
-}
-
 .forge-design__preview {
   position: sticky;
   top: 1rem;
@@ -580,7 +551,7 @@
 }
 
 .forge-design__submit {
-  flex: 0 0 auto;
+  justify-self: end;
 }
 
 .forge-card {
@@ -1738,24 +1709,6 @@
   .forge-illustration-picker > span {
     padding: 0;
     text-align: center;
-  }
-
-  .forge-design__toolbar {
-    position: static;
-    align-items: stretch;
-    flex-direction: column;
-    margin: 0;
-    padding: 0 0 0.85rem;
-    border: 0;
-    border-bottom: 1px solid var(--forge-line);
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-    backdrop-filter: none;
-  }
-
-  .forge-design__submit {
-    width: 100%;
   }
 
   .forge-file-status {

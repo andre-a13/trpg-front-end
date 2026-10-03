@@ -444,20 +444,14 @@ export default function HearthstoneForge({
       {state.view === "design" && (
         <section className="forge-design" aria-labelledby="forge-design-title">
           <form className="forge-design__form" onSubmit={submitDesign}>
-            <div className="forge-design__toolbar">
-              <div className="forge-section-heading">
-                <button type="button" className="forge-icon-button" onClick={() => dispatch({ type: "RETURN_LANDING" })} aria-label={t("hearthstoneForge.actions.back")}>
-                  <ArrowLeft size={20} />
-                </button>
-                <div>
-                  <p className="forge-eyebrow">{t("hearthstoneForge.design.eyebrow")}</p>
-                  <h1 id="forge-design-title">{t("hearthstoneForge.design.title")}</h1>
-                </div>
-              </div>
-              <button type="submit" className="forge-button forge-button--primary forge-design__submit" disabled={processingImage}>
-                <Flame size={20} aria-hidden="true" />
-                {t("hearthstoneForge.design.begin")}
+            <div className="forge-section-heading">
+              <button type="button" className="forge-icon-button" onClick={() => dispatch({ type: "RETURN_LANDING" })} aria-label={t("hearthstoneForge.actions.back")}>
+                <ArrowLeft size={20} />
               </button>
+              <div>
+                <p className="forge-eyebrow">{t("hearthstoneForge.design.eyebrow")}</p>
+                <h1 id="forge-design-title">{t("hearthstoneForge.design.title")}</h1>
+              </div>
             </div>
 
             <div className="forge-form-grid">
@@ -608,6 +602,10 @@ export default function HearthstoneForge({
             </fieldset>
 
             {designError && <p className="forge-field-error" role="alert">{designError}</p>}
+            <button type="submit" className="forge-button forge-button--primary forge-design__submit" disabled={processingImage}>
+              <Flame size={20} aria-hidden="true" />
+              {t("hearthstoneForge.design.begin")}
+            </button>
           </form>
 
           <aside className="forge-design__preview">
