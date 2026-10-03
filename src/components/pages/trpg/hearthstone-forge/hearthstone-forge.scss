@@ -350,7 +350,7 @@
 }
 
 .forge-rarity-choices,
-.forge-mastery-choices {
+.forge-skill-inputs {
   display: grid;
   gap: 0.65rem;
 }
@@ -359,8 +359,7 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-.forge-rarity-choice,
-.forge-mastery-choices label {
+.forge-rarity-choice {
   display: flex !important;
   cursor: pointer;
   align-items: center;
@@ -374,15 +373,13 @@
   text-align: center;
 }
 
-.forge-rarity-choice:has(input:checked),
-.forge-mastery-choices label:has(input:checked) {
+.forge-rarity-choice:has(input:checked) {
   border-color: currentColor;
   background: rgba(255, 255, 255, 0.08);
   box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.035);
 }
 
-.forge-rarity-choice input,
-.forge-mastery-choices input {
+.forge-rarity-choice input {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -395,12 +392,34 @@
 .forge-rarity-choice--violet { color: #d49cff !important; }
 .forge-rarity-choice--orange { color: #ff9b52 !important; }
 
-.forge-mastery-choices {
+.forge-skill-inputs {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.forge-mastery-choices label {
+.forge-skill-inputs label {
+  padding: 0.85rem;
+  border: 1px solid rgba(255, 214, 145, 0.12);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.025);
   color: #ead2ad;
+}
+
+.forge-skill-inputs label > span {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.forge-skill-inputs input {
+  font-size: 1.2rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.forge-skill-inputs small {
+  color: #8d7863;
+  font: 800 0.72rem/1 Aptos, sans-serif;
 }
 
 .forge-illustration-picker {
@@ -1027,18 +1046,47 @@
 
 .forge-roll-reveal {
   display: grid;
-  justify-items: center;
   gap: 1rem;
   padding-top: 0.4rem;
 }
 
-.forge-roll-reveal > p {
+.forge-roll-reveal__summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+}
+
+.forge-roll-reveal__summary > div:last-child > p:first-child {
   max-width: 34rem;
-  min-height: 3rem;
   margin: 0;
   color: #e1c49c;
   font: 1rem/1.55 Aptos, sans-serif;
-  text-align: center;
+}
+
+.forge-phase-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0.7rem 0 0;
+  padding: 0.45rem 0.55rem 0.45rem 0.8rem;
+  border: 1px solid rgba(255, 196, 104, 0.24);
+  border-radius: 999px;
+  color: #bca17c;
+  font: 800 0.75rem/1 Aptos, sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.forge-phase-score strong {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 50%;
+  background: #d88a3f;
+  color: #24130d;
+  font-size: 1.15rem;
 }
 
 .forge-die {
@@ -1052,6 +1100,141 @@
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35), inset 0 0 18px rgba(255, 255, 255, 0.22);
   color: #321b14;
   font: 4.6rem/1 Arial, sans-serif;
+}
+
+.forge-retouch {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 197, 106, 0.18);
+  border-radius: 12px 5px 12px 5px;
+  background: rgba(8, 9, 9, 0.52);
+}
+
+.forge-retouch > p {
+  margin: 0;
+  color: #bba284;
+  font: 0.88rem/1.5 Aptos, sans-serif;
+}
+
+.forge-retouch__heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.forge-retouch__heading h2,
+.forge-retouch__heading p {
+  margin: 0;
+}
+
+.forge-retouch__heading h2 {
+  color: #fff0d1;
+  font-size: 1.3rem;
+}
+
+.forge-retouch__heading > span {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid rgba(255, 201, 117, 0.23);
+  border-radius: 999px;
+  color: #f0c47f;
+  font: 900 0.74rem/1 Aptos, sans-serif;
+  white-space: nowrap;
+}
+
+.forge-retouch__options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.forge-retouch__options button {
+  display: grid;
+  cursor: pointer;
+  gap: 0.2rem;
+  min-height: 3.6rem;
+  place-items: center;
+  border: 1px solid rgba(255, 214, 145, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.025);
+  color: #f1d5aa;
+}
+
+.forge-retouch__options button strong {
+  font-size: 1rem;
+}
+
+.forge-retouch__options button span {
+  color: #9e8568;
+  font: 0.68rem/1 Aptos, sans-serif;
+}
+
+.forge-retouch__options button:hover,
+.forge-retouch__options button.is-selected {
+  border-color: #d88a3f;
+  background: rgba(116, 50, 19, 0.48);
+}
+
+.forge-retouch__actions {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 0.55rem;
+}
+
+.forge-retouch--critical,
+.forge-retouch--complete {
+  justify-items: center;
+  text-align: center;
+}
+
+.forge-skill-die {
+  display: grid;
+  width: 5rem;
+  height: 5rem;
+  place-items: center;
+  border: 2px solid #cc7d36;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f0ce91, #8f5128 72%);
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.18), 0 10px 24px rgba(0, 0, 0, 0.3);
+  color: #29150e;
+  font: 900 1.55rem/1 Aptos, sans-serif;
+}
+
+.forge-retouch__outcome {
+  color: #f0d4a7 !important;
+  font-weight: 850 !important;
+}
+
+.forge-retouch__outcome--success,
+.forge-retouch__outcome--criticalSuccess {
+  color: #a8dfa6 !important;
+}
+
+.forge-retouch__outcome--criticalFailure {
+  color: #ff9684 !important;
+}
+
+.forge-critical-options {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(2.8rem, 1fr));
+  gap: 0.35rem;
+  width: 100%;
+}
+
+.forge-critical-options button {
+  cursor: pointer;
+  min-height: 2.8rem;
+  border: 1px solid rgba(255, 210, 139, 0.24);
+  border-radius: 8px;
+  background: rgba(105, 52, 24, 0.46);
+  color: #ffe2b2;
+  font: 900 0.9rem/1 Aptos, sans-serif;
+}
+
+.forge-critical-options button:hover {
+  border-color: #ffbd60;
+  background: rgba(144, 67, 25, 0.65);
 }
 
 .forge-resolution {
@@ -1303,10 +1486,29 @@
   }
 
   .forge-rarity-choices,
-  .forge-mastery-choices,
+  .forge-skill-inputs,
   .forge-postures,
   .forge-unstable-choices {
     grid-template-columns: 1fr;
+  }
+
+  .forge-roll-reveal__summary {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .forge-retouch__heading {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .forge-retouch__actions {
+    grid-template-columns: 1fr;
+  }
+
+  .forge-critical-options {
+    grid-template-columns: repeat(4, minmax(2.8rem, 1fr));
   }
 
   .forge-illustration-picker {

@@ -400,8 +400,8 @@
       "health": "Vie",
       "ambition": "Ambition de l'œuvre",
       "ambitionHint": "Annoncez jusqu'où vous comptez défier les lois de la magie.",
-      "masteries": "Talents de l'artisan",
-      "masteriesHint": "Indiquez honnêtement les disciplines que votre artisan maîtrise.",
+      "skills": "Compétences de l'artisan",
+      "skillsHint": "Inscrivez les trois valeurs de votre artisan, de 0 à 100. La presse prétend qu'elle ne triche jamais.",
       "illustration": "Portrait du futur problème",
       "imageUrl": "Adresse d'une illustration",
       "or": "ou",
@@ -410,6 +410,7 @@
       "preview": "Ce que la machine croit avoir compris",
       "begin": "Engager le parchemin",
       "requiredError": "Le nom et le prodige doivent contenir autre chose que du vide cosmique.",
+      "skillsError": "Chaque compétence doit être renseignée avec un nombre entier compris entre 0 et 100.",
       "imageErrors": {
         "invalid-format": "La presse n'accepte que les images JPG, PNG ou WebP.",
         "too-large": "Cette image dépasse 10 Mo et menace de coincer la presse.",
@@ -422,10 +423,10 @@
       "epic": "Épique",
       "legendary": "Légendaire"
     },
-    "masteries": {
-      "ink": "Runologie",
-      "paint": "Art et calligraphie",
-      "gem": "Gemmologie et enchantement"
+    "skills": {
+      "runology": "Runologie",
+      "artCalligraphy": "Art & Calligraphie",
+      "gemologyEnchantment": "Gemmologie & Enchantement"
     },
     "phases": {
       "ink": {
@@ -468,6 +469,29 @@
       "continue": "Poursuivre le rituel",
       "seal": "Sceller l'œuvre",
       "dieResult": "Résultat du dé : {{value}}",
+      "phaseScore": "Score de la phase",
+      "retouch": {
+        "eyebrow": "Réglage fin, conséquences grossières",
+        "title": "Tenter une retouche ?",
+        "body": "Choisissez le sens et l'ampleur de la correction. Plus vous exigez de la presse, plus le test devient difficile.",
+        "skillValue": "{{skill}} : {{value}}/100",
+        "optionsLabel": "Retouche à tenter",
+        "optionLabel": "Modifier de {{adjustment}}, seuil {{threshold}} sur 100",
+        "threshold": "Seuil {{value}}/100",
+        "attempt": "Lancer le test de compétence",
+        "keep": "Conserver ce score",
+        "skillRoll": "Jet de compétence : {{roll}}, seuil {{threshold}}",
+        "criticalChoice": "La presse vous obéit exceptionnellement. Choisissez librement la correction, de −3 à +3.",
+        "criticalOptionsLabel": "Correction du succès critique",
+        "finalScore": "La phase est verrouillée avec un score de {{value}}.",
+        "kept": "Aucune retouche. La phase conserve son score de {{value}}.",
+        "outcomes": {
+          "success": "Retouche réussie : la presse accepte votre réglage.",
+          "failure": "Retouche manquée : le score reste inchangé.",
+          "criticalSuccess": "Succès critique ! Les cadrans s'alignent de 01 à 05.",
+          "criticalFailure": "Échec critique ! Entre 96 et 100, la presse choisit elle-même un écart de trois points."
+        }
+      },
       "reactions": {
         "ink": {
           "low": "L'encre hésite, renifle le parchemin et consent à y poser une patte.",

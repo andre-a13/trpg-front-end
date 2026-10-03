@@ -11,6 +11,11 @@ export type ForgeView =
 
 export type PhaseKey = "ink" | "paint" | "gem";
 export type Posture = "precise" | "steady" | "forced";
+export type SkillKey = "runology" | "artCalligraphy" | "gemologyEnchantment";
+export type SkillScores = Record<SkillKey, number | null>;
+export type RetouchAdjustment = -3 | -2 | -1 | 1 | 2 | 3;
+export type CriticalAdjustment = RetouchAdjustment | 0;
+export type RetouchOutcome = "success" | "failure" | "criticalSuccess" | "criticalFailure";
 export type Rarity = "common" | "rare" | "epic" | "legendary";
 export type GemColor = "white" | "blue" | "violet" | "orange";
 export type ForgeOutcome = "stable" | "unstable" | "undercharged" | "overcharged";
@@ -21,8 +26,6 @@ export type Illustration = {
   value?: string;
 };
 
-export type Masteries = Record<PhaseKey, boolean>;
-
 export type CardDraft = {
   name: string;
   illustration: Illustration;
@@ -31,26 +34,32 @@ export type CardDraft = {
   health: number;
   effect: string;
   rarity: Rarity;
-  masteries: Masteries;
+  skills: SkillScores;
+};
+
+export type RetouchAttempt = {
+  skill: SkillKey;
+  skillScore: number;
+  requestedAdjustment: RetouchAdjustment;
+  roll: number;
+  threshold: number;
+  outcome: RetouchOutcome;
+  appliedAdjustment: number;
 };
 
 export type PhaseResult = {
   phase: PhaseKey;
   posture: Posture;
   roll: number;
+  baseScore: number;
   score: number;
-};
-
-export type RetouchResult = {
-  phase: PhaseKey;
-  adjustment: -1 | 1;
+  retouch?: RetouchAttempt;
 };
 
 export type ForgeResolution = {
   outcome: ForgeOutcome;
   total: number;
   target: number;
-  retouch?: RetouchResult;
 };
 
 export type StoredForgeCardV1 = {

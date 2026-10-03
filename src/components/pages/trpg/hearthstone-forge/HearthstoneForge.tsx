@@ -9,7 +9,6 @@ import {
   Home,
   ImagePlus,
   RotateCcw,
-  ScrollText,
   Sparkles,
   Trash2,
   WandSparkles,
@@ -18,11 +17,25 @@ import {
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import CardPreview from "./CardPreview";
-import { createStoredCard, GEM_RULES, PHASE_ORDER, pickFlaw, resolveForge, rollD6, scorePhase } from "./game";
+import {
+  applyCriticalRetouch,
+  createStoredCard,
+  evaluateRetouch,
+  GEM_RULES,
+  getRetouchThreshold,
+  PHASE_ORDER,
+  pickFlaw,
+  resolveForge,
+  rollD100,
+  rollD6,
+  scorePhase,
+  SKILL_BY_PHASE,
+} from "./game";
 import { normalizeIllustration } from "./image";
 import { loadForgeCards, saveForgeCards } from "./storage";
 import type {
   CardDraft,
+  CriticalAdjustment,
   FlawId,
   ForgeResolution,
   ForgeView,
@@ -30,11 +43,13 @@ import type {
   PhaseResult,
   Posture,
   Rarity,
+  RetouchAdjustment,
+  SkillKey,
   StoredForgeCardV1,
 } from "./types";
 import "./hearthstone-forge.scss";
 
-type PhaseStatus = "choosing" | "revealed";
+type PhaseStatus = "choosing" | "retouch" | "criticalChoice" | "complete";
 
 type ForgeState = {
   view: ForgeView;
@@ -43,6 +58,7 @@ type ForgeState = {
   phaseStatus: PhaseStatus;
   phaseResults: PhaseResult[];
   lastRoll: number | null;
+  selectedRetouch: RetouchAdjustment | null;
   resolution: ForgeResolution | null;
   resultCard: StoredForgeCardV1 | null;
   collection: StoredForgeCardV1[];
@@ -57,6 +73,10 @@ type ForgeAction =
   | { type: "BEGIN_RITUAL" }
   | { type: "SELECT_POSTURE"; posture: Posture }
   | { type: "ROLL_PHASE"; result: PhaseResult }
+  | { type: "SELECT_RETOUCH"; adjustment: RetouchAdjustment }
+  | { type: "SKIP_RETOUCH" }
+  | { type: "RESOLVE_RETOUCH"; result: PhaseResult }
+  | { type: "APPLY_CRITICAL_RETOUCH"; result: PhaseResult }
   | { type: "ADVANCE_PHASE" }
   | { type: "REVEAL"; resolution: ForgeResolution; card?: StoredForgeCardV1 }
   | { type: "FINALIZE_UNSTABLE"; card: StoredForgeCardV1 }
@@ -68,15 +88,11 @@ type ForgeAction =
 
 type HearthstoneForgeProps = {
   dieRoller?: () => number;
+  skillRoller?: () => number;
+  chaosRoller?: () => number;
   flawPicker?: () => FlawId;
   storage?: Storage;
 };
-
-const PHASE_ICONS = {
-  ink: ScrollText,
-  paint: Brush,
-  gem: Gem,
-} satisfies Record<PhaseKey, typeof ScrollText>;
 
 const POSTURE_ICONS = {
   precise: Sparkles,
@@ -85,6 +101,9 @@ const POSTURE_ICONS = {
 } satisfies Record<Posture, typeof Sparkles>;
 
 const DIE_FACES = ["", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+const SKILL_ORDER: SkillKey[] = ["runology", "artCalligraphy", "gemologyEnchantment"];
+const RETOUCH_OPTIONS: RetouchAdjustment[] = [-1, 1, -2, 2, -3, 3];
+const CRITICAL_OPTIONS: CriticalAdjustment[] = [-3, -2, -1, 0, 1, 2, 3];
 
 function emptyDraft(): CardDraft {
   return {
@@ -95,7 +114,7 @@ function emptyDraft(): CardDraft {
     health: 1,
     effect: "",
     rarity: "common",
-    masteries: { ink: false, paint: false, gem: false },
+    skills: { runology: null, artCalligraphy: null, gemologyEnchantment: null },
   };
 }
 
@@ -107,6 +126,7 @@ function initialState(storage: Storage): ForgeState {
     phaseStatus: "choosing",
     phaseResults: [],
     lastRoll: null,
+    selectedRetouch: null,
     resolution: null,
     resultCard: null,
     collection: loadForgeCards(storage),
@@ -122,6 +142,7 @@ function resetRitual(state: ForgeState, view: ForgeView): ForgeState {
     phaseStatus: "choosing",
     phaseResults: [],
     lastRoll: null,
+    selectedRetouch: null,
     resolution: null,
     resultCard: null,
   };
@@ -146,7 +167,24 @@ function reducer(state: ForgeState, action: ForgeAction): ForgeState {
         ...state,
         phaseResults: [...state.phaseResults.filter((item) => item.phase !== action.result.phase), action.result],
         lastRoll: action.result.roll,
-        phaseStatus: "revealed",
+        selectedRetouch: null,
+        phaseStatus: "retouch",
+      };
+    case "SELECT_RETOUCH":
+      return state.phaseStatus === "retouch" ? { ...state, selectedRetouch: action.adjustment } : state;
+    case "SKIP_RETOUCH":
+      return state.phaseStatus === "retouch" ? { ...state, selectedRetouch: null, phaseStatus: "complete" } : state;
+    case "RESOLVE_RETOUCH":
+      return {
+        ...state,
+        phaseResults: [...state.phaseResults.filter((item) => item.phase !== action.result.phase), action.result],
+        phaseStatus: action.result.retouch?.outcome === "criticalSuccess" ? "criticalChoice" : "complete",
+      };
+    case "APPLY_CRITICAL_RETOUCH":
+      return {
+        ...state,
+        phaseResults: [...state.phaseResults.filter((item) => item.phase !== action.result.phase), action.result],
+        phaseStatus: "complete",
       };
     case "ADVANCE_PHASE": {
       const nextView: Record<PhaseKey, ForgeView> = { ink: "paint", paint: "gem", gem: "resolving" };
@@ -157,6 +195,7 @@ function reducer(state: ForgeState, action: ForgeAction): ForgeState {
         selectedPosture: null,
         phaseStatus: "choosing",
         lastRoll: null,
+        selectedRetouch: null,
       };
     }
     case "REVEAL":
@@ -204,6 +243,8 @@ function reactionTier(roll: number): "low" | "mid" | "high" {
 
 export default function HearthstoneForge({
   dieRoller = rollD6,
+  skillRoller = rollD100,
+  chaosRoller = rollD6,
   flawPicker = () => pickFlaw(),
   storage = window.localStorage,
 }: HearthstoneForgeProps) {
@@ -223,6 +264,9 @@ export default function HearthstoneForge({
   }, [state.collection, storage]);
 
   const currentPhase = isPhaseView(state.view) ? state.view : null;
+  const currentPhaseResult = currentPhase ? state.phaseResults.find((result) => result.phase === currentPhase) : undefined;
+  const currentSkill = currentPhase ? SKILL_BY_PHASE[currentPhase] : null;
+  const currentSkillScore = currentSkill ? state.draft.skills[currentSkill] : null;
   const gemColor = GEM_RULES[state.draft.rarity].color;
 
   function updateDraft(patch: Partial<CardDraft>) {
@@ -235,6 +279,10 @@ export default function HearthstoneForge({
     if (processingImage) return;
     if (!state.draft.name.trim() || !state.draft.effect.trim()) {
       setDesignError(t("hearthstoneForge.design.requiredError"));
+      return;
+    }
+    if (Object.values(state.draft.skills).some((score) => score === null || !Number.isInteger(score) || score < 0 || score > 100)) {
+      setDesignError(t("hearthstoneForge.design.skillsError"));
       return;
     }
     setDesignError(null);
@@ -260,13 +308,51 @@ export default function HearthstoneForge({
   function handleRoll() {
     if (!currentPhase || !state.selectedPosture || state.phaseStatus !== "choosing") return;
     const roll = dieRoller();
+    const score = scorePhase(state.selectedPosture, roll);
     dispatch({
       type: "ROLL_PHASE",
       result: {
         phase: currentPhase,
         posture: state.selectedPosture,
         roll,
-        score: scorePhase(state.selectedPosture, roll),
+        baseScore: score,
+        score,
+      },
+    });
+  }
+
+  function handleRetouch() {
+    if (!currentPhase || !currentPhaseResult || state.phaseStatus !== "retouch" || state.selectedRetouch === null) return;
+    const skill = SKILL_BY_PHASE[currentPhase];
+    const skillScore = state.draft.skills[skill];
+    if (skillScore === null) return;
+
+    const roll = skillRoller();
+    const chaosDirection = roll >= 96 ? (chaosRoller() <= 3 ? -1 : 1) : 1;
+    const evaluation = evaluateRetouch(
+      currentPhaseResult.score,
+      skill,
+      skillScore,
+      state.selectedRetouch,
+      roll,
+      chaosDirection,
+    );
+
+    dispatch({
+      type: "RESOLVE_RETOUCH",
+      result: { ...currentPhaseResult, score: evaluation.score, retouch: evaluation.attempt },
+    });
+  }
+
+  function handleCriticalRetouch(adjustment: CriticalAdjustment) {
+    if (!currentPhaseResult?.retouch || currentPhaseResult.retouch.outcome !== "criticalSuccess") return;
+    const resolved = applyCriticalRetouch(currentPhaseResult.baseScore, adjustment);
+    dispatch({
+      type: "APPLY_CRITICAL_RETOUCH",
+      result: {
+        ...currentPhaseResult,
+        score: resolved.score,
+        retouch: { ...currentPhaseResult.retouch, appliedAdjustment: resolved.appliedAdjustment },
       },
     });
   }
@@ -404,23 +490,32 @@ export default function HearthstoneForge({
             </fieldset>
 
             <fieldset className="forge-choice-group">
-              <legend>{t("hearthstoneForge.design.masteries")}</legend>
-              <p>{t("hearthstoneForge.design.masteriesHint")}</p>
-              <div className="forge-mastery-choices">
-                {PHASE_ORDER.map((phase) => {
-                  const Icon = PHASE_ICONS[phase];
-                  return (
-                    <label key={phase}>
+              <legend>{t("hearthstoneForge.design.skills")}</legend>
+              <p>{t("hearthstoneForge.design.skillsHint")}</p>
+              <div className="forge-skill-inputs">
+                {SKILL_ORDER.map((skill) => (
+                  <label key={skill}>
+                    {t(`hearthstoneForge.skills.${skill}`)}
+                    <span>
                       <input
-                        type="checkbox"
-                        checked={state.draft.masteries[phase]}
-                        onChange={(event) => updateDraft({ masteries: { ...state.draft.masteries, [phase]: event.target.checked } })}
+                        type="number"
+                        aria-label={t(`hearthstoneForge.skills.${skill}`)}
+                        required
+                        min={0}
+                        max={100}
+                        step={1}
+                        value={state.draft.skills[skill] ?? ""}
+                        onChange={(event) => updateDraft({
+                          skills: {
+                            ...state.draft.skills,
+                            [skill]: event.target.value === "" ? null : Number(event.target.value),
+                          },
+                        })}
                       />
-                      <Icon size={18} aria-hidden="true" />
-                      <span>{t(`hearthstoneForge.masteries.${phase}`)}</span>
-                    </label>
-                  );
-                })}
+                      <small>/ 100</small>
+                    </span>
+                  </label>
+                ))}
               </div>
             </fieldset>
 
@@ -508,18 +603,114 @@ export default function HearthstoneForge({
                   {t("hearthstoneForge.ritual.roll")}
                 </button>
               </>
-            ) : (
+            ) : currentPhaseResult && currentSkill && currentSkillScore !== null ? (
               <div className="forge-roll-reveal" aria-live="polite">
-                <div className="forge-die" aria-label={t("hearthstoneForge.ritual.dieResult", { value: state.lastRoll })}>
-                  <span aria-hidden="true">{DIE_FACES[state.lastRoll ?? 0]}</span>
+                <div className="forge-roll-reveal__summary">
+                  <div className="forge-die" aria-label={t("hearthstoneForge.ritual.dieResult", { value: state.lastRoll })}>
+                    <span aria-hidden="true">{DIE_FACES[state.lastRoll ?? 0]}</span>
+                  </div>
+                  <div>
+                    <p>{t(`hearthstoneForge.ritual.reactions.${currentPhase}.${reactionTier(state.lastRoll ?? 1)}`)}</p>
+                    <p className="forge-phase-score">
+                      <span>{t("hearthstoneForge.ritual.phaseScore")}</span>
+                      <strong>{currentPhaseResult.score}</strong>
+                    </p>
+                  </div>
                 </div>
-                <p>{t(`hearthstoneForge.ritual.reactions.${currentPhase}.${reactionTier(state.lastRoll ?? 1)}`)}</p>
-                <button type="button" className="forge-button forge-button--primary" onClick={() => dispatch({ type: "ADVANCE_PHASE" })}>
-                  {currentPhase === "gem" ? t("hearthstoneForge.ritual.seal") : t("hearthstoneForge.ritual.continue")}
-                  <ChevronRight size={19} aria-hidden="true" />
-                </button>
+
+                {state.phaseStatus === "retouch" && (
+                  <div className="forge-retouch">
+                    <div className="forge-retouch__heading">
+                      <div>
+                        <p className="forge-eyebrow">{t("hearthstoneForge.ritual.retouch.eyebrow")}</p>
+                        <h2>{t("hearthstoneForge.ritual.retouch.title")}</h2>
+                      </div>
+                      <span>{t("hearthstoneForge.ritual.retouch.skillValue", {
+                        skill: t(`hearthstoneForge.skills.${currentSkill}`),
+                        value: currentSkillScore,
+                      })}</span>
+                    </div>
+                    <p>{t("hearthstoneForge.ritual.retouch.body")}</p>
+                    <div className="forge-retouch__options" role="radiogroup" aria-label={t("hearthstoneForge.ritual.retouch.optionsLabel") }>
+                      {RETOUCH_OPTIONS.map((adjustment) => {
+                        const threshold = getRetouchThreshold(currentSkillScore, adjustment);
+                        return (
+                          <button
+                            type="button"
+                            role="radio"
+                            aria-checked={state.selectedRetouch === adjustment}
+                            aria-label={t("hearthstoneForge.ritual.retouch.optionLabel", {
+                              adjustment: adjustment > 0 ? `+${adjustment}` : adjustment,
+                              threshold,
+                            })}
+                            className={state.selectedRetouch === adjustment ? "is-selected" : ""}
+                            key={adjustment}
+                            onClick={() => dispatch({ type: "SELECT_RETOUCH", adjustment })}
+                          >
+                            <strong>{adjustment > 0 ? `+${adjustment}` : adjustment}</strong>
+                            <span>{t("hearthstoneForge.ritual.retouch.threshold", { value: threshold })}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <div className="forge-retouch__actions">
+                      <button type="button" className="forge-button forge-button--primary" disabled={state.selectedRetouch === null} onClick={handleRetouch}>
+                        <Sparkles size={18} aria-hidden="true" />
+                        {t("hearthstoneForge.ritual.retouch.attempt")}
+                      </button>
+                      <button type="button" className="forge-button" onClick={() => dispatch({ type: "SKIP_RETOUCH" })}>
+                        {t("hearthstoneForge.ritual.retouch.keep")}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {state.phaseStatus === "criticalChoice" && currentPhaseResult.retouch && (
+                  <div className="forge-retouch forge-retouch--critical">
+                    <div className="forge-skill-die" aria-label={t("hearthstoneForge.ritual.retouch.skillRoll", {
+                      roll: currentPhaseResult.retouch.roll,
+                      threshold: currentPhaseResult.retouch.threshold,
+                    })}>
+                      {String(currentPhaseResult.retouch.roll).padStart(2, "0")}
+                    </div>
+                    <p className="forge-retouch__outcome">{t("hearthstoneForge.ritual.retouch.outcomes.criticalSuccess")}</p>
+                    <p>{t("hearthstoneForge.ritual.retouch.criticalChoice")}</p>
+                    <div className="forge-critical-options" aria-label={t("hearthstoneForge.ritual.retouch.criticalOptionsLabel") }>
+                      {CRITICAL_OPTIONS.map((adjustment) => (
+                        <button type="button" key={adjustment} onClick={() => handleCriticalRetouch(adjustment)}>
+                          {adjustment > 0 ? `+${adjustment}` : adjustment}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {state.phaseStatus === "complete" && (
+                  <div className="forge-retouch forge-retouch--complete">
+                    {currentPhaseResult.retouch ? (
+                      <>
+                        <div className="forge-skill-die" aria-label={t("hearthstoneForge.ritual.retouch.skillRoll", {
+                          roll: currentPhaseResult.retouch.roll,
+                          threshold: currentPhaseResult.retouch.threshold,
+                        })}>
+                          {String(currentPhaseResult.retouch.roll).padStart(2, "0")}
+                        </div>
+                        <p className={`forge-retouch__outcome forge-retouch__outcome--${currentPhaseResult.retouch.outcome}`}>
+                          {t(`hearthstoneForge.ritual.retouch.outcomes.${currentPhaseResult.retouch.outcome}`)}
+                        </p>
+                        <p>{t("hearthstoneForge.ritual.retouch.finalScore", { value: currentPhaseResult.score })}</p>
+                      </>
+                    ) : (
+                      <p className="forge-retouch__outcome">{t("hearthstoneForge.ritual.retouch.kept", { value: currentPhaseResult.score })}</p>
+                    )}
+                    <button type="button" className="forge-button forge-button--primary" onClick={() => dispatch({ type: "ADVANCE_PHASE" })}>
+                      {currentPhase === "gem" ? t("hearthstoneForge.ritual.seal") : t("hearthstoneForge.ritual.continue")}
+                      <ChevronRight size={19} aria-hidden="true" />
+                    </button>
+                  </div>
+                )}
               </div>
-            )}
+            ) : null}
           </div>
         </section>
       )}

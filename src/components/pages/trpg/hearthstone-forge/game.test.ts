@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { resolveForge, rollD6, scorePhase } from "./game";
+import {
+  applyCriticalRetouch,
+  evaluateRetouch,
+  getRetouchThreshold,
+  resolveForge,
+  rollD100,
+  rollD6,
+  scorePhase,
+} from "./game";
 import type { CardDraft, PhaseResult } from "./types";
 
 function draft(overrides: Partial<CardDraft> = {}): CardDraft {
@@ -11,65 +19,76 @@ function draft(overrides: Partial<CardDraft> = {}): CardDraft {
     health: 3,
     effect: "Produit un résultat vérifiable.",
     rarity: "rare",
-    masteries: { ink: false, paint: false, gem: false },
+    skills: { runology: 60, artCalligraphy: 60, gemologyEnchantment: 60 },
     ...overrides,
   };
 }
 
 function results(scores: [number, number, number]): PhaseResult[] {
   return [
-    { phase: "ink", posture: "steady", roll: 3, score: scores[0] },
-    { phase: "paint", posture: "steady", roll: 3, score: scores[1] },
-    { phase: "gem", posture: "steady", roll: 3, score: scores[2] },
+    { phase: "ink", posture: "steady", roll: 3, baseScore: scores[0], score: scores[0] },
+    { phase: "paint", posture: "steady", roll: 3, baseScore: scores[1], score: scores[1] },
+    { phase: "gem", posture: "steady", roll: 3, baseScore: scores[2], score: scores[2] },
   ];
 }
 
 describe("forge game engine", () => {
-  it("maps each posture and die tier to its hidden score", () => {
+  it("maps each posture and die tier to its phase score", () => {
     expect([1, 3, 5].map((roll) => scorePhase("precise", roll))).toEqual([0, 1, 2]);
     expect([1, 3, 5].map((roll) => scorePhase("steady", roll))).toEqual([1, 2, 4]);
     expect([1, 3, 5].map((roll) => scorePhase("forced", roll))).toEqual([2, 4, 6]);
   });
 
-  it("uses rejection sampling for an unbiased d6", () => {
-    const bytes = [255, 251];
-    const roll = rollD6((buffer) => {
-      buffer[0] = bytes.shift() ?? 0;
+  it("uses rejection sampling for deterministic d6 and d100 rolls", () => {
+    const d6Bytes = [255, 251];
+    expect(rollD6((buffer) => {
+      buffer[0] = d6Bytes.shift() ?? 0;
       return buffer;
+    })).toBe(6);
+
+    const d100Bytes = [255, 199];
+    expect(rollD100((buffer) => {
+      buffer[0] = d100Bytes.shift() ?? 0;
+      return buffer;
+    })).toBe(100);
+  });
+
+  it("uses skill, skill minus 20 and skill minus 40 as retouch thresholds", () => {
+    expect(getRetouchThreshold(68, 1)).toBe(68);
+    expect(getRetouchThreshold(68, -2)).toBe(48);
+    expect(getRetouchThreshold(68, 3)).toBe(28);
+    expect(getRetouchThreshold(25, -3)).toBe(0);
+  });
+
+  it("applies a successful retouch and leaves the score unchanged on an ordinary failure", () => {
+    expect(evaluateRetouch(2, "runology", 60, 2, 40).score).toBe(4);
+    expect(evaluateRetouch(2, "runology", 60, 2, 41)).toMatchObject({
+      score: 2,
+      attempt: { outcome: "failure", threshold: 40, appliedAdjustment: 0 },
     });
-
-    expect(roll).toBe(6);
-    expect(bytes).toHaveLength(0);
   });
 
-  it("applies the single retouch to the latest mastered phase", () => {
-    const resolution = resolveForge(
-      draft({ masteries: { ink: false, paint: true, gem: true } }),
-      results([2, 2, 4]),
-    );
+  it("treats 01 to 05 as critical successes with a freely chosen correction", () => {
+    const evaluation = evaluateRetouch(2, "runology", 0, 3, 5);
+    expect(evaluation).toMatchObject({ score: 2, attempt: { outcome: "criticalSuccess", threshold: 0 } });
+    expect(applyCriticalRetouch(evaluation.score, -2)).toEqual({ score: 0, appliedAdjustment: -2 });
+  });
 
-    expect(resolution).toMatchObject({
-      outcome: "stable",
-      total: 7,
-      target: 7,
-      retouch: { phase: "gem", adjustment: -1 },
+  it("treats 96 to 100 as critical failures and changes the score randomly by three", () => {
+    expect(evaluateRetouch(4, "runology", 100, -1, 96, 1)).toMatchObject({
+      score: 7,
+      attempt: { outcome: "criticalFailure", appliedAdjustment: 3 },
+    });
+    expect(evaluateRetouch(1, "runology", 100, 1, 100, -1)).toMatchObject({
+      score: 0,
+      attempt: { outcome: "criticalFailure", appliedAdjustment: -1 },
     });
   });
 
-  it("does not spend a retouch unless it improves the result", () => {
-    const resolution = resolveForge(
-      draft({ masteries: { ink: true, paint: true, gem: true } }),
-      results([2, 2, 3]),
-    );
-
-    expect(resolution.outcome).toBe("stable");
-    expect(resolution.retouch).toBeUndefined();
-  });
-
-  it("distinguishes unstable, undercharged and overcharged results", () => {
+  it("distinguishes stable, unstable, undercharged and overcharged results after retouches", () => {
+    expect(resolveForge(draft(), results([2, 2, 3])).outcome).toBe("stable");
     expect(resolveForge(draft(), results([2, 2, 2])).outcome).toBe("unstable");
     expect(resolveForge(draft(), results([1, 1, 1])).outcome).toBe("undercharged");
     expect(resolveForge(draft(), results([4, 4, 4])).outcome).toBe("overcharged");
   });
 });
-
