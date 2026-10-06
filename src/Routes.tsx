@@ -9,6 +9,7 @@ import CreateCharacter from "./components/pages/trpg/CreateCharacter";
 import CreateTeam from "./components/pages/trpg/CreateTeam";
 import HearthstonePrinter from "./components/pages/trpg/HearthstonePrinter";
 import HearthstoneForge from "./components/pages/trpg/hearthstone-forge/HearthstoneForge";
+import DeckPage from "./components/pages/trpg/Deck";
 import Team from "./components/pages/trpg/Team";
 import Teams from "./components/pages/trpg/Teams";
 
@@ -24,6 +25,7 @@ export default function AppRoutes() {
         <Route path="/jace" element={<CharacterPage presetSlug="jace" portraitUrl="/assets/jace_jdr.jpg" />} />
         <Route path="/maribeth" element={<CharacterPage presetSlug="maribeth" portraitUrl="/assets/maribeth_jdr.jpg" />} />
         <Route path="/characters/:slug" element={<CharacterPage />} />
+        <Route path="/characters/:slug/deck" element={<DeckPage />} />
         <Route path="/teams" element={<Teams />} />
         <Route path="/teams/:uuid" element={<Team />} />
         <Route path="/hearthstone-printer" element={<HearthstonePrinter />} />

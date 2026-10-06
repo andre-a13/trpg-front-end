@@ -1,12 +1,13 @@
 import { type FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import { ShieldCheck, ToggleLeft, ToggleRight, UserPlus, Users } from "lucide-react";
+import { ShieldCheck, Sparkles, ToggleLeft, ToggleRight, UserPlus, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { useAdminControls } from "../../../admin/useAdminControls";
 import Character from "../../../models/character";
 import accountService from "../../../services/account.service";
 import characterService from "../../../services/character.service";
+import hearthstoneDeckService from "../../../services/hearthstone-deck.service";
 import type { AccountDto, UserRole } from "../../../types/api";
 import "./dashboard.scss";
 
@@ -30,6 +31,7 @@ export default function Dashboard() {
   const [submittingAccount, setSubmittingAccount] = useState(false);
   const [updatingAccountId, setUpdatingAccountId] = useState<number | null>(null);
   const [updatingCharacterId, setUpdatingCharacterId] = useState<number | null>(null);
+  const [updatingHearthstomancerSlug, setUpdatingHearthstomancerSlug] = useState<string | null>(null);
 
   const accountById = useMemo(
     () => new Map(accounts.map((account) => [account.id, account])),
@@ -141,6 +143,31 @@ export default function Dashboard() {
       });
     } finally {
       setUpdatingCharacterId(null);
+    }
+  }
+
+  async function updateHearthstomancer(character: Character) {
+    const enabled = !character.hearthstomancer.enabled;
+    setUpdatingHearthstomancerSlug(character.slug);
+    setStatus(null);
+    try {
+      await hearthstoneDeckService.setEnabled(character.slug, enabled);
+      setCharacters((currentCharacters) => currentCharacters.map((item) => (
+        item.id === character.id
+          ? new Character({
+              ...item,
+              hearthstomancer: { configured: true, enabled },
+            })
+          : item
+      )));
+      setStatus({ tone: "success", message: t("dashboard.characters.hearthstomancerUpdated") });
+    } catch (error) {
+      setStatus({
+        tone: "error",
+        message: formatError(error, t("dashboard.characters.hearthstomancerUpdateFailed")),
+      });
+    } finally {
+      setUpdatingHearthstomancerSlug(null);
     }
   }
 
@@ -267,6 +294,7 @@ export default function Dashboard() {
                       <th>{t("createCharacter.name")}</th>
                       <th>{t("createCharacter.race")}</th>
                       <th>{t("dashboard.characters.owner")}</th>
+                      <th>{t("dashboard.characters.hearthstomancer")}</th>
                       <th>{t("common.actions.open")}</th>
                     </tr>
                   </thead>
@@ -295,6 +323,20 @@ export default function Dashboard() {
                               ))}
                             </select>
                             {owner && <span className="admin-table__meta">{t(`roles.${owner.role}`)}</span>}
+                          </td>
+                          <td>
+                            <button
+                              type="button"
+                              className={`admin-deckToggle ${character.hearthstomancer.enabled ? "is-active" : ""}`}
+                              disabled={updatingHearthstomancerSlug === character.slug}
+                              aria-pressed={character.hearthstomancer.enabled}
+                              onClick={() => updateHearthstomancer(character)}
+                            >
+                              <Sparkles size={16} aria-hidden="true" />
+                              {character.hearthstomancer.configured
+                                ? t(`dashboard.characters.hearthstomancerState.${character.hearthstomancer.enabled ? "active" : "inactive"}`)
+                                : t("dashboard.characters.hearthstomancerState.unconfigured")}
+                            </button>
                           </td>
                           <td>
                             <Link to={`/characters/${character.slug}`}>{t("common.actions.open")}</Link>

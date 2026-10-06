@@ -138,7 +138,8 @@
       "notes": "Notes",
       "stats": "Attributs",
       "skills": "Compétences",
-      "inventory": "Inventaire"
+      "inventory": "Inventaire",
+      "deck": "Deck Hearthstomancien"
     },
     "moduleActions": {
       "move": "Déplacer {{title}}",
@@ -245,6 +246,127 @@
       "backgroundTooLarge": "Image trop lourde : 15 Mo maximum.",
       "removeFailed": "Impossible de retirer le fond. Réessayez plus tard.",
       "failed": "Envoi impossible. Réessayez plus tard."
+    }
+  },
+  "hearthstomancer": {
+    "title": "Deck de {{name}}",
+    "state": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "counts": {
+      "total": "{{count}} carte(s) au total",
+      "remaining": "{{count}} dans le paquet",
+      "drawn": "{{count}} tirée(s)",
+      "normal": "{{count}} normale(s)",
+      "golden": "{{count}} dorée(s)"
+    },
+    "actions": {
+      "draw": "Tirer une carte",
+      "reset": "Réinitialiser",
+      "undoPlay": "Annuler le dernier jeu",
+      "openDeck": "Ouvrir le deck",
+      "backToSheet": "Retour à la fiche",
+      "refresh": "Actualiser",
+      "discard": "Défausser",
+      "play": "Jouer",
+      "remove": "Supprimer",
+      "removing": "Suppression…",
+      "addCard": "Ajouter une carte",
+      "openPack": "Ouvrir un paquet",
+      "removeNormal": "Supprimer",
+      "removeGolden": "Supprimer"
+    },
+    "inactiveHelp": "Le pouvoir est désactivé. Le deck reste consultable mais aucune action n’est disponible.",
+    "drawnTitle": "Cartes tirées",
+    "drawnEmpty": "Aucune carte tirée.",
+    "compositionTitle": "Composition",
+    "compositionEmpty": "Aucune carte restante dans le paquet.",
+    "view": {
+      "label": "Mode d’affichage du deck",
+      "full": "Vue complète",
+      "minimal": "Vue minimaliste",
+      "minimalHint": "Survolez une carte, ou sélectionnez-la au clavier, pour afficher son illustration et ses informations.",
+      "normalCards": "Cartes normales",
+      "goldenCards": "Cartes dorées"
+    },
+    "feedback": {
+      "updating": "Mise à jour du deck…",
+      "saved": "Composition enregistrée et deck mélangé.",
+      "drawn": "Une carte a été tirée.",
+      "discarded": "Carte remise dans le paquet et deck mélangé.",
+      "played": "Carte jouée.",
+      "reset": "Cartes tirées remises dans le paquet.",
+      "undo": "Dernier jeu annulé.",
+      "removed": "Carte supprimée définitivement.",
+      "draftUpdated": "Brouillon mis à jour.",
+      "draftReset": "Modifications du brouillon annulées.",
+      "packSaved": "{{count}} cartes ont rejoint le deck.",
+      "refreshed": "Deck actualisé."
+    },
+    "card": {
+      "name": "Nom",
+      "cost": "Coût",
+      "attack": "Attaque",
+      "health": "PV",
+      "durability": "Durabilité",
+      "effect": "Effet",
+      "type": "Type",
+      "cardType": "Type",
+      "rarity": "Rareté",
+      "class": "Classe",
+      "cardClass": "Classe",
+      "tribe": "Tribu",
+      "spellSchool": "École de magie",
+      "cardSet": "Extension",
+      "illustrationUrl": "URL de l’illustration",
+      "golden": "Dorée"
+    },
+    "builder": {
+      "title": "Composer le deck",
+      "help": "Ajoutez des cartes, créez des variantes et modifiez leurs valeurs. Une sauvegarde remet les cartes conservées dans le paquet et le mélange.",
+      "draftTotal": "Brouillon : {{count}} carte(s)",
+      "dirtyActionHelp": "Enregistrez ou annulez le brouillon avant d’effectuer une action de jeu.",
+      "discardConfirm": "Fermer la composition et abandonner les modifications du brouillon ?",
+      "selectedCard": "Carte sélectionnée",
+      "selectedCardHelp": "Modifiez ses caractéristiques, puis ajoutez un exemplaire normal ou doré au brouillon.",
+      "selectCardHelp": "Sélectionnez une carte dans le catalogue pour la modifier avant de l’ajouter."
+    },
+    "catalog": {
+      "search": "Rechercher une carte par nom",
+      "setFilter": "Filtrer par extension",
+      "allSets": "Toutes les extensions",
+      "select": "Sélectionner",
+      "submit": "Rechercher",
+      "addNormal": "Ajouter normale",
+      "addGolden": "Ajouter dorée",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "page": "Page {{page}} sur {{total}}",
+      "resultCount": "{{count}} carte(s) trouvée(s)"
+    },
+    "pack": {
+      "title": "Ouvrir un paquet",
+      "chooseHelp": "Choisissez l’extension dont seront issues les cinq cartes.",
+      "setLabel": "Extension du paquet",
+      "selectSet": "Sélectionner une extension",
+      "confirmSet": "Confirmer et ouvrir",
+      "opening": "Ouverture…",
+      "openedSet": "Paquet : {{set}}",
+      "revealHelp": "Cliquez sur chaque dos de carte pour la révéler. Enregistrez le paquet une fois les cinq cartes retournées.",
+      "revealCard": "Révéler la carte {{index}}",
+      "saving": "Enregistrement…",
+      "progress": "{{count}} carte(s) révélée(s) sur {{total}}",
+      "errors": {
+        "sets": "Impossible de charger les extensions.",
+        "open": "Impossible d’ouvrir ce paquet.",
+        "save": "Le paquet n’a pas pu être ajouté au deck."
+      }
+    },
+    "errors": {
+      "load": "Impossible de charger le deck.",
+      "action": "Impossible d’effectuer cette action. Actualisez le deck puis réessayez.",
+      "catalog": "Impossible de charger le catalogue Hearthstone."
     }
   },
   "teams": {
@@ -360,7 +482,15 @@
       "ownerFor": "Compte de {{name}}",
       "unassigned": "Non assigne",
       "ownerUpdated": "Compte du personnage mis a jour.",
-      "ownerUpdateFailed": "Impossible de modifier le compte du personnage."
+      "ownerUpdateFailed": "Impossible de modifier le compte du personnage.",
+      "hearthstomancer": "Hearthstomancien",
+      "hearthstomancerUpdated": "Pouvoir Hearthstomancien mis à jour.",
+      "hearthstomancerUpdateFailed": "Impossible de modifier le pouvoir Hearthstomancien.",
+      "hearthstomancerState": {
+        "unconfigured": "Non configuré",
+        "active": "Actif",
+        "inactive": "Inactif"
+      }
     }
   },
   "hearthstoneForge": {
