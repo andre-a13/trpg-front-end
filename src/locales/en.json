@@ -138,7 +138,8 @@
       "notes": "Notes",
       "stats": "Attributes",
       "skills": "Talents",
-      "inventory": "Equipment"
+      "inventory": "Equipment",
+      "deck": "Hearthstomancer deck"
     },
     "moduleActions": {
       "move": "Move {{title}}",
@@ -245,6 +246,127 @@
       "backgroundTooLarge": "Image too large: 15 MB maximum.",
       "removeFailed": "Unable to remove background. Try again later.",
       "failed": "Upload failed. Try again later."
+    }
+  },
+  "hearthstomancer": {
+    "title": "{{name}}’s deck",
+    "state": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "counts": {
+      "total": "{{count}} total card(s)",
+      "remaining": "{{count}} in deck",
+      "drawn": "{{count}} drawn",
+      "normal": "{{count}} normal",
+      "golden": "{{count}} golden"
+    },
+    "actions": {
+      "draw": "Draw a card",
+      "reset": "Reset",
+      "undoPlay": "Undo last play",
+      "openDeck": "Open deck",
+      "backToSheet": "Back to character sheet",
+      "refresh": "Refresh",
+      "discard": "Discard",
+      "play": "Play",
+      "remove": "Remove",
+      "removing": "Removing…",
+      "addCard": "Add a card",
+      "openPack": "Open a pack",
+      "removeNormal": "Remove",
+      "removeGolden": "Remove"
+    },
+    "inactiveHelp": "This power is inactive. The deck remains visible, but no action is available.",
+    "drawnTitle": "Drawn cards",
+    "drawnEmpty": "No drawn cards.",
+    "compositionTitle": "Composition",
+    "compositionEmpty": "No cards remain in the deck.",
+    "view": {
+      "label": "Deck display mode",
+      "full": "Full view",
+      "minimal": "Minimal view",
+      "minimalHint": "Hover a card, or select it with the keyboard, to reveal its illustration and details.",
+      "normalCards": "Normal cards",
+      "goldenCards": "Golden cards"
+    },
+    "feedback": {
+      "updating": "Updating deck…",
+      "saved": "Composition saved and deck shuffled.",
+      "drawn": "A card was drawn.",
+      "discarded": "Card returned to the deck and deck shuffled.",
+      "played": "Card played.",
+      "reset": "Drawn cards returned to the deck.",
+      "undo": "Last play undone.",
+      "removed": "Card permanently removed.",
+      "draftUpdated": "Draft updated.",
+      "draftReset": "Draft changes cancelled.",
+      "packSaved": "{{count}} cards were added to the deck.",
+      "refreshed": "Deck refreshed."
+    },
+    "card": {
+      "name": "Name",
+      "cost": "Cost",
+      "attack": "Attack",
+      "health": "Health",
+      "durability": "Durability",
+      "effect": "Effect",
+      "type": "Type",
+      "cardType": "Type",
+      "rarity": "Rarity",
+      "class": "Class",
+      "cardClass": "Class",
+      "tribe": "Tribe",
+      "spellSchool": "Spell school",
+      "cardSet": "Set",
+      "illustrationUrl": "Illustration URL",
+      "golden": "Golden"
+    },
+    "builder": {
+      "title": "Build the deck",
+      "help": "Add cards, create variants, and edit their values. Saving returns kept cards to the deck and shuffles it.",
+      "draftTotal": "Draft: {{count}} card(s)",
+      "dirtyActionHelp": "Save or cancel the draft before performing a game action.",
+      "discardConfirm": "Close the builder and discard the draft changes?",
+      "selectedCard": "Selected card",
+      "selectedCardHelp": "Edit its values, then add one normal or golden copy to the draft.",
+      "selectCardHelp": "Select a card from the catalog to edit it before adding it."
+    },
+    "catalog": {
+      "search": "Search cards by name",
+      "setFilter": "Filter by set",
+      "allSets": "All sets",
+      "select": "Select",
+      "submit": "Search",
+      "addNormal": "Add normal",
+      "addGolden": "Add golden",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {{page}} of {{total}}",
+      "resultCount": "{{count}} card(s) found"
+    },
+    "pack": {
+      "title": "Open a pack",
+      "chooseHelp": "Choose the set for the five cards in this pack.",
+      "setLabel": "Pack set",
+      "selectSet": "Select a set",
+      "confirmSet": "Confirm and open",
+      "opening": "Opening…",
+      "openedSet": "Pack: {{set}}",
+      "revealHelp": "Click each card back to reveal it. Save the pack once all five cards are face up.",
+      "revealCard": "Reveal card {{index}}",
+      "saving": "Saving…",
+      "progress": "{{count}} of {{total}} card(s) revealed",
+      "errors": {
+        "sets": "Unable to load the sets.",
+        "open": "Unable to open this pack.",
+        "save": "The pack could not be added to the deck."
+      }
+    },
+    "errors": {
+      "load": "Unable to load the deck.",
+      "action": "Unable to perform this action. Refresh the deck and try again.",
+      "catalog": "Unable to load the Hearthstone catalog."
     }
   },
   "teams": {
@@ -360,7 +482,15 @@
       "ownerFor": "Owner for {{name}}",
       "unassigned": "Unassigned",
       "ownerUpdated": "Character owner updated.",
-      "ownerUpdateFailed": "Unable to update character owner."
+      "ownerUpdateFailed": "Unable to update character owner.",
+      "hearthstomancer": "Hearthstomancer",
+      "hearthstomancerUpdated": "Hearthstomancer power updated.",
+      "hearthstomancerUpdateFailed": "Unable to update Hearthstomancer power.",
+      "hearthstomancerState": {
+        "unconfigured": "Not configured",
+        "active": "Active",
+        "inactive": "Inactive"
+      }
     }
   }
 }

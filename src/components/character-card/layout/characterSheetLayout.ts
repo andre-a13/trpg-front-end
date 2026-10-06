@@ -1,4 +1,4 @@
-export const MODULE_IDS = ["identity", "portrait", "stats", "skills", "inventory", "notes"] as const;
+export const MODULE_IDS = ["identity", "portrait", "stats", "skills", "inventory", "notes", "deck"] as const;
 
 export type FixedModuleId = typeof MODULE_IDS[number];
 export type ModuleId = FixedModuleId | `inventory-category:${number}`;
@@ -21,14 +21,15 @@ const fixedDefaults = (): Record<FixedModuleId, ModuleLayout> => ({
     stats: { x: 28, y: 296, width: 446, height: 226, z: 4, minimized: false },
     skills: { x: 512, y: 452, width: 366, height: 420, z: 5, minimized: false },
     inventory: { x: 28, y: 568, width: 446, height: 390, z: 6, minimized: false },
+    deck: { x: 512, y: 920, width: 440, height: 520, z: 7, minimized: false },
 });
 
 export const createDefaultDynamicLayout = (index: number): ModuleLayout => ({
     x: 512 + ((index % 2) * 28),
-    y: 920 + (index * 48),
+    y: 1500 + (index * 48),
     width: 392,
     height: 360,
-    z: 7 + index,
+    z: 8 + index,
     minimized: false,
 });
 

@@ -23,6 +23,7 @@ import { useCharacterCardState } from "./hooks/useCharacterCardState";
 import { useSaveStatus } from "./hooks/useSaveStatus";
 import Modal, { type ModalHandle } from "../ui/modal/Modal";
 import inventoryTableService from "../../services/inventory-table.service";
+import DeckModule from "../hearthstone-deck/DeckModule";
 
 interface CharacterCardProps {
     character: Character;
@@ -296,6 +297,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 <SheetModule id="inventory" title={t("characterCard.modules.inventory")} layout={layout.inventory} {...moduleControls}>
                     <Inventory slug={character.slug} items={character.inventory ?? []} gold={character.gold} refresh={refresh} saveStatus={saveStatus} editable={canEdit} />
                 </SheetModule>
+
+                {character.hearthstomancer.configured && (
+                    <SheetModule id="deck" title={t("characterCard.modules.deck")} layout={layout.deck} {...moduleControls}>
+                        <DeckModule slug={character.slug} />
+                    </SheetModule>
+                )}
 
                 {inventoryCategories.map((category, index) => {
                     const moduleId = `inventory-category:${category.id}` as ModuleId;
