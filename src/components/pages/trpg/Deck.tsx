@@ -1,8 +1,11 @@
 import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
+  BarChart3,
   CheckCircle2,
+  Gamepad2,
   Grid2X2,
+  Layers3,
   List,
   LoaderCircle,
   PackageOpen,
@@ -12,6 +15,7 @@ import {
   Sparkles,
   Undo2,
 } from "lucide-react";
+import axios from "axios";
 import { Link, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import characterService from "../../../services/character.service";
@@ -26,7 +30,14 @@ import type {
 import HearthstoneCard from "../../hearthstone-deck/HearthstoneCard";
 import MinimalDeckList, { MinimalDrawnList } from "../../hearthstone-deck/MinimalDeckList";
 import PackOpeningModal, { type PackOpeningHandle } from "../../hearthstone-deck/PackOpeningModal";
+import {
+  filterDeckDefinitions,
+  getDeckFilterOptions,
+  getDeckInsights,
+  type DeckFilters,
+} from "../../hearthstone-deck/deck-utils";
 import Modal, { type ModalHandle } from "../../ui/modal/Modal";
+import cardBackUrl from "../../../assets/hearthstone-card-back.svg";
 import "../../hearthstone-deck/hearthstone-deck.scss";
 import "./deck.scss";
 
@@ -40,6 +51,12 @@ type DraftDefinition = DeckDefinitionInput & {
 };
 
 const PAGE_SIZE = 24;
+type DeckViewMode = "game" | "full" | "minimal";
+
+type DeckError = {
+  kind: "forbidden" | "notFound" | "network" | "conflict" | "generic";
+  message: string;
+};
 
 function draftFromDefinition(definition: DeckCardDefinitionDto): DraftDefinition {
   return {
@@ -150,14 +167,23 @@ export default function DeckPage() {
   const [draftDirty, setDraftDirty] = useState(false);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<DeckError | null>(null);
   const [query, setQuery] = useState("");
   const [selectedCardSet, setSelectedCardSet] = useState("");
   const [catalog, setCatalog] = useState<HearthstoneCatalogPageDto | null>(null);
   const [catalogLoading, setCatalogLoading] = useState(false);
-  const [viewMode, setViewMode] = useState<"full" | "minimal">(() => (
-    window.localStorage.getItem("hearthstomancer-deck-view") === "minimal" ? "minimal" : "full"
-  ));
+  const [viewMode, setViewMode] = useState<DeckViewMode>(() => {
+    const stored = window.localStorage.getItem("hearthstomancer-deck-view");
+    return stored === "full" || stored === "minimal" || stored === "game" ? stored : "game";
+  });
+  const [filters, setFilters] = useState<DeckFilters>({
+    query: "",
+    rarity: "",
+    cardType: "",
+    cardClass: "",
+    edition: "all",
+    sort: "cost",
+  });
   const [feedback, setFeedback] = useState<{ id: number; message: string } | null>(null);
   const compositionModalRef = useRef<ModalHandle | null>(null);
   const packModalRef = useRef<PackOpeningHandle | null>(null);
@@ -180,8 +206,10 @@ export default function DeckPage() {
       setDeck(state);
       syncDraft(state);
       return true;
-    } catch {
-      setError(t("hearthstomancer.errors.load"));
+    } catch (caught) {
+      const status = axios.isAxiosError(caught) ? caught.response?.status : undefined;
+      const kind = status === 404 ? "notFound" : status === 403 ? "forbidden" : !status ? "network" : "generic";
+      setError({ kind, message: t(`hearthstomancer.errors.${kind}`) });
       return false;
     } finally {
       setLoading(false);
@@ -193,7 +221,7 @@ export default function DeckPage() {
     try {
       setCatalog(await hearthstoneDeckService.searchCards(search, page, PAGE_SIZE, cardSet));
     } catch {
-      setError(t("hearthstomancer.errors.catalog"));
+      setError({ kind: "generic", message: t("hearthstomancer.errors.catalog") });
     } finally {
       setCatalogLoading(false);
     }
@@ -213,6 +241,15 @@ export default function DeckPage() {
     () => draft.reduce((sum, definition) => sum + definition.normalCount + definition.goldenCount, 0),
     [draft],
   );
+  const insights = useMemo(() => getDeckInsights(deck?.definitions ?? []), [deck?.definitions]);
+  const filterOptions = useMemo(() => getDeckFilterOptions(deck?.definitions ?? []), [deck?.definitions]);
+  const filteredDefinitions = useMemo(
+    () => filterDeckDefinitions(deck?.definitions ?? [], filters),
+    [deck?.definitions, filters],
+  );
+  const showNormal = filters.edition !== "golden";
+  const showGolden = filters.edition !== "normal";
+  const maxCurveCount = Math.max(1, ...insights.curve.map((bucket) => bucket.count));
 
   function applyState(state: DeckStateDto) {
     setDeck(state);
@@ -223,7 +260,7 @@ export default function DeckPage() {
     setFeedback({ id: Date.now(), message });
   }
 
-  function changeViewMode(mode: "full" | "minimal") {
+  function changeViewMode(mode: DeckViewMode) {
     setViewMode(mode);
     window.localStorage.setItem("hearthstomancer-deck-view", mode);
   }
@@ -236,8 +273,11 @@ export default function DeckPage() {
       applyState(await action());
       if (successMessage) showFeedback(successMessage);
       return true;
-    } catch {
-      setError(t("hearthstomancer.errors.action"));
+    } catch (caught) {
+      const status = axios.isAxiosError(caught) ? caught.response?.status : undefined;
+      const kind = status === 409 ? "conflict" : status === 403 ? "forbidden" : status === 404 ? "notFound" : !status ? "network" : "generic";
+      const messageKey = kind === "generic" ? "action" : kind;
+      setError({ kind, message: t(`hearthstomancer.errors.${messageKey}`) });
       return false;
     } finally {
       setBusy(false);
@@ -353,11 +393,25 @@ export default function DeckPage() {
   }
 
   if (loading) return <main className="page hs-deckPage"><p>{t("common.loading")}</p></main>;
-  if (!deck) return <main className="page hs-deckPage"><p className="hs-deckPage__error">{error}</p></main>;
+  if (!deck) return (
+    <main className="page hs-deckPage">
+      <section className="hs-deckError" role="alert">
+        <span className="hs-deckError__icon" aria-hidden="true">!</span>
+        <div>
+          <h1>{t(`hearthstomancer.errors.${error?.kind ?? "generic"}Title`)}</h1>
+          <p>{error?.message ?? t("hearthstomancer.errors.load")}</p>
+          <div className="hs-deckError__actions">
+            <button type="button" onClick={() => void refresh()}>{t("hearthstomancer.errors.retry")}</button>
+            <Link className="hs-button" to={`/characters/${slug}`}>{t("hearthstomancer.actions.backToSheet")}</Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
 
   return (
     <main
-      className={`page hs-deckPage ${viewMode === "minimal" ? "is-minimal" : ""} ${busy ? "is-busy" : ""}`}
+      className={`page hs-deckPage is-${viewMode} ${busy ? "is-busy" : ""}`}
       aria-busy={busy}
     >
       <header className="hs-deckPage__header">
@@ -367,6 +421,14 @@ export default function DeckPage() {
         </div>
         <div className="hs-deckPage__headerActions">
           <div className="hs-viewToggle" role="group" aria-label={t("hearthstomancer.view.label")}>
+            <button
+              type="button"
+              className={viewMode === "game" ? "is-selected" : ""}
+              aria-pressed={viewMode === "game"}
+              onClick={() => changeViewMode("game")}
+            >
+              <Gamepad2 size={16} aria-hidden="true" /> {t("hearthstomancer.view.game")}
+            </button>
             <button
               type="button"
               className={viewMode === "full" ? "is-selected" : ""}
@@ -390,7 +452,7 @@ export default function DeckPage() {
         </div>
       </header>
 
-      {viewMode === "full" && <section className="hs-deckPage__overview">
+      {viewMode !== "game" && <section className="hs-deckPage__overview">
         <div className="hs-deckPage__counts">
           <span>{t("hearthstomancer.counts.total", { count: deck.counts.total })}</span>
           <span>{t("hearthstomancer.counts.remaining", { count: deck.counts.remaining })}</span>
@@ -416,10 +478,59 @@ export default function DeckPage() {
         </div>
         {draftDirty && <p className="hs-deckPage__notice">{t("hearthstomancer.builder.dirtyActionHelp")}</p>}
         {!deck.enabled && <p className="hs-deckPage__notice">{t("hearthstomancer.inactiveHelp")}</p>}
-        {error && <p className="hs-deckPage__error" role="alert">{error}</p>}
+        {error && <p className="hs-deckPage__error" role="alert">{error.message}</p>}
       </section>}
 
-      <section className={`hs-deckPage__section ${viewMode === "minimal" ? "hs-deckPage__section--minimal" : ""}`}>
+      {viewMode === "game" && (
+        <section className="hs-gameBoard">
+          <div className="hs-gameDeck">
+            <div className={`hs-gameDeck__pile ${busy ? "is-shuffling" : ""}`}>
+              <span className="hs-gameDeck__shadow hs-gameDeck__shadow--two" aria-hidden="true" />
+              <span className="hs-gameDeck__shadow hs-gameDeck__shadow--one" aria-hidden="true" />
+              <img src={cardBackUrl} alt="" />
+              <strong>{deck.counts.remaining}</strong>
+            </div>
+            <div className="hs-gameDeck__details">
+              <span>{t("hearthstomancer.game.remaining")}</span>
+              <strong>{t("hearthstomancer.game.deckCount", { remaining: deck.counts.remaining, total: deck.counts.total })}</strong>
+            </div>
+            {canAct && (
+              <button
+                type="button"
+                className="hs-gameDeck__draw"
+                disabled={busy || draftDirty || deck.counts.remaining === 0}
+                onClick={() => run(() => hearthstoneDeckService.draw(slug), t("hearthstomancer.feedback.drawn"))}
+              >
+                <Layers3 size={20} aria-hidden="true" /> {t("hearthstomancer.actions.draw")}
+              </button>
+            )}
+          </div>
+
+          <div className="hs-gameHand">
+            <header>
+              <div>
+                <span>{t("hearthstomancer.game.handEyebrow")}</span>
+                <h2>{t("hearthstomancer.drawnTitle")} <small>{deck.counts.drawn}</small></h2>
+              </div>
+              <div className="hs-gameToolbar">
+                {canAct && <button type="button" disabled={busy || draftDirty} onClick={() => run(() => hearthstoneDeckService.reset(slug), t("hearthstomancer.feedback.reset"))}><RotateCcw size={16} /> {t("hearthstomancer.actions.reset")}</button>}
+                {canAct && deck.undoablePlay && <button type="button" disabled={busy || draftDirty} onClick={() => run(() => hearthstoneDeckService.undoPlay(slug), t("hearthstomancer.feedback.undo"))}><Undo2 size={16} /> {t("hearthstomancer.actions.undoPlay")}</button>}
+                <button type="button" disabled={busy || draftDirty} onClick={() => void refreshWithFeedback()}>{t("hearthstomancer.actions.refresh")}</button>
+                <button type="button" onClick={() => changeViewMode("minimal")}><List size={16} /> {t("hearthstomancer.game.openCollection")}</button>
+              </div>
+            </header>
+            {deck.drawnCards.length === 0 ? (
+              <div className="hs-gameHand__empty"><Layers3 size={30} aria-hidden="true" /><p>{t("hearthstomancer.game.emptyHand")}</p></div>
+            ) : (
+              <div className="hs-gameHand__cards">{deck.drawnCards.map(renderDrawnCard)}</div>
+            )}
+          </div>
+          {!deck.enabled && <p className="hs-deckPage__notice">{t("hearthstomancer.inactiveHelp")}</p>}
+          {error && <p className="hs-deckPage__error" role="alert">{error.message}</p>}
+        </section>
+      )}
+
+      {viewMode !== "game" && <section className={`hs-deckPage__section ${viewMode === "minimal" ? "hs-deckPage__section--minimal" : ""}`}>
         <header className="hs-deckPage__sectionHeader">
           <h2>{t("hearthstomancer.drawnTitle")}</h2>
           {viewMode === "minimal" && canAct && (
@@ -460,9 +571,9 @@ export default function DeckPage() {
             )}
           </div>
         )}
-      </section>
+      </section>}
 
-      <section className={`hs-deckPage__section ${viewMode === "minimal" ? "hs-deckPage__section--minimal" : ""}`}>
+      {viewMode !== "game" && <section className={`hs-deckPage__section ${viewMode === "minimal" ? "hs-deckPage__section--minimal" : ""}`}>
         <header className="hs-deckPage__sectionHeader">
           <h2>{t("hearthstomancer.compositionTitle")}</h2>
           {canAct && (
@@ -476,23 +587,50 @@ export default function DeckPage() {
             </div>
           )}
         </header>
+        <div className="hs-deckInsights">
+          <div className="hs-deckInsights__summary">
+            <span><BarChart3 size={16} aria-hidden="true" /> {t("hearthstomancer.insights.averageCost", { value: insights.averageCost.toFixed(1) })}</span>
+            <span>{t("hearthstomancer.insights.editions", { normal: insights.normal, golden: insights.golden })}</span>
+            {insights.rarities.map((rarity) => <span key={rarity.name}>{rarity.count}× {rarity.name}</span>)}
+          </div>
+          <div className="hs-manaCurve" aria-label={t("hearthstomancer.insights.curve")}>
+            {insights.curve.map((bucket) => (
+              <div className="hs-manaCurve__bucket" key={bucket.label}>
+                <span className="hs-manaCurve__value">{bucket.count}</span>
+                <span className="hs-manaCurve__track"><span style={{ height: `${Math.max(bucket.count > 0 ? 12 : 0, (bucket.count / maxCurveCount) * 100)}%` }} /></span>
+                <strong>{bucket.label}</strong>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="hs-collectionFilters">
+          <label><span>{t("hearthstomancer.filters.search")}</span><input value={filters.query} onChange={(event) => setFilters((current) => ({ ...current, query: event.target.value }))} placeholder={t("hearthstomancer.filters.searchPlaceholder")} /></label>
+          <label><span>{t("hearthstomancer.card.rarity")}</span><select value={filters.rarity} onChange={(event) => setFilters((current) => ({ ...current, rarity: event.target.value }))}><option value="">{t("hearthstomancer.filters.all")}</option>{filterOptions.rarities.map((option) => <option key={option}>{option}</option>)}</select></label>
+          <label><span>{t("hearthstomancer.card.type")}</span><select value={filters.cardType} onChange={(event) => setFilters((current) => ({ ...current, cardType: event.target.value }))}><option value="">{t("hearthstomancer.filters.all")}</option>{filterOptions.cardTypes.map((option) => <option key={option}>{option}</option>)}</select></label>
+          <label><span>{t("hearthstomancer.card.class")}</span><select value={filters.cardClass} onChange={(event) => setFilters((current) => ({ ...current, cardClass: event.target.value }))}><option value="">{t("hearthstomancer.filters.all")}</option>{filterOptions.cardClasses.map((option) => <option key={option}>{option}</option>)}</select></label>
+          <label><span>{t("hearthstomancer.filters.edition")}</span><select value={filters.edition} onChange={(event) => setFilters((current) => ({ ...current, edition: event.target.value as DeckFilters["edition"] }))}><option value="all">{t("hearthstomancer.filters.all")}</option><option value="normal">{t("hearthstomancer.view.normalCards")}</option><option value="golden">{t("hearthstomancer.view.goldenCards")}</option></select></label>
+          <label><span>{t("hearthstomancer.filters.sort")}</span><select value={filters.sort} onChange={(event) => setFilters((current) => ({ ...current, sort: event.target.value as DeckFilters["sort"] }))}><option value="cost">{t("hearthstomancer.filters.cost")}</option><option value="name">{t("hearthstomancer.card.name")}</option><option value="rarity">{t("hearthstomancer.card.rarity")}</option></select></label>
+        </div>
         {viewMode === "minimal" ? (
           <>
             <p className="hs-minimalList__hint">{t("hearthstomancer.view.minimalHint")}</p>
             <MinimalDeckList
-              definitions={deck.definitions}
+              definitions={filteredDefinitions}
               canAct={canAct}
               disabled={busy || draftDirty}
+              showNormal={showNormal}
+              showGolden={showGolden}
+              sort={filters.sort}
               onRemove={(definition, isGolden) => void removeDeckCard(definition, isGolden)}
             />
           </>
-        ) : deck.counts.remaining === 0 ? <p>{t("hearthstomancer.compositionEmpty")}</p> : (
+        ) : filteredDefinitions.every((definition) => definition.remainingNormalCount + definition.remainingGoldenCount === 0) ? <p>{t("hearthstomancer.filters.empty")}</p> : (
           <div className="hs-compositionGroups">
-            {deck.definitions.some((definition) => definition.remainingNormalCount > 0) && (
+            {showNormal && filteredDefinitions.some((definition) => definition.remainingNormalCount > 0) && (
               <section className="hs-compositionGroup">
                 <h3>{t("hearthstomancer.view.normalCards")}</h3>
                 <div className="hs-deckPage__cards">
-                  {deck.definitions.filter((definition) => definition.remainingNormalCount > 0).map((definition) => (
+                  {filteredDefinitions.filter((definition) => definition.remainingNormalCount > 0).map((definition) => (
                     <HearthstoneCard
                       key={`normal-${definition.id}`}
                       definition={definition}
@@ -512,11 +650,11 @@ export default function DeckPage() {
               </section>
             )}
 
-            {deck.definitions.some((definition) => definition.remainingGoldenCount > 0) && (
+            {showGolden && filteredDefinitions.some((definition) => definition.remainingGoldenCount > 0) && (
               <section className="hs-compositionGroup is-golden">
                 <h3><Sparkles size={16} aria-hidden="true" /> {t("hearthstomancer.view.goldenCards")}</h3>
                 <div className="hs-deckPage__cards">
-                  {deck.definitions.filter((definition) => definition.remainingGoldenCount > 0).map((definition) => (
+                  {filteredDefinitions.filter((definition) => definition.remainingGoldenCount > 0).map((definition) => (
                     <HearthstoneCard
                       key={`golden-${definition.id}`}
                       definition={definition}
@@ -538,7 +676,7 @@ export default function DeckPage() {
             )}
           </div>
         )}
-      </section>
+      </section>}
 
       {canAct && (
         <Modal

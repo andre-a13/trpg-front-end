@@ -129,6 +129,230 @@
   font-weight: 750;
 }
 
+.hs-deckError {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  max-width: 720px;
+  margin: 8vh auto 0;
+  padding: 24px;
+  border: 1px solid rgba(173, 71, 81, .42);
+  border-radius: 12px;
+  color: #f7f1e4;
+  background: rgba(31, 24, 24, .92);
+  box-shadow: 0 18px 55px rgba(0, 0, 0, .34);
+}
+
+.hs-deckError h1,
+.hs-deckError p {
+  margin: 0;
+}
+
+.hs-deckError h1 {
+  margin-bottom: 7px;
+  font-size: 1.28rem;
+}
+
+.hs-deckError__icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: #9b2f37;
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
+.hs-deckError__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.hs-gameBoard {
+  display: grid;
+  grid-template-columns: minmax(225px, .32fr) minmax(0, 1fr);
+  gap: 18px;
+  padding: 24px;
+  border: 1px solid rgba(205, 159, 67, .42);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(57, 129, 159, .3), transparent 30%),
+    linear-gradient(145deg, rgba(18, 39, 51, .96), rgba(14, 24, 31, .98));
+  box-shadow: 0 20px 60px rgba(7, 12, 16, .35);
+  color: #f8f0df;
+}
+
+.hs-gameDeck {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: 16px;
+  padding: 28px 20px;
+  border: 1px solid rgba(255, 255, 255, .11);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, .18);
+}
+
+.hs-gameDeck__pile {
+  position: relative;
+  width: 154px;
+  aspect-ratio: 512 / 714;
+  filter: drop-shadow(0 18px 16px rgba(0, 0, 0, .42));
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.hs-gameDeck__pile > img,
+.hs-gameDeck__shadow {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 13px;
+}
+
+.hs-gameDeck__pile > img {
+  z-index: 3;
+}
+
+.hs-gameDeck__shadow {
+  border: 2px solid #8a6422;
+  background: #102f51;
+}
+
+.hs-gameDeck__shadow--one { z-index: 2; transform: translate(6px, 7px); }
+.hs-gameDeck__shadow--two { z-index: 1; transform: translate(12px, 14px); }
+
+.hs-gameDeck__pile > strong {
+  position: absolute;
+  right: -12px;
+  bottom: -12px;
+  z-index: 4;
+  min-width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  padding: 0 8px;
+  border: 3px solid #d9b754;
+  border-radius: 50%;
+  color: #fff;
+  background: #216b9f;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .44);
+  font-size: 1.05rem;
+}
+
+.hs-gameDeck__pile.is-shuffling {
+  animation: hs-deck-shuffle 430ms ease-in-out infinite alternate;
+}
+
+.hs-gameDeck__details {
+  display: grid;
+  gap: 3px;
+  text-align: center;
+}
+
+.hs-gameDeck__details span,
+.hs-gameHand > header span {
+  color: rgba(248, 240, 223, .62);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.hs-deckPage .hs-gameDeck__draw {
+  min-height: 44px;
+  padding: 9px 18px;
+  border-color: rgba(223, 183, 86, .72);
+  color: #fff8df;
+  background: linear-gradient(180deg, rgba(46, 124, 151, .9), rgba(27, 82, 117, .94));
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .27), inset 0 1px rgba(255, 255, 255, .18);
+  font-size: .94rem;
+}
+
+.hs-gameHand {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.hs-gameHand > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.hs-gameHand h2 {
+  margin: 4px 0 0;
+  font-size: 1.4rem;
+}
+
+.hs-gameHand h2 small {
+  display: inline-grid;
+  min-width: 29px;
+  height: 29px;
+  place-items: center;
+  margin-left: 4px;
+  border-radius: 50%;
+  color: #15222b;
+  background: #d9b754;
+  font-size: .75rem;
+}
+
+.hs-gameToolbar {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.hs-deckPage .hs-gameToolbar button {
+  color: #f8f0df;
+  border-color: rgba(255, 255, 255, .22);
+  background: rgba(255, 255, 255, .08);
+}
+
+.hs-gameHand__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
+  gap: 13px;
+}
+
+.hs-gameHand__cards .hs-card {
+  color: #28221b;
+  background: #f3ead7;
+  animation: hs-hand-enter 420ms cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.hs-gameHand__empty {
+  min-height: 265px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  border: 1px dashed rgba(248, 240, 223, .24);
+  border-radius: 12px;
+  color: rgba(248, 240, 223, .58);
+  text-align: center;
+}
+
+.hs-gameHand__empty p { margin: 0; }
+
+@keyframes hs-deck-shuffle {
+  from { transform: rotate(-1deg) translateX(-2px); }
+  to { transform: rotate(1deg) translateX(3px); }
+}
+
+@keyframes hs-hand-enter {
+  from { opacity: 0; transform: translateY(30px) scale(.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .hs-builder {
   display: grid;
   gap: 18px;
@@ -293,7 +517,75 @@
 }
 
 .hs-packCard__front {
+  position: absolute;
   transform: rotateY(180deg);
+}
+
+.hs-packCard__front::after {
+  position: absolute;
+  inset: -35%;
+  content: "";
+  opacity: 0;
+  background: linear-gradient(105deg, transparent 37%, rgba(255, 255, 255, .72) 49%, transparent 61%);
+  transform: translateX(-60%) rotate(8deg);
+  pointer-events: none;
+}
+
+.hs-packCard.is-revealed.is-rare .hs-packCard__front {
+  animation: hs-rarity-rare 900ms ease 380ms both;
+}
+
+.hs-packCard.is-revealed.is-epic .hs-packCard__front {
+  animation: hs-rarity-epic 1100ms ease 360ms both;
+}
+
+.hs-packCard.is-revealed.is-legendary .hs-packCard__front {
+  animation: hs-rarity-legendary 1400ms ease 320ms both;
+}
+
+.hs-packCard.is-revealed.is-epic .hs-packCard__front::after,
+.hs-packCard.is-revealed.is-legendary .hs-packCard__front::after {
+  animation: hs-card-shimmer 900ms ease 620ms both;
+}
+
+.hs-packStage.is-transferring .hs-packCard {
+  animation: hs-pack-transfer 560ms cubic-bezier(.55, 0, .65, .4) both;
+  animation-delay: calc(var(--pack-index) * 60ms);
+}
+
+.hs-packSummary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  color: rgba(248, 240, 223, .76);
+  font-size: .82rem;
+  animation: hs-feedback-in 240ms ease both;
+}
+
+.hs-packSummary strong { color: #f0cd70; }
+
+@keyframes hs-rarity-rare {
+  45% { box-shadow: 0 0 30px 8px rgba(62, 142, 255, .82); filter: brightness(1.13); }
+}
+
+@keyframes hs-rarity-epic {
+  45% { box-shadow: 0 0 42px 11px rgba(171, 70, 246, .92); filter: brightness(1.2) saturate(1.15); }
+}
+
+@keyframes hs-rarity-legendary {
+  35% { transform: rotateY(180deg) scale(1.055); box-shadow: 0 0 58px 16px rgba(255, 160, 43, .96); filter: brightness(1.28) saturate(1.2); }
+}
+
+@keyframes hs-card-shimmer {
+  0% { opacity: 0; transform: translateX(-60%) rotate(8deg); }
+  25% { opacity: .8; }
+  100% { opacity: 0; transform: translateX(60%) rotate(8deg); }
+}
+
+@keyframes hs-pack-transfer {
+  to { opacity: 0; transform: translateY(110px) scale(.74); }
 }
 
 .hs-packModal__progress {
@@ -484,6 +776,87 @@
 .hs-minimalGroups {
   display: grid;
   gap: 22px;
+}
+
+.hs-deckInsights {
+  display: grid;
+  grid-template-columns: minmax(260px, .75fr) minmax(320px, 1.25fr);
+  gap: 18px;
+  margin-bottom: 16px;
+  padding: 14px;
+  border: 1px solid rgba(72, 57, 40, .2);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, .25);
+}
+
+.hs-deckInsights__summary {
+  display: flex;
+  align-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.hs-deckInsights__summary span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  color: rgba(40, 34, 27, .79);
+  background: rgba(47, 111, 109, .09);
+  font-size: .75rem;
+  font-weight: 800;
+}
+
+.hs-manaCurve {
+  min-height: 92px;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(22px, 1fr));
+  align-items: end;
+  gap: 7px;
+}
+
+.hs-manaCurve__bucket {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: 15px 58px 16px;
+  gap: 3px;
+  text-align: center;
+  font-size: .68rem;
+}
+
+.hs-manaCurve__value { color: rgba(40, 34, 27, .7); font-weight: 800; }
+.hs-manaCurve__track { position: relative; display: flex; align-items: flex-end; overflow: hidden; border-radius: 4px 4px 2px 2px; background: rgba(49, 107, 164, .1); }
+.hs-manaCurve__track > span { width: 100%; min-height: 0; border-radius: 4px 4px 2px 2px; background: linear-gradient(180deg, #4d96d1, #225e98); transition: height 300ms ease; }
+.hs-manaCurve__bucket strong { color: #225e98; }
+
+.hs-collectionFilters {
+  display: grid;
+  grid-template-columns: minmax(210px, 1.5fr) repeat(5, minmax(115px, .75fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.hs-collectionFilters label {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  font-size: .7rem;
+  font-weight: 800;
+}
+
+.hs-collectionFilters input,
+.hs-collectionFilters select {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 8px;
+  border: 1px solid rgba(72, 57, 40, .3);
+  border-radius: 7px;
+  color: inherit;
+  background: rgba(255, 255, 255, .55);
+  font: inherit;
+  font-size: .78rem;
 }
 
 .hs-compositionGroup,
@@ -854,6 +1227,27 @@
   .hs-packCards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .hs-gameBoard {
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+
+  .hs-gameHand > header {
+    flex-direction: column;
+  }
+
+  .hs-gameToolbar {
+    justify-content: flex-start;
+  }
+
+  .hs-deckInsights {
+    grid-template-columns: 1fr;
+  }
+
+  .hs-collectionFilters {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -868,7 +1262,13 @@
 
 
   .hs-packCard,
-  .hs-packCard__inner {
+  .hs-packCard__inner,
+  .hs-packCard__front,
+  .hs-packCard__front::after,
+  .hs-packStage.is-transferring .hs-packCard,
+  .hs-gameDeck__pile,
+  .hs-gameHand__cards .hs-card,
+  .hs-manaCurve__track > span {
     transition: none;
     animation: none;
   }

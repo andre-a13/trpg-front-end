@@ -284,11 +284,33 @@
     "compositionEmpty": "No cards remain in the deck.",
     "view": {
       "label": "Deck display mode",
+      "game": "Game mode",
       "full": "Full view",
       "minimal": "Minimal view",
       "minimalHint": "Hover a card, or select it with the keyboard, to reveal its illustration and details.",
       "normalCards": "Normal cards",
       "goldenCards": "Golden cards"
+    },
+    "game": {
+      "remaining": "Draw pile",
+      "deckCount": "{{remaining}} / {{total}} cards",
+      "handEyebrow": "Your hand",
+      "emptyHand": "Your hand is empty. Draw a card to begin.",
+      "openCollection": "View collection"
+    },
+    "insights": {
+      "averageCost": "Average cost: {{value}}",
+      "editions": "{{normal}} normal · {{golden}} golden",
+      "curve": "Mana curve"
+    },
+    "filters": {
+      "search": "Search this deck",
+      "searchPlaceholder": "Name, effect, or set…",
+      "all": "All",
+      "edition": "Edition",
+      "sort": "Sort by",
+      "cost": "Cost",
+      "empty": "No remaining card matches these filters."
     },
     "feedback": {
       "updating": "Updating deck…",
@@ -357,6 +379,8 @@
       "revealCard": "Reveal card {{index}}",
       "saving": "Saving…",
       "progress": "{{count}} of {{total}} card(s) revealed",
+      "summary": "Pack contents",
+      "commonRarity": "COMMON",
       "errors": {
         "sets": "Unable to load the sets.",
         "open": "Unable to open this pack.",
@@ -366,7 +390,18 @@
     "errors": {
       "load": "Unable to load the deck.",
       "action": "Unable to perform this action. Refresh the deck and try again.",
-      "catalog": "Unable to load the Hearthstone catalog."
+      "catalog": "Unable to load the Hearthstone catalog.",
+      "notFound": "This deck or character does not exist, or you cannot access it.",
+      "forbidden": "Your account can view this page, but cannot perform this action.",
+      "network": "The server cannot be reached. Check your connection and try again.",
+      "conflict": "The deck changed on another screen. Refresh it before trying again.",
+      "generic": "An unexpected error is preventing the deck from loading.",
+      "notFoundTitle": "Deck not found",
+      "forbiddenTitle": "Access denied",
+      "networkTitle": "Connection interrupted",
+      "conflictTitle": "Deck already changed",
+      "genericTitle": "The deck could not be opened",
+      "retry": "Try again"
     }
   },
   "teams": {
