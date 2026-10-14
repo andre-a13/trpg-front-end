@@ -45,6 +45,11 @@ export type CharacterNoteDto = {
   sortOrder: number;
 };
 
+export type HearthstomancerStatusDto = {
+  configured: boolean;
+  enabled: boolean;
+};
+
 export type CharacterCreateRequest = {
   name: string;
   slug: string;
@@ -85,6 +90,7 @@ export type CharacterDto = CharacterCreateRequest & {
   teams?: CharacterTeamDto[];
   inventoryCategories?: InventoryCategoryDto[];
   noteTabs?: CharacterNoteDto[];
+  hearthstomancer?: HearthstomancerStatusDto;
 };
 
 export type CharacterUpdateRequest = Partial<CharacterCreateRequest>;
@@ -114,4 +120,96 @@ export type TeamIllustrationUploadResponse = {
   object_key: string;
   public_url: string;
   expires_in: number;
+};
+
+export type HearthstoneCardDto = {
+  id: string;
+  name: string;
+  cost?: number | null;
+  attack?: number | null;
+  health?: number | null;
+  durability?: number | null;
+  text: string;
+  cardType?: string | null;
+  rarity?: string | null;
+  cardClass?: string | null;
+  tribe?: string | null;
+  spellSchool?: string | null;
+  cardSet?: string | null;
+  cardSetName?: string | null;
+  illustrationUrl: string;
+  renderUrl: string;
+};
+
+export type DeckCardDefinitionDto = Omit<HearthstoneCardDto, "id"> & {
+  id: number;
+  sourceCardId: string;
+  originalIllustrationUrl?: string | null;
+  isVariant: boolean;
+  normalCount: number;
+  goldenCount: number;
+  remainingNormalCount: number;
+  remainingGoldenCount: number;
+};
+
+export type DeckCardCopyDto = {
+  copyId: number;
+  isGolden: boolean;
+  definition: DeckCardDefinitionDto;
+};
+
+export type DeckStateDto = {
+  configured: true;
+  enabled: boolean;
+  revision: number;
+  permissions: {
+    canManage: boolean;
+    canActivate: boolean;
+  };
+  counts: {
+    total: number;
+    remaining: number;
+    drawn: number;
+  };
+  definitions: DeckCardDefinitionDto[];
+  drawnCards: DeckCardCopyDto[];
+  undoablePlay?: DeckCardCopyDto | null;
+};
+
+export type DeckDefinitionInput = {
+  sourceCardId: string;
+  name: string;
+  cost?: number | null;
+  attack?: number | null;
+  health?: number | null;
+  durability?: number | null;
+  text: string;
+  cardType?: string | null;
+  rarity?: string | null;
+  cardClass?: string | null;
+  tribe?: string | null;
+  spellSchool?: string | null;
+  cardSet?: string | null;
+  illustrationUrl?: string | null;
+  normalCount: number;
+  goldenCount: number;
+};
+
+export type HearthstoneCatalogPageDto = {
+  items: HearthstoneCardDto[];
+  sets: HearthstoneCardSetDto[];
+  page: number;
+  pageSize: number;
+  total: number;
+};
+
+export type HearthstoneCardSetDto = {
+  code: string;
+  name: string;
+  cardCount: number;
+};
+
+export type HearthstonePackDto = {
+  cardSet: string;
+  cards: HearthstoneCardDto[];
 };

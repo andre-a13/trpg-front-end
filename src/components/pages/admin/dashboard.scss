@@ -143,6 +143,33 @@
   font-size: 0.78rem;
 }
 
+.admin-deckToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 0 10px;
+  border: 1px solid rgba(246, 239, 228, 0.2);
+  border-radius: 7px;
+  color: rgba(246, 239, 228, 0.82);
+  background: rgba(7, 10, 14, 0.54);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.admin-deckToggle.is-active {
+  border-color: rgba(245, 197, 24, 0.62);
+  color: #f8e7b8;
+  background: rgba(68, 54, 22, 0.72);
+}
+
+.admin-deckToggle:disabled {
+  cursor: wait;
+  opacity: 0.58;
+}
+
 .admin-form {
   display: grid;
   gap: 13px;

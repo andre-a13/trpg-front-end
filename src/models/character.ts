@@ -1,5 +1,6 @@
 import type { SkillSet } from "../types/character";
 import type { CharacterDto, CharacterNoteDto, CharacterTeamDto, InventoryCategoryDto } from "../interface/IAddCharacter";
+import type { HearthstomancerStatusDto } from "../types/api";
 
 export default class Character {
     id: number;
@@ -21,6 +22,7 @@ export default class Character {
     teams: CharacterTeamDto[] = [];
     inventoryCategories: InventoryCategoryDto[] = [];
     noteTabs: CharacterNoteDto[] = [];
+    hearthstomancer: HearthstomancerStatusDto = { configured: false, enabled: false };
     constructor(data: CharacterDto) {
         this.id = data.id;
         this.name = data.name;
@@ -41,6 +43,7 @@ export default class Character {
         this.ownerUsername = data.ownerUsername ?? null;
         this.teams = data.teams ?? [];
         this.inventoryCategories = data.inventoryCategories ?? [];
+        this.hearthstomancer = data.hearthstomancer ?? { configured: false, enabled: false };
 
     }
 
