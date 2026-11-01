@@ -1,6 +1,6 @@
 import { type FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import { ShieldCheck, Sparkles, ToggleLeft, ToggleRight, UserPlus, Users } from "lucide-react";
+import { ShieldCheck, Sparkles, ToggleLeft, ToggleRight, UserPlus, Users, Wrench } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { useAdminControls } from "../../../admin/useAdminControls";
@@ -8,6 +8,8 @@ import Character from "../../../models/character";
 import accountService from "../../../services/account.service";
 import characterService from "../../../services/character.service";
 import hearthstoneDeckService from "../../../services/hearthstone-deck.service";
+import inventionService from "../../../services/invention.service";
+import InventionCatalog from "../../inventions/InventionCatalog";
 import type { AccountDto, UserRole } from "../../../types/api";
 import "./dashboard.scss";
 
@@ -32,6 +34,7 @@ export default function Dashboard() {
   const [updatingAccountId, setUpdatingAccountId] = useState<number | null>(null);
   const [updatingCharacterId, setUpdatingCharacterId] = useState<number | null>(null);
   const [updatingHearthstomancerSlug, setUpdatingHearthstomancerSlug] = useState<string | null>(null);
+  const [updatingInvengineerSlug, setUpdatingInvengineerSlug] = useState<string | null>(null);
 
   const accountById = useMemo(
     () => new Map(accounts.map((account) => [account.id, account])),
@@ -154,8 +157,7 @@ export default function Dashboard() {
       await hearthstoneDeckService.setEnabled(character.slug, enabled);
       setCharacters((currentCharacters) => currentCharacters.map((item) => (
         item.id === character.id
-          ? new Character({
-              ...item,
+          ? Object.assign(new Character(item), {
               hearthstomancer: { configured: true, enabled },
             })
           : item
@@ -168,6 +170,22 @@ export default function Dashboard() {
       });
     } finally {
       setUpdatingHearthstomancerSlug(null);
+    }
+  }
+
+  async function updateInvengineer(character: Character) {
+    setUpdatingInvengineerSlug(character.slug);
+    setStatus(null);
+    try {
+      const { enabled } = await inventionService.setEnabled(character.slug, !character.invengineerEnabled);
+      setCharacters((current) => current.map((item) => (
+        item.id === character.id ? Object.assign(new Character(item), { invengineerEnabled: enabled }) : item
+      )));
+      setStatus({ tone: "success", message: t("inventions.activationUpdated") });
+    } catch (error) {
+      setStatus({ tone: "error", message: formatError(error, t("inventions.errors.activation")) });
+    } finally {
+      setUpdatingInvengineerSlug(null);
     }
   }
 
@@ -295,6 +313,7 @@ export default function Dashboard() {
                       <th>{t("createCharacter.race")}</th>
                       <th>{t("dashboard.characters.owner")}</th>
                       <th>{t("dashboard.characters.hearthstomancer")}</th>
+                      <th>{t("inventions.title")}</th>
                       <th>{t("common.actions.open")}</th>
                     </tr>
                   </thead>
@@ -339,6 +358,19 @@ export default function Dashboard() {
                             </button>
                           </td>
                           <td>
+                            <button
+                              type="button"
+                              className={`admin-deckToggle ${character.invengineerEnabled ? "is-active" : ""}`}
+                              disabled={updatingInvengineerSlug === character.slug}
+                              aria-pressed={character.invengineerEnabled}
+                              aria-label={t("inventions.activationFor", { name: character.name })}
+                              onClick={() => void updateInvengineer(character)}
+                            >
+                              <Wrench size={16} aria-hidden="true" />
+                              {t(character.invengineerEnabled ? "inventions.active" : "inventions.inactive")}
+                            </button>
+                          </td>
+                          <td>
                             <Link to={`/characters/${character.slug}`}>{t("common.actions.open")}</Link>
                           </td>
                         </tr>
@@ -348,6 +380,7 @@ export default function Dashboard() {
                 </table>
               </div>
             </section>
+            <InventionCatalog />
           </div>
         )}
       </main>

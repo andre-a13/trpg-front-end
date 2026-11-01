@@ -13,7 +13,7 @@ export const useSaveStatus = () => {
     const [status, setStatus] = React.useState<SaveStatus>("saved");
     const pendingSavesRef = React.useRef(0);
     const savingStartedAtRef = React.useRef<number | null>(null);
-    const settleTimerRef = React.useRef<ReturnType<typeof window.setTimeout> | null>(null);
+    const settleTimerRef = React.useRef<number | null>(null);
     const hasFailureRef = React.useRef(false);
 
     const clearSettleTimer = React.useCallback(() => {

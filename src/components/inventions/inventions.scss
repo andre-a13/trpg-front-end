@@ -1,0 +1,77 @@
+.inventions-module {
+  display: grid;
+  gap: 14px;
+  padding: 4px;
+  color: var(--parchment-ink, #272019);
+
+  p { margin: 0; }
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 38px;
+    padding: 8px 14px;
+    border: 1px solid #d4ac55;
+    border-radius: 7px;
+    background: #eac568;
+    color: #211908;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  button:disabled { opacity: 0.55; cursor: default; }
+}
+
+.invention-catalog__hint {
+  font-size: 0.88rem;
+  color: rgba(246, 239, 228, 0.72);
+  line-height: 1.5;
+}
+
+.inventions-module__actions { display: grid; gap: 10px; }
+.inventions-module__list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li { padding: 12px; border: 1px solid rgba(132, 100, 73, 0.3); border-radius: 7px; background: rgba(255, 255, 255, 0.3); overflow-wrap: anywhere; }
+  strong { font-size: 0.93rem; }
+  p { margin-top: 6px; }
+}
+
+.inventions-error { color: #ffacac; }
+.inventions-module .inventions-error { color: #9b2f37; }
+.inventions-success { color: #9de2b6; }
+
+.invention-catalog {
+  color: #f6efe4;
+  > p { margin: 12px 16px; }
+  input { box-sizing: border-box; }
+}
+.invention-catalog__count { margin-left: auto; font-variant-numeric: tabular-nums; color: #eac568; }
+.page .admin-dashboard .invention-catalog__form { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+.invention-catalog__form button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 0 16px; }
+.invention-catalog__body { padding: 0 16px 16px; }
+.page .invention-catalog__body > label { display: block; margin-bottom: 6px; color: rgba(246, 239, 228, 0.78); font-size: 0.9rem; }
+.page .invention-catalog__body > input { width: 100%; min-height: 38px; margin: 0 0 12px; padding: 0 10px; border: 1px solid rgba(246, 239, 228, 0.18); border-radius: 7px; background: rgba(7, 10, 14, 0.72); color: #f6efe4; }
+.invention-catalog__list {
+  max-height: 360px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(246, 239, 228, 0.1); }
+  span { overflow-wrap: anywhere; }
+  button { display: inline-flex; flex-shrink: 0; align-items: center; gap: 6px; min-height: 34px; padding: 6px 10px; border: 1px solid rgba(255, 172, 172, 0.3); border-radius: 6px; background: transparent; color: #ffb4b4; cursor: pointer; }
+  button:disabled { opacity: 0.5; cursor: default; }
+}
+
+@media (max-width: 520px) {
+  .page .admin-dashboard .invention-catalog__form { grid-template-columns: 1fr; }
+}

@@ -3,7 +3,8 @@ import { LogIn, LogOut, Swords, UserPlus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../../auth/useAuth";
-import { apiBaseUrl } from "../../../services/api";
+import { publicApiOptions } from "../../../services/api";
+import { systemHealth } from "../../../api/generated/sdk.gen";
 import LanguageSwitch from "../../language-switch/LanguageSwitch";
 import "./home.scss";
 
@@ -14,18 +15,18 @@ function useServerStatus() {
 
   useEffect(() => {
     let isMounted = true;
-    const healthBaseUrl = apiBaseUrl.replace(/\/$/, "");
 
     async function checkHealth() {
       const controller = new AbortController();
       const timeoutId = window.setTimeout(() => controller.abort(), 4500);
 
       try {
-        const response = await fetch(`${healthBaseUrl}/health`, {
+        await systemHealth({
+          ...publicApiOptions,
           signal: controller.signal,
         });
 
-        if (isMounted) setStatus(response.ok ? "online" : "offline");
+        if (isMounted) setStatus("online");
       } catch {
         if (isMounted) setStatus("offline");
       } finally {

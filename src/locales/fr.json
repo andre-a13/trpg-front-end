@@ -1,4 +1,36 @@
 {
+  "inventions": {
+    "title": "Invengénieur",
+    "active": "Activé",
+    "inactive": "Désactivé",
+    "activationFor": "Module invengénieur de {{name}}",
+    "activationUpdated": "Module invengénieur mis à jour.",
+    "draw": "Tirer {{count}} inventions",
+    "drawing": "Tirage en cours…",
+    "empty": "Aucune invention tirée pour le moment.",
+    "retry": "Réessayer",
+    "catalog": {
+      "title": "Catalogue des inventions",
+      "name": "Nom de l’invention",
+      "search": "Rechercher une invention",
+      "remove": "Supprimer {{name}} du catalogue",
+      "added": "Invention ajoutée.",
+      "removed": "Invention supprimée du catalogue.",
+      "empty": "Aucune invention à afficher.",
+      "help": "Les inventions supprimées restent sur les fiches qui les possèdent déjà, jusqu’au prochain tirage."
+    },
+    "errors": {
+      "load": "Impossible de charger les inventions.",
+      "draw": "Le tirage a échoué. Vérifiez que le module est toujours activé, puis réessayez.",
+      "notEnough": "Le catalogue doit contenir au moins 5 inventions pour effectuer un tirage.",
+      "storage": "Le stockage local est indisponible. Autorisez-le dans votre navigateur pour tirer des inventions.",
+      "catalog": "Impossible de charger le catalogue.",
+      "add": "Impossible d’ajouter cette invention.",
+      "duplicate": "Une invention porte déjà ce nom.",
+      "remove": "Impossible de supprimer cette invention.",
+      "activation": "Impossible de modifier l’activation du module invengénieur."
+    }
+  },
   "common": {
     "actions": {
       "add": "Ajouter",
@@ -139,7 +171,8 @@
       "stats": "Attributs",
       "skills": "Compétences",
       "inventory": "Inventaire",
-      "deck": "Deck Hearthstomancien"
+      "deck": "Deck Hearthstomancien",
+      "inventions": "Inventions de l’invengénieur"
     },
     "moduleActions": {
       "move": "Déplacer {{title}}",

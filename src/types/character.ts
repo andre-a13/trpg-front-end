@@ -1,9 +1,5 @@
-export interface SkillSet {
-    corps: number; // 0–100 (min 20 recommandé)
-    mental: number; // 0–100
-    social: number; // 0–100
-}
-
+import type { SkillSet } from "../api/generated/types.gen";
+export type { SkillSet };
 
 export interface Character {
     name: string;
