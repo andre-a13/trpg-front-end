@@ -21,6 +21,7 @@ jobs:
       - run: npm run api:check
       - run: npm test
       - run: npm run test:api
+      - run: npm run test:forge
       - run: npm run test:types
       - run: npm run lint
       - run: npm run build

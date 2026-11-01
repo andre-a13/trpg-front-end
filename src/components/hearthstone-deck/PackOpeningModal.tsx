@@ -7,6 +7,7 @@ import {
 } from "react";
 import { PackageOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import cardBackUrl from "../../assets/hearthstone-card-back.svg";
 import hearthstoneDeckService from "../../services/hearthstone-deck.service";
 import type {
   DeckStateDto,
@@ -14,8 +15,7 @@ import type {
   HearthstoneCardSetDto,
 } from "../../types/api";
 import Modal, { type ModalHandle } from "../ui/modal/Modal";
-
-const CLASSIC_CARD_BACK_URL = "https://hearthstone.wiki.gg/images/CardBack0.png?2a307b";
+import { getRarityEffectClass } from "./deck-utils";
 
 type PackCard = {
   card: HearthstoneCardDto;
@@ -44,6 +44,7 @@ const PackOpeningModal = forwardRef<PackOpeningHandle, Props>(function PackOpeni
   const [loadingSets, setLoadingSets] = useState(false);
   const [opening, setOpening] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [transferring, setTransferring] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function loadSets() {
@@ -64,6 +65,7 @@ const PackOpeningModal = forwardRef<PackOpeningHandle, Props>(function PackOpeni
       setSelectedSet("");
       setCards([]);
       setSaving(false);
+      setTransferring(false);
       setError(null);
       modalRef.current?.open();
       void loadSets();
@@ -103,18 +105,29 @@ const PackOpeningModal = forwardRef<PackOpeningHandle, Props>(function PackOpeni
         slug,
         cards.map((entry) => entry.card.id),
       );
+      setTransferring(true);
       onDeckChange(deck);
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        await new Promise((resolve) => window.setTimeout(resolve, 620));
+      }
       onPackSaved(cards.length);
       modalRef.current?.close();
     } catch {
       setError(t("hearthstomancer.pack.errors.save"));
     } finally {
       setSaving(false);
+      setTransferring(false);
     }
   }
 
   const revealedCount = cards.filter((entry) => entry.status === "revealed").length;
   const selectedSetName = sets.find((cardSet) => cardSet.code === selectedSet)?.name;
+  const raritySummary = cards.reduce<Record<string, number>>((summary, entry) => {
+    if (entry.status !== "revealed") return summary;
+    const rarity = entry.card.rarity || t("hearthstomancer.pack.commonRarity");
+    summary[rarity] = (summary[rarity] ?? 0) + 1;
+    return summary;
+  }, {});
 
   return (
     <Modal
@@ -167,15 +180,16 @@ const PackOpeningModal = forwardRef<PackOpeningHandle, Props>(function PackOpeni
           </button>
         </div>
       ) : (
-        <div className="hs-packStage">
+        <div className={`hs-packStage ${transferring ? "is-transferring" : ""}`}>
           <p>{t("hearthstomancer.pack.revealHelp")}</p>
           <div className="hs-packCards">
             {cards.map((entry, index) => {
               const revealed = entry.status === "revealed";
+              const rarityClass = getRarityEffectClass(entry.card.rarity);
               return (
                 <button
                   type="button"
-                  className={`hs-packCard ${revealed ? "is-revealed" : ""}`}
+                  className={`hs-packCard ${revealed ? `is-revealed ${rarityClass}` : ""}`}
                   key={`${entry.card.id}-${index}`}
                   style={{ "--pack-index": index } as CSSProperties}
                   disabled={entry.status !== "hidden" || saving}
@@ -184,16 +198,22 @@ const PackOpeningModal = forwardRef<PackOpeningHandle, Props>(function PackOpeni
                 >
                   <span className="hs-packCard__inner">
                     <span className="hs-packCard__face hs-packCard__back">
-                      <img src={CLASSIC_CARD_BACK_URL} alt="" />
+                      <img src={cardBackUrl} alt="" />
                     </span>
                     <span className="hs-packCard__face hs-packCard__front">
-                      <img src={entry.card.renderUrl} alt={entry.card.name} />
+                      {revealed && <img src={entry.card.renderUrl} alt={entry.card.name} />}
                     </span>
                   </span>
                 </button>
               );
             })}
           </div>
+          {revealedCount === cards.length && (
+            <div className="hs-packSummary" aria-live="polite">
+              <strong>{t("hearthstomancer.pack.summary")}</strong>
+              <span>{Object.entries(raritySummary).map(([rarity, count]) => `${count}× ${rarity}`).join(" · ")}</span>
+            </div>
+          )}
         </div>
       )}
       {error && <p className="hs-packModal__error" role="alert">{error}</p>}

@@ -2,11 +2,15 @@ import { ImageOff, Play, Shuffle, Sparkles, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import type { DeckCardCopyDto, DeckCardDefinitionDto } from "../../types/api";
+import type { DeckSort } from "./deck-utils";
 
 type Props = {
   definitions: DeckCardDefinitionDto[];
   canAct: boolean;
   disabled: boolean;
+  showNormal?: boolean;
+  showGolden?: boolean;
+  sort?: DeckSort;
   onRemove: (definition: DeckCardDefinitionDto, isGolden: boolean) => void;
 };
 
@@ -17,7 +21,12 @@ type MinimalEntry = {
   count: number;
 };
 
-function compareEntries(left: MinimalEntry, right: MinimalEntry) {
+function compareEntries(left: MinimalEntry, right: MinimalEntry, sort: DeckSort = "cost") {
+  if (sort === "name") return left.definition.name.localeCompare(right.definition.name, "fr");
+  if (sort === "rarity") {
+    return (left.definition.rarity ?? "").localeCompare(right.definition.rarity ?? "", "fr")
+      || left.definition.name.localeCompare(right.definition.name, "fr");
+  }
   const leftCost = left.definition.cost ?? Number.MAX_SAFE_INTEGER;
   const rightCost = right.definition.cost ?? Number.MAX_SAFE_INTEGER;
   return leftCost - rightCost || left.definition.name.localeCompare(right.definition.name, "fr");
@@ -38,8 +47,17 @@ function MinimalDeckEntry({
     ? definition.illustrationUrl
     : (definition.renderUrl ?? definition.illustrationUrl);
   const [imageFailed, setImageFailed] = useState(false);
+  const [visualRequested, setVisualRequested] = useState(false);
 
-  useEffect(() => setImageFailed(false), [imageUrl]);
+  useEffect(() => {
+    setImageFailed(false);
+    setVisualRequested(false);
+  }, [imageUrl]);
+
+  function requestVisual() {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
+    if (window.matchMedia("(min-width: 701px)").matches) setVisualRequested(true);
+  }
 
   const stats = [
     definition.cost != null ? `${t("hearthstomancer.card.cost")} ${definition.cost}` : null,
@@ -62,6 +80,8 @@ function MinimalDeckEntry({
       className={`hs-minimalCard ${isGolden ? "is-golden" : ""}`}
       role="listitem"
       tabIndex={0}
+      onPointerEnter={requestVisual}
+      onFocus={requestVisual}
     >
       <div className="hs-minimalCard__summary">
         <span className="hs-minimalCard__identity">
@@ -77,8 +97,14 @@ function MinimalDeckEntry({
 
       <div className="hs-minimalCard__details" role="tooltip">
         <div className="hs-minimalCard__visual">
-          {!imageFailed && imageUrl ? (
-            <img src={imageUrl} alt={definition.name} onError={() => setImageFailed(true)} />
+          {visualRequested && !imageFailed && imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={definition.name}
+              loading="lazy"
+              decoding="async"
+              onError={() => setImageFailed(true)}
+            />
           ) : (
             <div className="hs-minimalCard__imageFallback">
               <ImageOff size={26} aria-hidden="true" />
@@ -103,14 +129,22 @@ function MinimalDeckEntry({
   );
 }
 
-export default function MinimalDeckList({ definitions, canAct, disabled, onRemove }: Props) {
+export default function MinimalDeckList({
+  definitions,
+  canAct,
+  disabled,
+  showNormal = true,
+  showGolden = true,
+  sort = "cost",
+  onRemove,
+}: Props) {
   const { t } = useTranslation();
   const groups = useMemo(() => {
     const normal: MinimalEntry[] = [];
     const golden: MinimalEntry[] = [];
 
     definitions.forEach((definition) => {
-      if (definition.remainingNormalCount > 0) {
+      if (showNormal && definition.remainingNormalCount > 0) {
         normal.push({
           key: `normal-${definition.id}`,
           definition,
@@ -118,7 +152,7 @@ export default function MinimalDeckList({ definitions, canAct, disabled, onRemov
           count: definition.remainingNormalCount,
         });
       }
-      if (definition.remainingGoldenCount > 0) {
+      if (showGolden && definition.remainingGoldenCount > 0) {
         golden.push({
           key: `golden-${definition.id}`,
           definition,
@@ -128,10 +162,10 @@ export default function MinimalDeckList({ definitions, canAct, disabled, onRemov
       }
     });
 
-    normal.sort(compareEntries);
-    golden.sort(compareEntries);
+    normal.sort((left, right) => compareEntries(left, right, sort));
+    golden.sort((left, right) => compareEntries(left, right, sort));
     return { normal, golden };
-  }, [definitions]);
+  }, [definitions, showGolden, showNormal, sort]);
 
   if (groups.normal.length === 0 && groups.golden.length === 0) {
     return <p>{t("hearthstomancer.compositionEmpty")}</p>;

@@ -34,6 +34,7 @@ npm run api:generate
 npm run api:check
 npm run test:api
 npm run test:types
+npm run test:forge
 ```
 
 To verify real HTTP exchanges against an isolated local backend, install the

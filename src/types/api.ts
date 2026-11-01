@@ -1,4 +1,4 @@
-import type { CharacterSummaryResponse, CharacterDetailResponse, UserResponse } from "../api/generated/types.gen";
+import type { CharacterSummaryResponse, CharacterDetailResponse, UserResponse, DeckDefinitionResponse, HearthstoneCardResponse } from "../api/generated/types.gen";
 
 export type {
   UserResponse as AuthUser,
@@ -20,7 +20,6 @@ export type {
   InventionResponse as InventionDto,
   InventionStateResponse as InventionStateDto,
   HearthstoneCardResponse as HearthstoneCardDto,
-  DeckDefinitionResponse as DeckCardDefinitionDto,
   DeckCopyResponse as DeckCardCopyDto,
   DeckStateResponse as DeckStateDto,
   DeckDefinitionInput,
@@ -30,4 +29,6 @@ export type {
 } from "../api/generated/types.gen";
 
 export type UserRole = UserResponse["role"];
+// Display data may be enriched with a catalogue label absent from deck responses.
+export type DeckCardDefinitionDto = DeckDefinitionResponse & Partial<Pick<HearthstoneCardResponse, "cardSetName">>;
 export type CharacterDto = CharacterSummaryResponse & Partial<Pick<CharacterDetailResponse, "inventoryCategories" | "noteTabs">>;
