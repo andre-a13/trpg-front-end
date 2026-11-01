@@ -63,7 +63,7 @@ export const Notes: React.FC<NotesProps> = ({
   const [dragOverId, setDragOverId] = React.useState<number | null>(null);
   const initialRef = React.useRef(initialTabs[0]?.content ?? "");
   const dragIndexRef = React.useRef<number | null>(null);
-  const timer = React.useRef<ReturnType<typeof window.setTimeout> | null>(null);
+  const timer = React.useRef<number | null>(null);
 
   const activeTab = React.useMemo(
     () => tabs.find((tab) => tab.id === activeId) ?? tabs[0],

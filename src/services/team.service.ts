@@ -1,48 +1,47 @@
-import type { IAddTeam, TeamDto } from "../interface/IAddTeam";
-import type { TeamIllustrationUploadResponse } from "../types/api";
-import api from "./api";
+import type { IAddTeam } from "../interface/IAddTeam";
+import { teamsCreate, teamsList, teamsGet, teamsAddMember, teamsRemoveMember,
+  teamsCreateIllustrationUpload, teamsUpdateIllustration } from "../api/generated/sdk.gen";
+import type { TeamIllustrationUploadRequest } from "../api/generated/types.gen";
+import { apiOptions } from "./api";
 
 async function create(body: IAddTeam) {
-  const res = await api.post<TeamDto>("/teams", body);
+  const res = await teamsCreate({ ...apiOptions, body });
   return res;
 }
 
 async function list() {
-  const res = await api.get<TeamDto[]>("/teams");
+  const res = await teamsList(apiOptions);
   return res.data;
 }
 
 async function getByUuid(uuid: string) {
-  const res = await api.get<TeamDto>("/teams/" + uuid);
+  const res = await teamsGet({ ...apiOptions, path: { team_uuid: uuid } });
   return res.data;
 }
 
 async function addMember(uuid: string, characterSlug: string) {
-  const res = await api.post<TeamDto>(`/teams/${uuid}/characters/${characterSlug}`);
+  const res = await teamsAddMember({ ...apiOptions, path: { team_uuid: uuid, character_slug: characterSlug } });
   return res.data;
 }
 
 async function removeMember(uuid: string, characterSlug: string) {
-  const res = await api.delete<TeamDto>(`/teams/${uuid}/characters/${characterSlug}`);
+  const res = await teamsRemoveMember({ ...apiOptions, path: { team_uuid: uuid, character_slug: characterSlug } });
   return res.data;
 }
 
 async function createIllustrationUpload(uuid: string, file: File) {
-  const res = await api.post<TeamIllustrationUploadResponse>(
-    `/teams/${uuid}/illustration-upload`,
-    {
+  const res = await teamsCreateIllustrationUpload({
+    ...apiOptions, path: { team_uuid: uuid }, body: {
       filename: file.name,
-      content_type: file.type,
+      content_type: file.type as TeamIllustrationUploadRequest["content_type"],
       size: file.size,
-    }
-  );
+    },
+  });
   return res.data;
 }
 
 async function updateIllustration(uuid: string, illustrationUrl: string | null) {
-  const res = await api.patch<TeamDto>(`/teams/${uuid}/illustration`, {
-    illustrationUrl,
-  });
+  const res = await teamsUpdateIllustration({ ...apiOptions, path: { team_uuid: uuid }, body: { illustrationUrl } });
   return res.data;
 }
 

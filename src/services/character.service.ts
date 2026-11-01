@@ -1,49 +1,43 @@
 import type { IAddCharacter, IUpdateCharacter } from "../interface/IAddCharacter";
 import Character from "../models/character";
-import type { CharacterDto } from "../types/api";
-import api from "./api";
+import { charactersCreate, charactersGet, charactersList, charactersUpdate,
+    charactersCreatePortraitUpload, charactersCreateBackgroundUpload } from "../api/generated/sdk.gen";
+import type { CharacterPortraitUploadRequest } from "../api/generated/types.gen";
+import { apiOptions } from "./api";
 
 async function create( body : IAddCharacter )
 {
-    const res = await api.post("/characters", body );
+    const res = await charactersCreate({ ...apiOptions, body });
     return res;
 }
 
 async function getBySlug( slug : string )
 {
-    const res = await api.get("/characters/" + slug );
+    const res = await charactersGet({ ...apiOptions, path: { slug } });
     return new Character(res.data);
 }
 
 async function list()
 {
-    const res = await api.get("/characters");
-    return res.data.map((item: CharacterDto) => new Character(item));
+    const res = await charactersList(apiOptions);
+    return res.data.map((item) => new Character(item));
 }
 
 async function patch( slug : string, body : IUpdateCharacter )
 {
-    const res = await api.patch("/characters/" + slug, body );
+    const res = await charactersUpdate({ ...apiOptions, path: { slug }, body });
     return res;
 }
 
-type CharacterPortraitUploadResponse = {
-    upload_url: string;
-    object_key: string;
-    public_url: string;
-    expires_in: number;
-};
-
 async function uploadPortrait( slug : string, file : File )
 {
-    const uploadRequest = await api.post<CharacterPortraitUploadResponse>(
-        `/characters/${slug}/portrait-upload`,
-        {
+    const uploadRequest = await charactersCreatePortraitUpload({
+        ...apiOptions, path: { slug }, body: {
             filename: file.name,
-            content_type: file.type,
+            content_type: file.type as CharacterPortraitUploadRequest["content_type"],
             size: file.size,
-        }
-    );
+        },
+    });
 
     const uploadResponse = await fetch(uploadRequest.data.upload_url, {
         method: "PUT",
@@ -64,14 +58,13 @@ async function uploadPortrait( slug : string, file : File )
 
 async function uploadBackground( slug : string, file : File )
 {
-    const uploadRequest = await api.post<CharacterPortraitUploadResponse>(
-        `/characters/${slug}/background-upload`,
-        {
+    const uploadRequest = await charactersCreateBackgroundUpload({
+        ...apiOptions, path: { slug }, body: {
             filename: file.name,
-            content_type: file.type,
+            content_type: file.type as CharacterPortraitUploadRequest["content_type"],
             size: file.size,
-        }
-    );
+        },
+    });
 
     const uploadResponse = await fetch(uploadRequest.data.upload_url, {
         method: "PUT",

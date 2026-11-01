@@ -1,11 +1,12 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
+import { createClient } from "../api/generated/client";
+import { authRefresh } from "../api/generated/sdk.gen";
 import {
   clearStoredTokens,
   getStoredTokens,
   setStoredTokens,
   toStoredTokens,
   type StoredTokens,
-  type TokenPairResponse,
 } from "./token-storage";
 
 type RetriableRequestConfig = InternalAxiosRequestConfig & {
@@ -30,6 +31,11 @@ const api = axios.create({
   withCredentials: true,
 });
 
+export const apiClient = createClient({ axios: api, baseURL: apiBaseUrl, withCredentials: true });
+export const publicClient = createClient({ axios: publicApi, baseURL: apiBaseUrl, withCredentials: true });
+export const apiOptions = { client: apiClient, throwOnError: true } as const;
+export const publicApiOptions = { client: publicClient, throwOnError: true } as const;
+
 let refreshPromise: Promise<StoredTokens> | null = null;
 let unauthorizedHandler: (() => void) | null = null;
 
@@ -39,8 +45,7 @@ export function setUnauthorizedHandler(handler: (() => void) | null) {
 
 export async function refreshTokens() {
   if (!refreshPromise) {
-    refreshPromise = publicApi
-      .post<TokenPairResponse>("/auth/refresh")
+    refreshPromise = authRefresh(publicApiOptions)
       .then((response) => {
         const nextTokens = toStoredTokens(response.data);
         setStoredTokens(nextTokens);
@@ -77,7 +82,11 @@ api.interceptors.response.use(
     originalRequest._authRetry = true;
 
     try {
-      const tokens = await refreshTokens();
+      const stored = getStoredTokens();
+      // Another concurrent request may have refreshed while this 401 was in flight.
+      const tokens = stored?.accessToken && originalRequest.headers.Authorization !== `Bearer ${stored.accessToken}`
+        ? stored
+        : await refreshTokens();
       originalRequest.headers.Authorization = `Bearer ${tokens.accessToken}`;
       return api(originalRequest);
     } catch {

@@ -139,7 +139,8 @@
       "stats": "Attributes",
       "skills": "Talents",
       "inventory": "Equipment",
-      "deck": "Hearthstomancer deck"
+      "deck": "Hearthstomancer deck",
+      "inventions": "Invengineer inventions"
     },
     "moduleActions": {
       "move": "Move {{title}}",
@@ -526,6 +527,38 @@
         "active": "Active",
         "inactive": "Inactive"
       }
+    }
+  },
+  "inventions": {
+    "title": "Invengineer",
+    "active": "Enabled",
+    "inactive": "Disabled",
+    "activationFor": "Invengineer module for {{name}}",
+    "activationUpdated": "Invengineer module updated.",
+    "draw": "Draw {{count}} inventions",
+    "drawing": "Drawing…",
+    "empty": "No inventions drawn yet.",
+    "retry": "Retry",
+    "catalog": {
+      "title": "Invention catalogue",
+      "name": "Invention name",
+      "search": "Search inventions",
+      "remove": "Remove {{name}} from the catalogue",
+      "added": "Invention added.",
+      "removed": "Invention removed from the catalogue.",
+      "empty": "No inventions to display.",
+      "help": "Removed inventions stay on character sheets that already have them until their next draw."
+    },
+    "errors": {
+      "load": "Unable to load inventions.",
+      "draw": "The draw failed. Check that the module is still enabled, then retry.",
+      "notEnough": "The catalogue must contain at least 5 inventions to draw.",
+      "storage": "Local storage is unavailable. Enable it in your browser to draw inventions.",
+      "catalog": "Unable to load the catalogue.",
+      "add": "Unable to add this invention.",
+      "duplicate": "An invention with this name already exists.",
+      "remove": "Unable to remove this invention.",
+      "activation": "Unable to update the invengineer module."
     }
   }
 }

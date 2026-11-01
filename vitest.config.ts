@@ -1,11 +1,11 @@
-import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  plugins: [react()],
   test: {
-    environment: "jsdom",
-    setupFiles: "./src/test/setup.ts",
+    environment: "node",
+    include: ["tests/api/**/*.test.ts"],
+    pool: "threads",
+    maxWorkers: 1,
+    minWorkers: 1,
   },
 });
-

@@ -23,7 +23,8 @@ export default class Character {
     inventoryCategories: InventoryCategoryDto[] = [];
     noteTabs: CharacterNoteDto[] = [];
     hearthstomancer: HearthstomancerStatusDto = { configured: false, enabled: false };
-    constructor(data: CharacterDto) {
+    invengineerEnabled: boolean = false;
+    constructor(data: CharacterDto | Character) {
         this.id = data.id;
         this.name = data.name;
         this.slug = data.slug;
@@ -33,7 +34,7 @@ export default class Character {
         this.skillsSecondary = data.skillsSecondary;
         this.inventory = data.inventory;
         this.gold = data.gold ?? 0;
-        this.portraitUrl = data.portraitUrl;
+        this.portraitUrl = data.portraitUrl ?? undefined;
         this.backgroundUrl = data.backgroundUrl;
         this.noteTabs = [...(data.noteTabs ?? [])].sort((a, b) => a.sortOrder - b.sortOrder || a.id - b.id);
         this.notes = data.notes ?? this.noteTabs[0]?.content ?? "";
@@ -44,6 +45,7 @@ export default class Character {
         this.teams = data.teams ?? [];
         this.inventoryCategories = data.inventoryCategories ?? [];
         this.hearthstomancer = data.hearthstomancer ?? { configured: false, enabled: false };
+        this.invengineerEnabled = data.invengineerEnabled ?? false;
 
     }
 

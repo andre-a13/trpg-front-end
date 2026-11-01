@@ -1,94 +1,47 @@
-import type {
-  DeckDefinitionInput,
-  DeckStateDto,
-  HearthstoneCatalogPageDto,
-  HearthstonePackDto,
-} from "../types/api";
-import api from "./api";
+import { hearthstoneCardsList, decksSetEnabled, decksGet, decksReplaceComposition,
+  decksOpenPack, decksSavePack, decksDraw, decksDiscard, decksPlay, decksUndoPlay,
+  decksRemoveCopy, decksReset } from "../api/generated/sdk.gen";
+import type { DeckDefinitionInput, DeckPackSaveRequest, DeckRemoveRequest } from "../api/generated/types.gen";
+import { apiOptions } from "./api";
 
-async function searchCards(query: string, page = 1, pageSize = 24, cardSet = "") {
-  const response = await api.get<HearthstoneCatalogPageDto>("/hearthstone/cards", {
-    params: { q: query, page, pageSize, ...(cardSet ? { cardSet } : {}) },
-  });
-  return response.data;
+async function searchCards(q: string, page = 1, pageSize = 24, cardSet = "") {
+  return (await hearthstoneCardsList({ ...apiOptions, query: { q, page, pageSize, ...(cardSet ? { cardSet } : {}) } })).data;
 }
-
 async function setEnabled(slug: string, enabled: boolean) {
-  const response = await api.patch<DeckStateDto | { configured: false; enabled: false }>(
-    `/characters/${slug}/hearthstomancer`,
-    { enabled },
-  );
-  return response.data;
+  return (await decksSetEnabled({ ...apiOptions, path: { slug }, body: { enabled } })).data;
 }
-
 async function getDeck(slug: string) {
-  const response = await api.get<DeckStateDto>(`/characters/${slug}/deck`);
-  return response.data;
+  return (await decksGet({ ...apiOptions, path: { slug } })).data;
 }
-
 async function saveComposition(slug: string, definitions: DeckDefinitionInput[]) {
-  const response = await api.put<DeckStateDto>(`/characters/${slug}/deck/composition`, { definitions });
-  return response.data;
+  return (await decksReplaceComposition({ ...apiOptions, path: { slug }, body: { definitions } })).data;
 }
-
 async function openPack(slug: string, cardSet: string) {
-  const response = await api.post<HearthstonePackDto>(`/characters/${slug}/deck/pack/open`, { cardSet });
-  return response.data;
+  return (await decksOpenPack({ ...apiOptions, path: { slug }, body: { cardSet } })).data;
 }
-
 async function savePack(slug: string, sourceCardIds: string[]) {
-  const response = await api.post<DeckStateDto>(`/characters/${slug}/deck/pack/save`, { sourceCardIds });
-  return response.data;
+  // The pack UI keeps an array; the API retains validation of the five-card tuple.
+  return (await decksSavePack({ ...apiOptions, path: { slug }, body: {
+    sourceCardIds: sourceCardIds as DeckPackSaveRequest["sourceCardIds"],
+  } })).data;
 }
-
 async function draw(slug: string) {
-  const response = await api.post<DeckStateDto>(`/characters/${slug}/deck/draw`);
-  return response.data;
+  return (await decksDraw({ ...apiOptions, path: { slug } })).data;
 }
-
 async function discard(slug: string, copyId: number) {
-  const response = await api.post<DeckStateDto>(`/characters/${slug}/deck/copies/${copyId}/discard`);
-  return response.data;
+  return (await decksDiscard({ ...apiOptions, path: { slug, copy_id: copyId } })).data;
 }
-
 async function play(slug: string, copyId: number) {
-  const response = await api.post<DeckStateDto>(`/characters/${slug}/deck/copies/${copyId}/play`);
-  return response.data;
+  return (await decksPlay({ ...apiOptions, path: { slug, copy_id: copyId } })).data;
 }
-
 async function undoPlay(slug: string) {
-  const response = await api.post<DeckStateDto>(`/characters/${slug}/deck/undo-play`);
-  return response.data;
+  return (await decksUndoPlay({ ...apiOptions, path: { slug } })).data;
 }
-
-async function remove(
-  slug: string,
-  body: {
-    zone: "deck";
-    definitionId: number;
-    isGolden: boolean;
-  },
-) {
-  const response = await api.post<DeckStateDto>(`/characters/${slug}/deck/remove`, body);
-  return response.data;
+async function remove(slug: string, body: DeckRemoveRequest) {
+  return (await decksRemoveCopy({ ...apiOptions, path: { slug }, body })).data;
 }
-
 async function reset(slug: string) {
-  const response = await api.post<DeckStateDto>(`/characters/${slug}/deck/reset`);
-  return response.data;
+  return (await decksReset({ ...apiOptions, path: { slug } })).data;
 }
-
-export default {
-  searchCards,
-  setEnabled,
-  getDeck,
-  saveComposition,
-  openPack,
-  savePack,
-  draw,
-  discard,
-  play,
-  undoPlay,
-  remove,
-  reset,
-};
+export default { searchCards, setEnabled, getDeck, saveComposition, openPack, savePack,
+  draw, discard, play, undoPlay, remove, reset };

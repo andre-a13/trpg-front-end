@@ -41,7 +41,7 @@ import cardBackUrl from "../../../assets/hearthstone-card-back.svg";
 import "../../hearthstone-deck/hearthstone-deck.scss";
 import "./deck.scss";
 
-type DraftDefinition = DeckDefinitionInput & {
+type DraftDefinition = DeckDefinitionInput & Pick<DeckCardDefinitionDto, "name" | "text" | "normalCount" | "goldenCount"> & {
   key: string;
   serverId?: number;
   renderUrl?: string | null;
@@ -62,7 +62,7 @@ function draftFromDefinition(definition: DeckCardDefinitionDto): DraftDefinition
   return {
     key: `server-${definition.id}`,
     serverId: definition.id,
-    sourceCardId: definition.sourceCardId,
+    sourceCardId: definition.sourceCardId ?? "",
     name: definition.name,
     cost: definition.cost,
     attack: definition.attack,

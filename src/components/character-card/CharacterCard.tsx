@@ -24,6 +24,7 @@ import { useSaveStatus } from "./hooks/useSaveStatus";
 import Modal, { type ModalHandle } from "../ui/modal/Modal";
 import inventoryTableService from "../../services/inventory-table.service";
 import DeckModule from "../hearthstone-deck/DeckModule";
+import InventionsModule from "../inventions/InventionsModule";
 
 interface CharacterCardProps {
     character: Character;
@@ -301,6 +302,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 {character.hearthstomancer.configured && (
                     <SheetModule id="deck" title={t("characterCard.modules.deck")} layout={layout.deck} {...moduleControls}>
                         <DeckModule slug={character.slug} />
+                    </SheetModule>
+                )}
+
+                {character.invengineerEnabled && (
+                    <SheetModule id="inventions" title={t("characterCard.modules.inventions")} layout={layout.inventions} {...moduleControls}>
+                        <InventionsModule key={character.id} characterId={character.id} slug={character.slug} />
                     </SheetModule>
                 )}
 

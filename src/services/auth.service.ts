@@ -1,34 +1,18 @@
-import api, { publicApi, refreshTokens } from "./api";
-import type { AuthUser, TokenPairResponse } from "./token-storage";
+import { authLogin, authRegister, authLogout, authMe } from "../api/generated/sdk.gen";
+import type { AccountCredentials } from "../api/generated/types.gen";
+import { apiOptions, publicApiOptions, refreshTokens } from "./api";
+export type { AccountCredentials };
 
-export type AccountCredentials = {
-  username: string;
-  password: string;
-};
-
-async function login(credentials: AccountCredentials) {
-  const response = await publicApi.post<TokenPairResponse>("/auth/login", credentials);
-  return response.data;
+async function login(body: AccountCredentials) {
+  return (await authLogin({ ...publicApiOptions, body })).data;
 }
-
-async function register(credentials: AccountCredentials) {
-  const response = await api.post<AuthUser>("/auth/register", credentials);
-  return response.data;
+async function register(body: AccountCredentials) {
+  return (await authRegister({ ...apiOptions, body })).data;
 }
-
 async function logout() {
-  await publicApi.post("/auth/logout");
+  await authLogout(publicApiOptions);
 }
-
 async function me() {
-  const response = await api.get<AuthUser>("/auth/me");
-  return response.data;
+  return (await authMe(apiOptions)).data;
 }
-
-export default {
-  login,
-  logout,
-  me,
-  refresh: refreshTokens,
-  register,
-};
+export default { login, logout, me, refresh: refreshTokens, register };

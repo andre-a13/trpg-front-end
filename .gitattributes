@@ -1,0 +1,2 @@
+contracts/*.json text eol=lf
+src/api/generated/** text eol=lf

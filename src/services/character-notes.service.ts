@@ -1,33 +1,17 @@
-import type { CharacterNoteDto } from "../types/api";
-import api from "./api";
+import { characterNotesCreate, characterNotesUpdate, characterNotesDelete, characterNotesReorder } from "../api/generated/sdk.gen";
+import type { CharacterNoteCreate, CharacterNoteUpdate, ReorderEntry } from "../api/generated/types.gen";
+import { apiOptions } from "./api";
 
-type ReorderItem = {
-    id: number;
-    sortOrder: number;
-};
-
-async function createNote(slug: string, body: Pick<CharacterNoteDto, "title"> & Partial<Pick<CharacterNoteDto, "content">>) {
-    const res = await api.post<CharacterNoteDto>(`/characters/${slug}/notes`, body);
-    return res.data;
+async function createNote(slug: string, body: CharacterNoteCreate) {
+    return (await characterNotesCreate({ ...apiOptions, path: { slug }, body })).data;
 }
-
-async function patchNote(slug: string, noteId: number, body: Partial<Pick<CharacterNoteDto, "title" | "content" | "sortOrder">>) {
-    const res = await api.patch<CharacterNoteDto>(`/characters/${slug}/notes/${noteId}`, body);
-    return res.data;
+async function patchNote(slug: string, noteId: number, body: CharacterNoteUpdate) {
+    return (await characterNotesUpdate({ ...apiOptions, path: { slug, note_id: noteId }, body })).data;
 }
-
 async function deleteNote(slug: string, noteId: number) {
-    await api.delete(`/characters/${slug}/notes/${noteId}`);
+    await characterNotesDelete({ ...apiOptions, path: { slug, note_id: noteId } });
 }
-
-async function reorderNotes(slug: string, items: ReorderItem[]) {
-    const res = await api.patch<CharacterNoteDto[]>(`/characters/${slug}/notes/reorder`, { items });
-    return res.data;
+async function reorderNotes(slug: string, items: ReorderEntry[]) {
+    return (await characterNotesReorder({ ...apiOptions, path: { slug }, body: { items } })).data;
 }
-
-export default {
-    createNote,
-    patchNote,
-    deleteNote,
-    reorderNotes,
-};
+export default { createNote, patchNote, deleteNote, reorderNotes };
