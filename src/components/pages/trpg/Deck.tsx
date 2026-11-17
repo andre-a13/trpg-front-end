@@ -14,6 +14,7 @@ import {
   Search,
   Sparkles,
   Undo2,
+  FileUp,
 } from "lucide-react";
 import axios from "axios";
 import { Link, useParams } from "react-router";
@@ -28,6 +29,7 @@ import type {
   HearthstoneCatalogPageDto,
 } from "../../../types/api";
 import HearthstoneCard from "../../hearthstone-deck/HearthstoneCard";
+import DeckImportModal from "../../hearthstone-deck/DeckImportModal";
 import MinimalDeckList, { MinimalDrawnList } from "../../hearthstone-deck/MinimalDeckList";
 import PackOpeningModal, { type PackOpeningHandle } from "../../hearthstone-deck/PackOpeningModal";
 import {
@@ -165,6 +167,7 @@ export default function DeckPage() {
   const [draft, setDraft] = useState<DraftDefinition[]>([]);
   const [selectedCard, setSelectedCard] = useState<DraftDefinition | null>(null);
   const [draftDirty, setDraftDirty] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<DeckError | null>(null);
@@ -420,6 +423,9 @@ export default function DeckPage() {
           <h1>{t("hearthstomancer.title", { name: characterName })}</h1>
         </div>
         <div className="hs-deckPage__headerActions">
+          {canAct && <button type="button" className="hs-button" disabled={busy || draftDirty} onClick={() => setImportOpen(true)}>
+            <FileUp size={16} aria-hidden="true" /> {t("hearthstomancer.import.title")}
+          </button>}
           <div className="hs-viewToggle" role="group" aria-label={t("hearthstomancer.view.label")}>
             <button
               type="button"
@@ -784,6 +790,8 @@ export default function DeckPage() {
           </div>
         </Modal>
       )}
+
+      {importOpen && canAct && <DeckImportModal key={slug} slug={slug} onClose={() => setImportOpen(false)} onImported={applyState} />}
 
       {busy && (
         <div className="hs-actionProgress" role="status" aria-live="polite">

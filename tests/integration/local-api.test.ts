@@ -143,6 +143,24 @@ describe("generated frontend SDK against a real isolated FastAPI server", () => 
     expect((await decks.savePack(slug, pack.cards.map(card => card.id))).counts.total).toBe(7);
   });
 
+  it("previews and appends spreadsheet imports through the generated SDK without duplicating a replay", async () => {
+    const before = await decks.getDeck(slug);
+    const content = "Carte (FR);Quantité;Type;Coût;Stats (ATQ/PV);Effet (résumé);Illustration;Dorée\n"
+      + "Boule de feu;1;Sort;1;;Effet JDR;;Non\nBoule de feu;1;Sort;1;;Effet JDR;;Oui\nGivrix;1;Serviteur;3;3/3;Custom;;Oui\n";
+    const preview = await decks.previewImport(slug, { filename: "deck.csv", contentBase64: Buffer.from(content).toString("base64") });
+    expect(preview).toMatchObject({ revision: before.revision, totalCount: 3, goldenCount: 2 });
+    expect(preview.rows[2]).toMatchObject({ status: "missing", selectedCardId: null });
+    expect((await decks.getDeck(slug)).counts).toEqual(before.counts);
+    const body = { expectedRevision: preview.revision, selections: preview.rows.flatMap(row =>
+      row.source && row.selectedCardId ? [{ source: row.source, sourceCardId: row.selectedCardId }] : []) };
+    const saved = await decks.commitImport(slug, body);
+    expect(saved.counts.total).toBe(before.counts.total + 2);
+    expect(saved.definitions.find(card => card.sourceCardId === "CS2_029")).toMatchObject({
+      cost: 1, text: "Effet JDR", normalCount: 1, goldenCount: 1,
+    });
+    await expect(decks.commitImport(slug, body)).rejects.toMatchObject({ response: { status: 409 } });
+  });
+
   it("keeps account ownership and forbids player-only sessions from administrative operations", async () => {
     const player = { username: "contract-player", password: "local-player-test-password" };
     const account = await accounts.create({ ...player, role: "player" });

@@ -42,6 +42,74 @@
       "login": "Login",
       "logout": "Logout {{username}}",
       "register": "Register"
+    },
+    "camp": {
+      "skip": "Skip to campaign tools",
+      "explore": "Around the table",
+      "eyebrow": "Great stories are played together",
+      "title": "Adventure",
+      "titleAccent": "awaits again.",
+      "intro": "Find your company, prepare your characters and let the dice write what comes next.",
+      "findCompany": "Find my company",
+      "welcome": "Your seat is waiting, {{username}}.",
+      "atmosphere": "Scenery atmosphere",
+      "dusk": "Dusk",
+      "night": "Night",
+      "chapter": "The camp",
+      "tableEyebrow": "Your campaign journal",
+      "tableTitle": "Ready for the next chapter.",
+      "tableIntro": "Your companions, your tools and a little chance. All within reach.",
+      "footer": "Gather your company. Leave the rest to the dice."
+    },
+    "explorer": {
+      "title": "Around the table",
+      "views": "Explore the campaign",
+      "companies": "Companies",
+      "characters": "Characters",
+      "tools": "Tools",
+      "search": {
+        "companies": "Find a company…",
+        "characters": "Search by name or race…"
+      },
+      "memberCount_one": "{{count}} character",
+      "memberCount_other": "{{count}} characters",
+      "healthAccess": "HP tracker",
+      "hp": "{{current}} / {{max}} HP",
+      "allCompanies": "View all companies",
+      "noResults": "No results for this search.",
+      "loading": "Gathering the company…",
+      "failed": "Companies could not be loaded right now.",
+      "retry": "Try again",
+      "empty": "Your next company is waiting to be discovered.",
+      "guestTitle": "A seat by the fire.",
+      "guestIntro": "Sign in to find companies and browse their characters.",
+      "toolsLogin": "Sign in to use these tools.",
+      "forge": {
+        "title": "Hearthstone Forge",
+        "description": "Build and customize your cards."
+      },
+      "printer": {
+        "title": "Printing workshop",
+        "description": "Prepare your cards for the table."
+      }
+    },
+    "dice": {
+      "eyebrow": "03 / A little chance",
+      "title": "Your move.",
+      "intro": "A quick roll, right from the camp.",
+      "choose": "Choose a die",
+      "ready": "Ready to roll",
+      "result": "Roll {{roll}}: {{result}} on a D{{sides}}",
+      "roll": "Roll the dice",
+      "history": "Last five rolls",
+      "clear": "Clear"
+    },
+    "portal": {
+      "signature": "The threshold of worlds",
+      "eyebrow": "A world to imagine together",
+      "invitation": "Your adventures begin on the other side.",
+      "enter": "Enter the world",
+      "welcome": "Welcome, {{username}}."
     }
   },
   "navigation": {
@@ -251,6 +319,31 @@
   },
   "hearthstomancer": {
     "title": "{{name}}’s deck",
+    "import": {
+      "title": "Import a deck",
+      "help": "Choose an Excel (.xlsx) or UTF-8 CSV file (maximum 2 MB). Columns: Carte (FR), Quantité, Type, Coût, Stats (ATQ/PV), Effet (résumé), Illustration, Dorée. In Excel, a yellow name cell means golden. In CSV, use Oui or Non in Dorée.",
+      "chooseFile": "Choose a deck file",
+      "fileError": "Choose a .csv or .xlsx file of at most 2 MB.",
+      "failed": "Could not read or import this file. Check its format and card values.",
+      "conflict": "The deck changed since the preview or the request was already applied. Close this window, refresh the deck and reload the file to check existing copies.",
+      "forbidden": "You no longer have permission to manage this deck.",
+      "summary": "{{count}} selected copies, including {{golden}} golden",
+      "completed": "Added {{count}} copies, including {{golden}} golden",
+      "pending": "{{count}} pending rows",
+      "preserve": "Costs, statistics and effects entered in the sheet are preserved. Blank fields use catalogue values. Selected cards are added to the existing deck. Download pending rows to recreate them as custom cards later.",
+      "row": "Row {{number}}",
+      "cost": "Cost",
+      "link": "Linked catalogue card",
+      "leavePending": "Leave pending for a custom card",
+      "linked": "Match selected",
+      "missing": "No match found",
+      "needsChoice": "Check the suggestion or search for another card",
+      "catalogueDetails": "View catalogue data",
+      "searchFor": "Search for a match for {{name}}",
+      "search": "Search the catalogue",
+      "downloadPending": "Export pending cards",
+      "submit": "Add {{count}} copies to the deck"
+    },
     "state": {
       "active": "Active",
       "inactive": "Inactive"
@@ -560,5 +653,30 @@
       "remove": "Unable to remove this invention.",
       "activation": "Unable to update the invengineer module."
     }
+  },
+  "teamHealth": {
+    "title": "Team hit points",
+    "hint": "Keep track of the whole party without leaving the action.",
+    "refresh": "Refresh HP",
+    "total": "{{current}} / {{max}} party HP",
+    "woundedCount": "{{count}} wounded",
+    "downCount": "{{count}} down",
+    "hp": "HP",
+    "amount": "HP adjustment for {{name}}",
+    "amountLabel": "Custom amount",
+    "damage": "Damage",
+    "heal": "Heal",
+    "readOnly": "Read only",
+    "saving": "Saving…",
+    "state": {
+      "healthy": "Healthy",
+      "wounded": "Wounded",
+      "critical": "Critical",
+      "down": "Down"
+    },
+    "decrease": "Remove {{amount}} HP from {{name}}",
+    "increase": "Restore {{amount}} HP to {{name}}",
+    "progress": "Hit points for {{name}}",
+    "saveFailed": "HP could not be saved. Try again or refresh the page."
   }
 }

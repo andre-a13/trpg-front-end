@@ -42,6 +42,74 @@
       "login": "Se connecter",
       "logout": "Se déconnecter — {{username}}",
       "register": "Créer un compte"
+    },
+    "camp": {
+      "skip": "Accéder aux outils de campagne",
+      "explore": "Autour de la table",
+      "eyebrow": "Les grandes histoires se jouent ensemble",
+      "title": "L’aventure",
+      "titleAccent": "reprend ici.",
+      "intro": "Retrouvez votre compagnie, préparez vos personnages et laissez les dés écrire la suite.",
+      "findCompany": "Retrouver ma compagnie",
+      "welcome": "Votre place vous attend, {{username}}.",
+      "atmosphere": "Ambiance du décor",
+      "dusk": "Crépuscule",
+      "night": "Nuit",
+      "chapter": "Le campement",
+      "tableEyebrow": "Votre carnet de campagne",
+      "tableTitle": "Tout est prêt pour la suite.",
+      "tableIntro": "Vos compagnons, vos outils et un peu de hasard. À portée de main.",
+      "footer": "Rassemblez la compagnie. Le reste appartient aux dés."
+    },
+    "explorer": {
+      "title": "Autour de la table",
+      "views": "Parcourir la campagne",
+      "companies": "Compagnies",
+      "characters": "Personnages",
+      "tools": "Outils",
+      "search": {
+        "companies": "Chercher une compagnie…",
+        "characters": "Chercher un nom ou une race…"
+      },
+      "memberCount_one": "{{count}} personnage",
+      "memberCount_other": "{{count}} personnages",
+      "healthAccess": "Suivi des PV",
+      "hp": "{{current}} / {{max}} PV",
+      "allCompanies": "Voir toutes les compagnies",
+      "noResults": "Aucun résultat pour cette recherche.",
+      "loading": "La compagnie se rassemble…",
+      "failed": "Impossible de charger les compagnies pour le moment.",
+      "retry": "Réessayer",
+      "empty": "Votre prochaine compagnie reste à découvrir.",
+      "guestTitle": "Une place autour du feu.",
+      "guestIntro": "Connectez-vous pour retrouver les compagnies et consulter leurs personnages.",
+      "toolsLogin": "Connectez-vous pour utiliser ces outils.",
+      "forge": {
+        "title": "Forge Hearthstone",
+        "description": "Composez et personnalisez vos cartes."
+      },
+      "printer": {
+        "title": "Atelier d’impression",
+        "description": "Préparez vos cartes pour la table."
+      }
+    },
+    "dice": {
+      "eyebrow": "03 / Un peu de hasard",
+      "title": "À vous de jouer.",
+      "intro": "Un jet rapide, sans quitter le campement.",
+      "choose": "Choisir un dé",
+      "ready": "Prêt à lancer le dé",
+      "result": "Jet {{roll}} : {{result}} sur un D{{sides}}",
+      "roll": "Lancer le dé",
+      "history": "Les cinq derniers jets",
+      "clear": "Effacer"
+    },
+    "portal": {
+      "signature": "Le seuil des mondes",
+      "eyebrow": "Un monde à imaginer ensemble",
+      "invitation": "Vos aventures commencent de l’autre côté.",
+      "enter": "Entrer dans le monde",
+      "welcome": "Bienvenue, {{username}}."
     }
   },
   "navigation": {
@@ -251,6 +319,31 @@
   },
   "hearthstomancer": {
     "title": "Deck de {{name}}",
+    "import": {
+      "title": "Importer un deck",
+      "help": "Choisissez un fichier Excel (.xlsx) ou CSV UTF-8 (2 Mo maximum). Colonnes : Carte (FR), Quantité, Type, Coût, Stats (ATQ/PV), Effet (résumé), Illustration, Dorée. En Excel, le fond jaune du nom indique une carte dorée. Dans un CSV, renseignez Dorée avec Oui ou Non.",
+      "chooseFile": "Choisir le fichier du deck",
+      "fileError": "Choisissez un fichier .csv ou .xlsx de 2 Mo maximum.",
+      "failed": "Impossible de lire ou d’importer ce fichier. Vérifiez son format et les valeurs des cartes.",
+      "conflict": "Le deck a changé depuis l’aperçu ou la demande a déjà été appliquée. Fermez cette fenêtre, actualisez le deck et rechargez le fichier pour vérifier les exemplaires présents.",
+      "forbidden": "Vous n’avez plus l’autorisation de modifier ce deck.",
+      "summary": "{{count}} exemplaire(s) sélectionné(s), dont {{golden}} doré(s)",
+      "completed": "{{count}} exemplaire(s) ajouté(s), dont {{golden}} doré(s)",
+      "pending": "{{count}} ligne(s) en attente",
+      "preserve": "Les coûts, statistiques et effets renseignés dans la feuille sont conservés. Les champs vides sont complétés par le catalogue. Les cartes sélectionnées s’ajoutent au deck existant. Téléchargez les lignes en attente pour les recréer plus tard en custom.",
+      "row": "Ligne {{number}}",
+      "cost": "Coût",
+      "link": "Carte du catalogue à relier",
+      "leavePending": "Laisser en attente pour une carte custom",
+      "linked": "Correspondance sélectionnée",
+      "missing": "Aucune correspondance trouvée",
+      "needsChoice": "Vérifiez la suggestion ou recherchez une autre carte",
+      "catalogueDetails": "Voir les données du catalogue",
+      "searchFor": "Rechercher une correspondance pour {{name}}",
+      "search": "Rechercher dans le catalogue",
+      "downloadPending": "Exporter les cartes en attente",
+      "submit": "Ajouter {{count}} exemplaire(s) au deck"
+    },
     "state": {
       "active": "Actif",
       "inactive": "Inactif"
@@ -788,5 +881,30 @@
       "remove": "Impossible de supprimer cette invention.",
       "activation": "Impossible de modifier l’activation du module invengénieur."
     }
+  },
+  "teamHealth": {
+    "title": "Points de vie de l’équipe",
+    "hint": "Une vue d’ensemble pour garder le rythme de la partie.",
+    "refresh": "Actualiser les PV",
+    "total": "{{current}} / {{max}} PV dans l’équipe",
+    "woundedCount": "{{count}} blessé(s)",
+    "downCount": "{{count}} hors combat",
+    "hp": "PV",
+    "amount": "Variation de PV pour {{name}}",
+    "amountLabel": "Montant personnalisé",
+    "damage": "Dégâts",
+    "heal": "Soins",
+    "readOnly": "Consultation seule",
+    "saving": "Enregistrement…",
+    "state": {
+      "healthy": "En forme",
+      "wounded": "Blessé",
+      "critical": "État critique",
+      "down": "Hors combat"
+    },
+    "decrease": "Retirer {{amount}} PV à {{name}}",
+    "increase": "Rendre {{amount}} PV à {{name}}",
+    "progress": "Points de vie de {{name}}",
+    "saveFailed": "Les PV n’ont pas été enregistrés. Réessayez ou actualisez la page."
   }
 }

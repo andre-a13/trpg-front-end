@@ -750,6 +750,148 @@ export type DeckDefinitionResponse = {
 };
 
 /**
+ * DeckImportCommitRequest
+ */
+export type DeckImportCommitRequest = {
+    /**
+     * Expectedrevision
+     */
+    expectedRevision: number;
+    /**
+     * Selections
+     */
+    selections: Array<DeckImportSelection>;
+};
+
+/**
+ * DeckImportFileRequest
+ */
+export type DeckImportFileRequest = {
+    /**
+     * Contentbase64
+     */
+    contentBase64: string;
+    /**
+     * Filename
+     */
+    filename: string;
+};
+
+/**
+ * DeckImportPreviewResponse
+ */
+export type DeckImportPreviewResponse = {
+    /**
+     * Goldencount
+     */
+    goldenCount: number;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Rows
+     */
+    rows: Array<DeckImportPreviewRow>;
+    /**
+     * Totalcount
+     */
+    totalCount: number;
+};
+
+/**
+ * DeckImportPreviewRow
+ */
+export type DeckImportPreviewRow = {
+    /**
+     * Candidates
+     */
+    candidates: Array<HearthstoneCardResponse>;
+    /**
+     * Error
+     */
+    error?: string | null;
+    /**
+     * Rawname
+     */
+    rawName: string;
+    /**
+     * Rawvalues
+     */
+    rawValues: Array<string>;
+    /**
+     * Rownumber
+     */
+    rowNumber: number;
+    /**
+     * Selectedcardid
+     */
+    selectedCardId: string | null;
+    source: DeckImportSourceRow | null;
+    /**
+     * Status
+     */
+    status: 'matched' | 'suggested' | 'missing' | 'invalid';
+};
+
+/**
+ * DeckImportSelection
+ */
+export type DeckImportSelection = {
+    source: DeckImportSourceRow;
+    /**
+     * Sourcecardid
+     */
+    sourceCardId: string;
+};
+
+/**
+ * DeckImportSourceRow
+ */
+export type DeckImportSourceRow = {
+    /**
+     * Attack
+     */
+    attack?: number | null;
+    /**
+     * Cardtype
+     */
+    cardType?: string | null;
+    /**
+     * Cost
+     */
+    cost?: number | null;
+    /**
+     * Health
+     */
+    health?: number | null;
+    /**
+     * Illustrationurl
+     */
+    illustrationUrl?: string | null;
+    /**
+     * Isgolden
+     */
+    isGolden?: boolean;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Quantity
+     */
+    quantity?: number;
+    /**
+     * Rownumber
+     */
+    rowNumber: number;
+    /**
+     * Text
+     */
+    text?: string | null;
+};
+
+/**
  * DeckPackOpenRequest
  */
 export type DeckPackOpenRequest = {
@@ -1304,9 +1446,17 @@ export type SkillSetPartial = {
  */
 export type TeamCharacterResponse = {
     /**
+     * Current Hp
+     */
+    current_hp: number;
+    /**
      * Id
      */
     id: number;
+    /**
+     * Max Hp
+     */
+    max_hp: number;
     /**
      * Name
      */
@@ -2022,6 +2172,70 @@ export type DecksDrawResponses = {
 };
 
 export type DecksDrawResponse = DecksDrawResponses[keyof DecksDrawResponses];
+
+export type DecksCommitImportData = {
+    body: DeckImportCommitRequest;
+    path: {
+        /**
+         * Slug
+         */
+        slug: string;
+    };
+    query?: never;
+    url: '/characters/{slug}/deck/import';
+};
+
+export type DecksCommitImportErrors = {
+    /**
+     * Response 422 Deckscommitimport
+     *
+     * Unprocessable Content
+     */
+    422: ApiError | RequestValidationErrorResponse;
+};
+
+export type DecksCommitImportError = DecksCommitImportErrors[keyof DecksCommitImportErrors];
+
+export type DecksCommitImportResponses = {
+    /**
+     * Successful Response
+     */
+    200: DeckStateResponse;
+};
+
+export type DecksCommitImportResponse = DecksCommitImportResponses[keyof DecksCommitImportResponses];
+
+export type DecksPreviewImportData = {
+    body: DeckImportFileRequest;
+    path: {
+        /**
+         * Slug
+         */
+        slug: string;
+    };
+    query?: never;
+    url: '/characters/{slug}/deck/import/preview';
+};
+
+export type DecksPreviewImportErrors = {
+    /**
+     * Response 422 Deckspreviewimport
+     *
+     * Unprocessable Content
+     */
+    422: ApiError | RequestValidationErrorResponse;
+};
+
+export type DecksPreviewImportError = DecksPreviewImportErrors[keyof DecksPreviewImportErrors];
+
+export type DecksPreviewImportResponses = {
+    /**
+     * Successful Response
+     */
+    200: DeckImportPreviewResponse;
+};
+
+export type DecksPreviewImportResponse = DecksPreviewImportResponses[keyof DecksPreviewImportResponses];
 
 export type DecksOpenPackData = {
     body: DeckPackOpenRequest;

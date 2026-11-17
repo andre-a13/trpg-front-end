@@ -1,180 +1,319 @@
-.trpg-landing {
+.portal-home {
+  --portal-gold: #d2b477;
+  --portal-cream: #f2e5c9;
+  --portal-backdrop-filter: blur(5px) brightness(.54) saturate(.85);
+  --portal-world-filter: brightness(1.08) saturate(1.04);
+  --portal-stone-filter: brightness(1.12) drop-shadow(0 0 22px #000a);
+  --portal-light: #fff1b526;
   position: relative;
+  isolation: isolate;
   display: grid;
-  min-height: 100vh;
+  grid-template-rows: auto 1fr auto;
+  min-height: max(680px, 100svh);
   overflow: hidden;
-  align-items: end;
-  padding: 5.5rem clamp(1rem, 5vw, 4rem) clamp(2rem, 6vw, 4rem);
-  background:
-    linear-gradient(90deg, rgba(12, 10, 8, 0.9), rgba(20, 23, 26, 0.64) 54%, rgba(20, 23, 26, 0.24)),
-    url("/assets/campaign_bg.png") center / cover;
-  color: #f8fafc;
+  background: #0c1712;
+  color: var(--portal-cream);
+
+  a, button {
+    -webkit-tap-highlight-color: transparent;
+    transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease;
+  }
+
+  button {
+    cursor: pointer;
+    font: inherit;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid #e2c48b;
+    outline-offset: 5px;
+  }
+
+  &::after {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, transparent 12%, #07110db8 80%), linear-gradient(#09140f8c, transparent 25%, #08110bc9 100%);
+    content: "";
+    pointer-events: none;
+  }
 }
 
-.trpg-landing::after {
+.portal-home__backdrop {
   position: absolute;
-  inset: auto 0 0;
-  height: 34%;
-  background: linear-gradient(to top, rgba(20, 23, 26, 0.86), transparent);
-  content: "";
-  pointer-events: none;
+  z-index: -2;
+  inset: -12px;
+  background: url("/assets/campaign_bg.png") center / cover;
+  filter: var(--portal-backdrop-filter);
+  transition: filter 700ms ease;
 }
 
-.trpg-landing__status {
-  display: inline-flex;
+.portal-home__header {
+  position: relative;
+  z-index: 2;
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
-  min-height: 2.25rem;
-  width: max-content;
-  margin-bottom: 1rem;
-  padding: 0 0.65rem;
-  border: 1px solid rgba(248, 250, 252, 0.18);
-  border-radius: 8px;
-  background: rgba(20, 23, 26, 0.72);
-  color: #e5e7eb;
-  font-size: 0.82rem;
-  font-weight: 760;
+  justify-content: flex-end;
+  min-height: 76px;
+  gap: 1rem;
+  padding: 1.2rem clamp(1.25rem, 3vw, 3rem);
 }
 
-.trpg-landing__campfire {
-  display: inline-grid;
-  width: 1.25rem;
-  height: 1.25rem;
+.portal-home__account {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+
+  > a, > button {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    background: transparent;
+    color: #c0c3af;
+
+    &:hover {
+      border-color: #c4b18840;
+      color: #ead5a5;
+      background: #0c181360;
+    }
+  }
+}
+
+.portal-home__stage {
+  position: relative;
+  isolation: isolate;
+  display: grid;
   place-items: center;
+  min-height: 500px;
 }
 
-.trpg-landing__campfire img {
+.portal-home__scene {
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  height: calc(100% + 80px);
+  max-height: 1120px;
+  aspect-ratio: 900 / 1040;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+
+  &::after {
+    position: absolute;
+    inset: 40% 18% 0;
+    background: radial-gradient(ellipse at bottom, var(--portal-light), transparent 65%);
+    content: "";
+    animation: portal-home-light 9s ease-in-out infinite alternate;
+  }
+}
+
+.portal-home__world, .portal-home__frame {
+  position: absolute;
   display: block;
   width: 100%;
   height: 100%;
+  inset: 0;
 }
 
-.trpg-landing__campfire--online {
-  opacity: 1;
+.portal-home__world {
+  filter: var(--portal-world-filter);
+  transition: filter 700ms ease;
 }
 
-.trpg-landing__campfire--online img {
-  animation: trpg-campfire-crackle 1.35s ease-in-out infinite;
+.portal-home__frame {
+  filter: var(--portal-stone-filter);
+  transition: filter 700ms ease;
 }
 
-.trpg-landing__campfire--offline {
-  filter: grayscale(0.85);
-  opacity: 0.72;
-}
-
-.trpg-landing__hero {
-  position: relative;
-  z-index: 2;
-  width: min(720px, 100%);
-}
-
-.trpg-landing__hero h1 {
-  max-width: 16ch;
-  margin: 0;
-  color: #ffffff;
-  font-size: clamp(2rem, 6vw, 4.5rem);
-  line-height: 1;
-  text-wrap: balance;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.34);
-}
-
-.trpg-landing__intro {
-  max-width: 36rem;
-  margin: 1rem 0 0;
-  color: #f3ead7;
-  font-size: clamp(1rem, 2vw, 1.12rem);
-  line-height: 1.55;
-}
-
-.trpg-landing__actions {
+.portal-home__content {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 2rem;
-}
-
-.trpg-landing__action {
-  display: inline-flex;
-  cursor: pointer;
+  flex-direction: column;
   align-items: center;
-  gap: 0.55rem;
-  min-height: 2.75rem;
-  padding: 0 1rem;
-  border: 1px solid rgba(248, 250, 252, 0.2);
-  border-radius: 8px;
-  background: rgba(20, 23, 26, 0.72);
-  color: #f8fafc;
-  font-weight: 780;
+  justify-content: flex-end;
+  width: min(480px, calc(100% - 3rem));
+  height: min(70svh, 700px);
+  min-height: 430px;
+  padding: 2.7rem 0 1rem;
+  text-align: center;
 }
 
-.trpg-landing__action:hover {
-  border-color: rgba(243, 234, 215, 0.44);
-  background: rgba(124, 63, 29, 0.78);
-  color: #ffffff;
-  text-decoration: none;
+.portal-home__entrance {
+  width: min(300px, 100%);
 }
 
-.trpg-landing__action--primary {
-  border-color: #f3ead7;
-  background: #f3ead7;
-  color: #1f2933;
+.portal-home__enter {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .85rem;
+  min-height: 52px;
+  padding: .85rem 1rem;
+  border: 1px solid #b49a62;
+  box-shadow: 0 0 0 3px #101d16, 0 0 0 4px #b49a6240, inset 0 1px #f5d8991a, 0 8px 25px #0006;
+  background: linear-gradient(#293c2aeF, #14251bec);
+  color: #ebd4a1;
+  font-family: Georgia, serif;
+  font-size: .97rem;
+  letter-spacing: .035em;
+
+  &:hover {
+    border-color: #e7ca8a;
+    background: #344c32;
+    color: #fff0ce;
+  }
+
+  svg {
+    flex: 0 0 auto;
+    transition: transform 180ms ease;
+  }
+
+  &:hover svg {
+    transform: translateX(3px);
+  }
 }
 
-.trpg-landing__action--primary:hover {
-  border-color: #ffffff;
-  background: #ffffff;
-  color: #1f2933;
+.portal-home__session {
+  min-height: 48px;
+  padding-top: 1rem;
+  font-size: .7rem;
+  line-height: 1.5;
+  color: #c2c8b5;
+  overflow-wrap: anywhere;
+  text-shadow: 0 1px 6px #000;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    color: #c2c8b5;
+
+    &:hover {
+      color: #efd8a4;
+    }
+  }
 }
 
-@keyframes trpg-campfire-crackle {
-  0%,
-  100% {
-    filter: brightness(1) saturate(1);
-    transform: translateY(0) rotate(0deg) scale(1);
+.portal-home__footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .85rem clamp(1.25rem, 3vw, 3rem) 1.25rem;
+}
+
+.portal-home__status {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  color: #a7b39f;
+  font-size: .65rem;
+  line-height: 1.5;
+
+  > span {
+    flex: 0 0 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #a29678;
+  }
+}
+
+.portal-home__status--online > span {
+  background: #a2bb86;
+  box-shadow: 0 0 8px #a2bb8630;
+}
+
+.portal-home__status--offline > span {
+  background: #bd8b74;
+}
+
+.portal-home--dusk {
+  --portal-backdrop-filter: blur(5px) brightness(.36) saturate(.72) sepia(.18);
+  --portal-world-filter: brightness(.83) saturate(.9) sepia(.2);
+  --portal-stone-filter: brightness(.92) sepia(.1) drop-shadow(0 0 22px #000a);
+  --portal-light: #e5a05626;
+}
+
+.portal-home--night {
+  --portal-backdrop-filter: blur(5px) brightness(.23) saturate(.45) hue-rotate(18deg);
+  --portal-world-filter: brightness(.5) saturate(.6) hue-rotate(20deg);
+  --portal-stone-filter: brightness(.7) drop-shadow(0 0 22px #000a);
+  --portal-light: #829cc426;
+}
+
+@keyframes portal-home-light {
+  from { opacity: .4; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  .portal-home {
+    min-height: max(680px, 100svh);
   }
 
-  18% {
-    filter: brightness(1.18) saturate(1.14);
-    transform: translateY(-1px) rotate(-1.5deg) scale(1.04);
+  .portal-home__header {
+    padding: .85rem 1rem;
+    gap: .5rem;
   }
 
-  37% {
-    filter: brightness(0.94) saturate(0.98);
-    transform: translateY(0) rotate(1deg) scale(0.98);
+  .portal-home__account {
+    gap: .2rem;
+
+    > a, > button { width: 30px; }
   }
 
-  61% {
-    filter: brightness(1.24) saturate(1.18);
-    transform: translateY(-1px) rotate(1.6deg) scale(1.05);
+  .portal-home__content {
+    width: calc(100% - 3.5rem);
+    min-height: 450px;
+    height: min(72svh, 700px);
+    padding-top: 3rem;
+    padding-bottom: 1rem;
   }
 
-  82% {
-    filter: brightness(1.05) saturate(1.08);
-    transform: translateY(0) rotate(-0.8deg) scale(1.01);
+  .portal-home__entrance {
+    width: min(270px, 100%);
+  }
+
+  .portal-home__enter {
+    font-size: .86rem;
+    gap: .5rem;
+  }
+
+  .portal-home__footer {
+    padding: .7rem 1rem 1rem;
+    gap: .8rem;
+  }
+
+}
+
+@media (max-height: 650px) and (min-width: 601px) {
+  .portal-home {
+    min-height: 600px;
+  }
+
+  .portal-home__stage {
+    min-height: 430px;
+  }
+
+  .portal-home__content {
+    min-height: 400px;
+    padding-top: 2rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .trpg-landing__campfire--online img {
-    animation: none;
-  }
-}
-
-@media (max-width: 720px) {
-  .trpg-landing {
-    padding-top: 5.5rem;
-  }
-
-  .trpg-landing__status {
-    max-width: 100%;
-  }
-
-  .trpg-landing__actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .trpg-landing__action {
-    justify-content: center;
+  .portal-home *, .portal-home *::before, .portal-home *::after {
+    animation: none !important;
+    transition: none !important;
   }
 }

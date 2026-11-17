@@ -1,7 +1,7 @@
 import { hearthstoneCardsList, decksSetEnabled, decksGet, decksReplaceComposition,
   decksOpenPack, decksSavePack, decksDraw, decksDiscard, decksPlay, decksUndoPlay,
-  decksRemoveCopy, decksReset } from "../api/generated/sdk.gen";
-import type { DeckDefinitionInput, DeckPackSaveRequest, DeckRemoveRequest } from "../api/generated/types.gen";
+  decksRemoveCopy, decksReset, decksPreviewImport, decksCommitImport } from "../api/generated/sdk.gen";
+import type { DeckDefinitionInput, DeckPackSaveRequest, DeckRemoveRequest, DeckImportFileRequest, DeckImportCommitRequest } from "../api/generated/types.gen";
 import { apiOptions } from "./api";
 
 async function searchCards(q: string, page = 1, pageSize = 24, cardSet = "") {
@@ -43,5 +43,11 @@ async function remove(slug: string, body: DeckRemoveRequest) {
 async function reset(slug: string) {
   return (await decksReset({ ...apiOptions, path: { slug } })).data;
 }
+async function previewImport(slug: string, body: DeckImportFileRequest) {
+  return (await decksPreviewImport({ ...apiOptions, path: { slug }, body })).data;
+}
+async function commitImport(slug: string, body: DeckImportCommitRequest) {
+  return (await decksCommitImport({ ...apiOptions, path: { slug }, body })).data;
+}
 export default { searchCards, setEnabled, getDeck, saveComposition, openPack, savePack,
-  draw, discard, play, undoPlay, remove, reset };
+  draw, discard, play, undoPlay, remove, reset, previewImport, commitImport };

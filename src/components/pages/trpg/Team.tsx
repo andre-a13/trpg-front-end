@@ -3,19 +3,29 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router";
 import { useAdminControls } from "../../../admin/useAdminControls";
-import type Character from "../../../models/character";
+import { useAuth } from "../../../auth/useAuth";
+import Character from "../../../models/character";
 import characterService from "../../../services/character.service";
 import teamService from "../../../services/team.service";
 import type { TeamCharacterDto, TeamDto } from "../../../interface/IAddTeam";
+import TeamHealthDashboard from "./TeamHealthDashboard";
 import "./team.scss";
 
 const ALLOWED_TEAM_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 const TEAM_IMAGE_MAX_SIZE_BYTES = 15 * 1024 * 1024;
 const SHOW_TEAM_ILLUSTRATION_UPLOAD = false;
 
+type HpSave = {
+  desiredHp: number;
+  confirmedHp: number;
+  maxHp: number;
+  completion?: Promise<void>;
+};
+
 export default function Team() {
   const { t } = useTranslation();
   const { uuid } = useParams();
+  const { user } = useAuth();
   const { isAdmin, manageCharactersEnabled } = useAdminControls();
   const [team, setTeam] = useState<TeamDto | null>(null);
   const [availableCharacters, setAvailableCharacters] = useState<Character[]>([]);
@@ -30,6 +40,10 @@ export default function Team() {
   const [illustrationStatus, setIllustrationStatus] = useState<string | null>(null);
   const [isUploadingIllustration, setIsUploadingIllustration] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const hpRequests = useRef(new Map<string, HpSave>());
+  const activeTeamUuid = useRef(uuid);
+  const [hpSaving, setHpSaving] = useState<Record<string, boolean>>({});
+  const [hpErrors, setHpErrors] = useState<Record<string, string | null>>({});
 
   const fetchTeam = useCallback(async () => {
     if (!uuid) {
@@ -40,6 +54,7 @@ export default function Team() {
 
     setLoading(true);
     setError(null);
+    setHpErrors({});
     setNotFound(false);
 
     try {
@@ -78,8 +93,80 @@ export default function Team() {
     .slice(0, 6);
 
   useEffect(() => {
+    activeTeamUuid.current = uuid;
     fetchTeam();
-  }, [fetchTeam]);
+  }, [fetchTeam, uuid]);
+
+  function canEditMember(character: TeamCharacterDto) {
+    return Boolean(
+      (user?.role === "admin" && manageCharactersEnabled) ||
+      (user?.role === "player" && character.ownerUserId === user.id)
+    );
+  }
+
+  function showHp(slug: string, currentHp: number, maxHp: number) {
+    setTeam((previous) => previous ? {
+      ...previous,
+      characters: previous.characters.map((member) => member.slug === slug ? {
+        ...member, current_hp: currentHp, max_hp: maxHp,
+      } : member),
+    } : previous);
+  }
+
+  async function persistHp(slug: string, request: HpSave) {
+    try {
+      while (true) {
+        const sentHp = request.desiredHp;
+        const response = await characterService.patch(slug, { current_hp: sentHp });
+        const updated = new Character(response.data);
+        request.confirmedHp = updated.current_hp;
+        request.maxHp = updated.getMaxHp();
+        const hasNewClicks = request.desiredHp !== sentHp;
+        if (!hasNewClicks) request.desiredHp = request.confirmedHp;
+        showHp(slug, request.desiredHp, request.maxHp);
+        if (!hasNewClicks || request.desiredHp === request.confirmedHp) break;
+      }
+    } catch {
+      showHp(slug, request.confirmedHp, request.maxHp);
+      setHpErrors((previous) => ({ ...previous, [slug]: t("teamHealth.saveFailed") }));
+    } finally {
+      hpRequests.current.delete(slug);
+      setHpSaving((previous) => ({ ...previous, [slug]: false }));
+    }
+  }
+
+  function handleAdjustHp(slug: string, delta: number) {
+    const character = team?.characters.find((member) => member.slug === slug);
+    if (!character || !canEditMember(character) ||
+        !Number.isInteger(delta) || delta === 0 || Math.abs(delta) > 9999) return;
+
+    const pending = hpRequests.current.get(slug);
+    const currentHp = pending?.desiredHp ?? character.current_hp;
+    const maxHp = pending?.maxHp ?? character.max_hp;
+    const nextHp = delta < 0
+      ? Math.max(0, currentHp + delta)
+      : Math.max(currentHp, Math.min(maxHp, currentHp + delta));
+    if (nextHp === currentHp) return;
+
+    showHp(slug, nextHp, maxHp);
+    setHpErrors((previous) => ({ ...previous, [slug]: null }));
+    if (pending) {
+      pending.desiredHp = nextHp;
+      return;
+    }
+    const request: HpSave = { desiredHp: nextHp, confirmedHp: currentHp, maxHp };
+    hpRequests.current.set(slug, request);
+    setHpSaving((previous) => ({ ...previous, [slug]: true }));
+    request.completion = persistHp(slug, request);
+  }
+
+  async function refreshHealth() {
+    const requestedUuid = uuid;
+    while (hpRequests.current.size > 0) {
+      await Promise.all([...hpRequests.current.values()].map((request) => request.completion));
+    }
+    if (activeTeamUuid.current === requestedUuid) await fetchTeam();
+  }
 
   async function handleAddMember(e: FormEvent) {
     e.preventDefault();
@@ -297,21 +384,23 @@ export default function Team() {
           {(team.characters ?? []).length === 0 ? (
             <p className="team-detail__empty">{t("teams.noCharacters")}</p>
           ) : (
-            <div className="team-detail__grid">
-              {(team.characters ?? []).map((character: TeamCharacterDto) => {
-                const portraitUrl = character.portraitUrl || `/assets/${character.slug}_jdr.jpg`;
-
-                return (
-                  <Link className="team-detail__portrait" key={character.slug} to={`/characters/${character.slug}`}>
-                    <img src={portraitUrl} alt={character.name} />
-                    <span>
-                      <strong>{character.name}</strong>
-                      <span className="team-detail__race">{character.race}</span>
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
+            <TeamHealthDashboard
+              key={team.uuid}
+              members={team.characters.map((character) => ({
+                slug: character.slug,
+                name: character.name,
+                race: character.race,
+                portraitUrl: character.portraitUrl,
+                currentHp: character.current_hp,
+                maxHp: character.max_hp,
+                canEdit: canEditMember(character),
+                isSaving: hpSaving[character.slug] ?? false,
+                error: hpErrors[character.slug] ?? null,
+              }))}
+              onAdjustHp={handleAdjustHp}
+              onRefresh={() => { void refreshHealth(); }}
+              refreshing={loading}
+            />
           )}
         </section>
       )}
