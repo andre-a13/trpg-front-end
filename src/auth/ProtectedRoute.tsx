@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "./useAuth";
 import type { UserRole } from "../types/api";
+import { authPath } from "../components/navigation/navigationPaths";
 import "./auth.scss";
 
 type ProtectedRouteProps = {
@@ -21,8 +22,8 @@ export default function ProtectedRoute({ requiredRole }: ProtectedRouteProps) {
   }
 
   if (!isAuthenticated) {
-    const next = `${location.pathname}${location.search}`;
-    return <Navigate to={`/login?next=${encodeURIComponent(next)}`} replace />;
+    const next = `${location.pathname}${location.search}${location.hash}`;
+    return <Navigate to={authPath("/login", next)} replace />;
   }
 
   if (requiredRole && user?.role !== requiredRole) {

@@ -214,6 +214,8 @@ export const SheetModule: React.FC<SheetModuleProps> = ({
             )}
             <section
                 ref={moduleRef}
+                id={id}
+                tabIndex={-1}
                 className={`ccard-module ccard-module--${id} ${editable ? "is-editable" : ""} ${isCollapsed ? "is-minimized" : ""} ${isFullscreen ? "is-fullscreen" : ""} ${className ?? ""}`}
                 style={isFullscreen ? { zIndex: 1001 } : {
                     left: layout.x,

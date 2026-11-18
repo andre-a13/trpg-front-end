@@ -10,6 +10,9 @@ import characterService from "../../../services/character.service";
 import hearthstoneDeckService from "../../../services/hearthstone-deck.service";
 import inventionService from "../../../services/invention.service";
 import InventionCatalog from "../../inventions/InventionCatalog";
+import LightBookSettings from "../../light-book/LightBookSettings";
+import { characterPath, withOrigin } from "../../navigation/navigationPaths";
+import PageNavigation from "../../navigation/PageNavigation";
 import type { AccountDto, UserRole } from "../../../types/api";
 import "./dashboard.scss";
 
@@ -59,7 +62,7 @@ export default function Dashboard() {
     try {
       const [accountRows, characterRows] = await Promise.all([
         accountService.list(),
-        characterService.list(),
+        characterService.listAll(),
       ]);
       setAccounts(accountRows);
       setCharacters(characterRows);
@@ -189,7 +192,8 @@ export default function Dashboard() {
     }
   }
 
-  return (
+  return (<>
+    <PageNavigation to="/" label={t("navigation.home")} />
     <div className="page">
       <main className="admin-dashboard">
         <header className="admin-dashboard__header">
@@ -207,6 +211,13 @@ export default function Dashboard() {
             <span>{t("dashboard.manageCharacters")}</span>
           </button>
         </header>
+
+        {manageCharactersEnabled && (
+          <nav className="admin-dashboard__create-links" aria-label={t("navigation.page")}>
+            <Link to="/characters/new">{t("navigation.newCharacter")}</Link>
+            <Link to={withOrigin("/teams/create", "/dashboard")}>{t("navigation.newTeam")}</Link>
+          </nav>
+        )}
 
         {status && (
           <p className={`admin-dashboard__status admin-dashboard__status--${status.tone}`} role="status">
@@ -371,7 +382,7 @@ export default function Dashboard() {
                             </button>
                           </td>
                           <td>
-                            <Link to={`/characters/${character.slug}`}>{t("common.actions.open")}</Link>
+                            <Link to={characterPath(character.slug, "/dashboard")}>{t("common.actions.open")}</Link>
                           </td>
                         </tr>
                       );
@@ -381,9 +392,10 @@ export default function Dashboard() {
               </div>
             </section>
             <InventionCatalog />
+            <LightBookSettings characters={characters} />
           </div>
         )}
       </main>
     </div>
-  );
+  </>);
 }

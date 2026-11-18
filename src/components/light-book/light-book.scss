@@ -1,0 +1,146 @@
+.light-book__word-link,
+.light-book__word-link:hover {
+  text-decoration: none;
+}
+
+.light-book__word-link:focus-visible {
+  outline: 2px solid var(--parchment-accent);
+  outline-offset: 1px;
+}
+
+.light-catalogue {
+  --book-ink: #362617;
+  --book-gold: #debb79;
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  min-height: 100dvh;
+  padding: 1.25rem clamp(1rem, 4vw, 3.5rem) 2.75rem;
+  gap: 1rem;
+  background: radial-gradient(ellipse at 50% 30%, #30302c, #161918 68%);
+  color: #f7ecd2;
+
+  &__header h1 {
+    margin: .4rem 0 .2rem;
+    font: 600 clamp(1.75rem, 4vw, 2.6rem) / 1.1 "PT Serif", Georgia, serif;
+    text-align: center;
+  }
+
+  &__book {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: min(100%, 58rem);
+    padding: .45rem .6rem .8rem;
+    border: 1px solid #95723f;
+    border-radius: .95rem .95rem 1.1rem 1.1rem;
+    background: linear-gradient(90deg, #4a2e1d, #6d4329 47%, #25160e 50%, #6d4329 53%, #4a2e1d);
+    box-shadow: 0 1.15rem 2.4rem #080706b8, inset 0 0 0 3px #b086475c;
+    color: var(--book-ink);
+  }
+
+  &__page {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    min-height: 26rem;
+    min-width: 0;
+    padding: 1.7rem clamp(1.05rem, 3vw, 2.7rem) .85rem;
+    border: 1px solid #cbb286;
+    border-radius: .6rem .12rem .35rem .6rem;
+    background: linear-gradient(90deg, #e6cca0, #f6e7c8 7%, #faeed6 86%, #c5a371);
+    box-shadow: 0 .16rem #c8aa76, 0 .32rem #e4c895, 0 .43rem #ac895b;
+
+    &:nth-child(2) {
+      border-radius: .12rem .6rem .6rem .35rem;
+      background: linear-gradient(90deg, #c5a371, #faeed6 14%, #f6e7c8 93%, #e6cca0);
+    }
+  }
+
+  &__entries {
+    grid-row: 1;
+    display: grid;
+    grid-template-rows: repeat(4, minmax(5rem, auto));
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__entry {
+    display: grid;
+    align-content: center;
+    gap: .25rem;
+    min-width: 0;
+    padding-block: .5rem;
+    overflow-wrap: anywhere;
+    border-bottom: 1px solid rgba(111, 77, 40, .2);
+
+    strong {
+      font: 700 clamp(1.1rem, 2.2vw, 1.45rem) / 1.2 "PT Serif", Georgia, serif;
+    }
+
+    p {
+      margin: 0;
+      color: #58432f;
+      font-size: .93rem;
+      line-height: 1.35;
+    }
+  }
+
+  &__hidden-indicator { color: #67451e; font: 700 1.43rem / 1.2 "PT Serif", Georgia, serif; letter-spacing: .16em; }
+  &__entry--selected {
+    border-radius: .35rem;
+    background: rgba(175, 119, 46, .16);
+    box-shadow: inset 3px 0 #9c631c;
+    padding-inline: .65rem;
+  }
+  &__page-number { grid-row: 2; margin-top: .6rem; text-align: center; font: .95rem "PT Serif", Georgia, serif; }
+  &__empty { position: absolute; inset: 0; display: grid; place-items: center; padding: 2rem; text-align: center; }
+  &__navigation { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: .5rem 1rem; }
+  &__navigation p { margin: 0; }
+
+  button, input, select, textarea {
+    border: 1px solid #9b8154;
+    border-radius: .42rem;
+    background: #262821;
+    color: #fbefd8;
+    font: inherit;
+    padding: .42rem .62rem;
+  }
+
+  button { display: inline-flex; align-items: center; justify-content: center; gap: .3rem; min-height: 2.15rem; }
+  button:not(:disabled), summary { cursor: pointer; }
+  button:disabled { opacity: .55; }
+  :focus-visible { outline: 2px solid var(--book-gold); outline-offset: 3px; }
+
+  &__management {
+    width: min(100%, 58rem);
+    padding: .75rem 1rem;
+    border: 1px solid #7f6b46;
+    border-radius: .55rem;
+    background: #23251e;
+    summary { color: var(--book-gold); font-weight: 600; }
+  }
+
+  &__forms {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: .8rem;
+    form, label { display: grid; gap: .5rem; align-content: start; min-width: 0; }
+    input, textarea, select { min-width: 0; }
+    textarea { min-height: 3rem; resize: vertical; }
+    button { justify-self: start; }
+    p { margin: 0; }
+  }
+
+  @media (max-width: 640px) {
+    padding-top: 3.1rem;
+    &__book, &__forms { grid-template-columns: minmax(0, 1fr); }
+    &__book { gap: .7rem; }
+    &__page { min-height: 22rem; }
+    &__page[aria-hidden="true"]:nth-child(2) { display: none; }
+  }
+}

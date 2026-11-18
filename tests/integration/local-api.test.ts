@@ -8,6 +8,7 @@ import inventory from "../../src/services/inventory-table.service";
 import teams from "../../src/services/team.service";
 import accounts from "../../src/services/account.service";
 import inventions from "../../src/services/invention.service";
+import lightBook from "../../src/services/light-book.service";
 import decks from "../../src/services/hearthstone-deck.service";
 import { clearStoredTokens, setStoredTokens, toStoredTokens } from "../../src/services/token-storage";
 import contract from "../../contracts/openapi.json";
@@ -82,6 +83,7 @@ describe("generated frontend SDK against a real isolated FastAPI server", () => 
     expect(hero.portraitUrl).toBeUndefined();
     expect(hero.backgroundUrl).toBeNull();
     expect((await characters.list()).map(character => character.slug)).toContain(slug);
+    expect((await characters.list({ limit: 1, offset: 1 })).map(character => character.slug)).toEqual(["second-hero"]);
   });
 
   it("supports note create, edit, reorder, duplicate errors and empty delete responses", async () => {
@@ -127,6 +129,28 @@ describe("generated frontend SDK against a real isolated FastAPI server", () => 
     await expect(inventions.draw(slug)).rejects.toMatchObject({ response: { status: 403 } });
   });
 
+  it("configures the Holy Book and masks only unrevealed words in the global catalogue", async () => {
+    const credentials = { username: "catalogue-player", password: "local-catalogue-password" };
+    const player = await accounts.create({ ...credentials, role: "player" });
+    await characters.patch(slug, { ownerUserId: player.id });
+    const hero = await characters.getBySlug(slug);
+    expect(await lightBook.listWords()).toEqual([]);
+    expect(await lightBook.setSlots(slug, 3)).toEqual({ slotCount: 3 });
+    expect((await lightBook.listSettings())[hero.id]).toEqual({ slotCount: 3 });
+    const dawn = await lightBook.createWord("Aurore", "Une lueur à l’horizon");
+    const shield = await lightBook.createWord("Garde", "");
+    await lightBook.unlockWord(slug, dawn.id);
+    expect(await lightBook.listWords()).toEqual([dawn, shield]);
+    try {
+      await login(credentials);
+      expect(await lightBook.listWords()).toEqual([dawn, null]);
+      expect(await lightBook.get(slug)).toEqual({ slotCount: 3, words: [dawn] });
+      await expect(lightBook.unlockWord(slug, shield.id)).rejects.toMatchObject({ response: { status: 403 } });
+    } finally {
+      await login();
+    }
+  });
+
   it("supports deck variants, composition, draw/reset and real five-card packs", async () => {
     expect(await decks.setEnabled(slug, false)).toEqual({ configured: false, enabled: false });
     expect((await decks.setEnabled(slug, true)).configured).toBe(true);
@@ -141,6 +165,24 @@ describe("generated frontend SDK against a real isolated FastAPI server", () => 
     const pack = await decks.openPack(slug, "CORE");
     expect(pack.cards).toHaveLength(5);
     expect((await decks.savePack(slug, pack.cards.map(card => card.id))).counts.total).toBe(7);
+  });
+
+  it("previews and appends spreadsheet imports through the generated SDK without duplicating a replay", async () => {
+    const before = await decks.getDeck(slug);
+    const content = "Carte (FR);Quantité;Type;Coût;Stats (ATQ/PV);Effet (résumé);Illustration;Dorée\n"
+      + "Boule de feu;1;Sort;1;;Effet JDR;;Non\nBoule de feu;1;Sort;1;;Effet JDR;;Oui\nGivrix;1;Serviteur;3;3/3;Custom;;Oui\n";
+    const preview = await decks.previewImport(slug, { filename: "deck.csv", contentBase64: Buffer.from(content).toString("base64") });
+    expect(preview).toMatchObject({ revision: before.revision, totalCount: 3, goldenCount: 2 });
+    expect(preview.rows[2]).toMatchObject({ status: "missing", selectedCardId: null });
+    expect((await decks.getDeck(slug)).counts).toEqual(before.counts);
+    const body = { expectedRevision: preview.revision, selections: preview.rows.flatMap(row =>
+      row.source && row.selectedCardId ? [{ source: row.source, sourceCardId: row.selectedCardId }] : []) };
+    const saved = await decks.commitImport(slug, body);
+    expect(saved.counts.total).toBe(before.counts.total + 2);
+    expect(saved.definitions.find(card => card.sourceCardId === "CS2_029")).toMatchObject({
+      cost: 1, text: "Effet JDR", normalCount: 1, goldenCount: 1,
+    });
+    await expect(decks.commitImport(slug, body)).rejects.toMatchObject({ response: { status: 409 } });
   });
 
   it("keeps account ownership and forbids player-only sessions from administrative operations", async () => {

@@ -5,12 +5,8 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { useAuth } from "../../../auth/useAuth";
 import CampfireHomeButton from "../../navigation/CampfireHomeButton";
+import { authDestination, authPath } from "../../navigation/navigationPaths";
 import "../../../auth/auth.scss";
-
-function getSafeNext(rawNext: string | null) {
-  if (rawNext?.startsWith("/") && !rawNext.startsWith("//")) return rawNext;
-  return "/teams";
-}
 
 export default function Login() {
   const { t } = useTranslation();
@@ -21,7 +17,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const next = getSafeNext(searchParams.get("next"));
+  const requested = searchParams.get("next");
+  const next = authDestination(requested);
 
   useEffect(() => {
     if (!isInitializing && isAuthenticated) {
@@ -92,7 +89,7 @@ export default function Login() {
         {error && <p className="auth-panel__message auth-panel__message--error">{error}</p>}
 
         <p className="auth-panel__switch">
-          {t("auth.login.switchPrefix")} <Link to="/register">{t("auth.login.switchLink")}</Link>
+          {t("auth.login.switchPrefix")} <Link to={authPath("/register", requested)}>{t("auth.login.switchLink")}</Link>
         </p>
       </section>
     </main>
