@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
-import { Brush, Gem, Home, RotateCcw, ScrollText, Sparkles, WandSparkles } from "lucide-react";
+import { Brush, Gem, Hammer, RotateCcw, ScrollText, Sparkles, WandSparkles } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import { withOrigin } from "../../navigation/navigationPaths";
 import "./hearthstone-printer.scss";
 
 type GemColor = "white" | "blue" | "violet" | "orange";
@@ -138,7 +140,8 @@ function getVerdict(total: number, target: number) {
   };
 }
 
-export default function HearthstonePrinter() {
+export default function HearthstonePrinter({ sheetReturn }: { sheetReturn?: string | null }) {
+  const { t } = useTranslation();
   const [cardName, setCardName] = useState("Apprenti de Karazhan");
   const [attack, setAttack] = useState(2);
   const [health, setHealth] = useState(3);
@@ -211,8 +214,8 @@ export default function HearthstonePrinter() {
               pour atteindre la resonance cible.
             </p>
           </div>
-          <Link className="hearthstone-workshop__home" to="/" aria-label="Retour a l'accueil">
-            <Home size={20} />
+          <Link className="hearthstone-workshop__forge" to={withOrigin("/hearthstone-forge", sheetReturn)}>
+            <Hammer size={18} aria-hidden="true" /> {t("navigation.forge")}
           </Link>
         </header>
 

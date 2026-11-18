@@ -334,7 +334,7 @@
 
 .ccard-workbench {
     position: relative;
-    min-height: 200vh;
+    min-height: max(200vh, var(--light-book-bottom, 0px));
     height: 100%;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, .1);
@@ -644,9 +644,6 @@
         font-size: 2.25rem;
     }
 
-    .ccard-workbench {
-        min-height: 200vh;
-    }
 }
 
 @media (max-width: 760px) {

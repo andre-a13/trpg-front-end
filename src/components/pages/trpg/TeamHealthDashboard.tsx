@@ -1,6 +1,7 @@
 import { useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import { characterPath } from "../../navigation/navigationPaths";
 import "./team-health-dashboard.scss";
 
 export interface TeamHealthMember {
@@ -17,6 +18,7 @@ export interface TeamHealthMember {
 
 interface Props {
   members: TeamHealthMember[];
+  teamHref: string;
   onAdjustHp: (slug: string, delta: number) => void;
   onRefresh: () => void;
   refreshing: boolean;
@@ -29,7 +31,7 @@ function healthState(current: number, max: number) {
   return "healthy";
 }
 
-export default function TeamHealthDashboard({ members, onAdjustHp, onRefresh, refreshing }: Props) {
+export default function TeamHealthDashboard({ members, teamHref, onAdjustHp, onRefresh, refreshing }: Props) {
   const { t } = useTranslation();
   const id = useId();
   const [amounts, setAmounts] = useState<Record<string, string>>({});
@@ -76,7 +78,7 @@ export default function TeamHealthDashboard({ members, onAdjustHp, onRefresh, re
                   {member.portraitUrl && <img src={member.portraitUrl} alt="" onError={(event) => { event.currentTarget.hidden = true; }} />}
                 </span>
                 <div>
-                  <h3><Link to={`/characters/${member.slug}`}>{member.name}</Link></h3>
+                  <h3><Link to={characterPath(member.slug, teamHref)}>{member.name}</Link></h3>
                   <span className="team-health__race">{member.race}</span>
                 </div>
               </div>

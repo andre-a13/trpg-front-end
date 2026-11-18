@@ -4,12 +4,13 @@ import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import hearthstoneDeckService from "../../services/hearthstone-deck.service";
 import type { DeckStateDto } from "../../types/api";
+import { characterPath, withOrigin } from "../navigation/navigationPaths";
 import HearthstoneCard from "./HearthstoneCard";
 import "./hearthstone-deck.scss";
 
-type Props = { slug: string };
+type Props = { slug: string; sheetHref: string };
 
-export default function DeckModule({ slug }: Props) {
+export default function DeckModule({ slug, sheetHref }: Props) {
   const { t } = useTranslation();
   const [deck, setDeck] = useState<DeckStateDto | null>(null);
   const [loading, setLoading] = useState(true);
@@ -75,7 +76,7 @@ export default function DeckModule({ slug }: Props) {
             <Undo2 size={15} aria-hidden="true" /> {t("hearthstomancer.actions.undoPlay")}
           </button>
         )}
-        <Link to={`/characters/${slug}/deck`}>
+        <Link to={withOrigin(`${characterPath(slug)}/deck`, sheetHref)}>
           <ExternalLink size={15} aria-hidden="true" /> {t("hearthstomancer.actions.openDeck")}
         </Link>
       </div>

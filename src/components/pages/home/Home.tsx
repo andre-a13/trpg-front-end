@@ -1,5 +1,5 @@
 import { useEffect, useId, useState } from "react";
-import { ArrowRight, LayoutDashboard, LogOut } from "lucide-react";
+import { ArrowRight, BookOpen, LayoutDashboard, LogOut } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../../auth/useAuth";
@@ -63,6 +63,11 @@ export default function Home() {
       <div className="portal-home__backdrop" aria-hidden="true" />
       <header className="portal-home__header">
         <div className="portal-home__account">
+          {isAuthenticated && (
+            <Link to="/light-words" aria-label={t("lightBook.catalogue.title")} title={t("lightBook.catalogue.title")}>
+              <BookOpen size={17} aria-hidden="true" />
+            </Link>
+          )}
           {user?.role === "admin" && (
             <Link to="/dashboard" aria-label={t("navigation.dashboard")} title={t("navigation.dashboard")}>
               <LayoutDashboard size={17} aria-hidden="true" />

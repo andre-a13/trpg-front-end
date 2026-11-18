@@ -1,4 +1,51 @@
 {
+  "lightBook": {
+    "title": "Livre saint",
+    "knownWords": "Mots connus",
+    "noKnownWords": "Aucun mot débloqué.",
+    "manage": "Gérer les mots de pouvoir",
+    "wordName": "Mot de pouvoir",
+    "wordDescription": "Description facultative",
+    "availableWord": "Mot à débloquer",
+    "chooseWord": "Choisir un mot",
+    "noAvailableWords": "Aucun mot à débloquer",
+    "createWord": "Créer le mot",
+    "unlockWord": "Débloquer pour ce personnage",
+    "wordCreated": "Mot créé dans le catalogue.",
+    "wordUnlocked": "Mot débloqué pour ce personnage.",
+    "retry": "Réessayer",
+    "errors": {
+      "load": "Le Livre saint est temporairement indisponible.",
+      "catalogue": "Impossible de charger les mots de pouvoir.",
+      "create": "Impossible de créer ce mot.",
+      "duplicate": "Ce mot existe déjà.",
+      "unlock": "Impossible de débloquer ce mot.",
+      "characters": "Impossible de charger les personnages."
+    },
+    "catalogue": {
+      "title": "Mots de pouvoir",
+      "page": "Page {{number}}",
+      "pageRange": "Pages {{start}}–{{end}}",
+      "hiddenWord": "Mot inconnu",
+      "empty": "Le catalogue est vide.",
+      "navigation": "Feuilleter le catalogue",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "character": "Personnage",
+      "chooseCharacter": "Choisir un personnage"
+    },
+    "settings": {
+      "title": "Emplacements du Livre saint",
+      "character": "Personnage",
+      "slots": "Emplacements",
+      "slotCountFor": "Emplacements pour {{character}}",
+      "save": "Enregistrer",
+      "saved": "Emplacements enregistrés.",
+      "error": "Impossible d’enregistrer les emplacements.",
+      "loadError": "Impossible de charger les réglages du Livre saint.",
+      "noCharacters": "Aucun personnage."
+    }
+  },
   "common": {
     "actions": {
       "add": "Ajouter",
@@ -9,6 +56,7 @@
       "edit": "Modifier",
       "open": "Ouvrir",
       "returnHome": "Revenir à l'accueil",
+      "retry": "Réessayer",
       "save": "Enregistrer"
     },
     "errors": {
@@ -114,13 +162,24 @@
   },
   "navigation": {
     "home": "Revenir à l'accueil",
-    "app": "Navigation JDR",
+    "page": "Navigation de la page",
+    "pagination": "Pagination",
     "dashboard": "Dashboard",
     "teams": "Compagnies",
+    "characters": "Personnages",
+    "charactersEmpty": "Aucun personnage disponible.",
+    "charactersError": "Impossible de charger les personnages.",
+    "forge": "Forge",
+    "printer": "Imprimerie",
+    "backToCompany": "Retour à la compagnie",
+    "backToDashboard": "Retour au dashboard",
+    "backToSheet": "Retour à la fiche",
+    "backToCharacters": "Retour aux personnages",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "notFound": "Page introuvable",
     "newCharacter": "Nouveau personnage",
-    "newTeam": "Nouvelle compagnie",
-    "logout": "Se déconnecter — {{username}}",
-    "logoutShort": "Se déconnecter"
+    "newTeam": "Nouvelle compagnie"
   },
   "auth": {
     "fields": {
@@ -830,7 +889,7 @@
       "openCollection": "Voir dans le cabinet",
       "createAnother": "Imprimer une autre carte",
       "retrySame": "Retenter la même carte",
-      "backToPress": "Revenir à l'imprimerie"
+      "backToForge": "Retour à la Forge"
     },
     "flaws": {
       "noise": "Défaut : son activation produit un vacarme impossible à dissimuler.",

@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import { withOrigin } from "../../../navigation/navigationPaths";
 import CardPreview from "./CardPreview";
 import {
   applyCriticalRetouch,
@@ -92,6 +93,7 @@ type HearthstoneForgeProps = {
   chaosRoller?: () => number;
   flawPicker?: () => FlawId;
   storage?: Storage;
+  sheetReturn?: string | null;
 };
 
 const POSTURE_ICONS = {
@@ -248,6 +250,7 @@ export default function HearthstoneForge({
   chaosRoller = rollD6,
   flawPicker = () => pickFlaw(),
   storage = window.localStorage,
+  sheetReturn,
 }: HearthstoneForgeProps) {
   const { t } = useTranslation();
   const [state, dispatch] = useReducer(reducer, storage, initialState);
@@ -404,13 +407,19 @@ export default function HearthstoneForge({
     >
       <div className="forge-page__smoke" aria-hidden="true" />
       <header className="forge-topbar">
-        <button type="button" className="forge-topbar__brand" onClick={() => dispatch({ type: "RETURN_LANDING" })}>
-          <Printer size={19} aria-hidden="true" />
-          <span>{t("hearthstoneForge.title")}</span>
-        </button>
-        <Link to="/teams" className="forge-topbar__exit">
-          <Home size={17} aria-hidden="true" />
-          <span>{t("hearthstoneForge.actions.leave")}</span>
+        {state.view === "landing" ? (
+          <Link to={sheetReturn ?? "/teams"} className="forge-topbar__brand">
+            <ArrowLeft size={19} aria-hidden="true" /> {t(sheetReturn ? "navigation.backToSheet" : "teams.returnToTeams")}
+          </Link>
+        ) : (
+          <button type="button" className="forge-topbar__brand" onClick={() => dispatch({ type: "RETURN_LANDING" })}>
+            <Printer size={19} aria-hidden="true" />
+            <span>{t("hearthstoneForge.title")}</span>
+          </button>
+        )}
+        <Link to={withOrigin("/hearthstone-printer", sheetReturn)} className="forge-topbar__exit" aria-label={t("navigation.printer")}>
+          <Printer size={17} aria-hidden="true" />
+          <span>{t("navigation.printer")}</span>
         </Link>
       </header>
 
@@ -883,7 +892,7 @@ export default function HearthstoneForge({
                   </button>
                   <button type="button" className="forge-button" onClick={() => dispatch({ type: "RETURN_LANDING" })}>
                     <Home size={19} aria-hidden="true" />
-                    {t("hearthstoneForge.result.backToPress")}
+                    {t("hearthstoneForge.result.backToForge")}
                   </button>
                 </>
               )}

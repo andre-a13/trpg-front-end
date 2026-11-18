@@ -1,7 +1,7 @@
 import { type ChangeEvent, type DragEvent, type FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
-import { Link, useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { useAdminControls } from "../../../admin/useAdminControls";
 import { useAuth } from "../../../auth/useAuth";
 import Character from "../../../models/character";
@@ -9,6 +9,8 @@ import characterService from "../../../services/character.service";
 import teamService from "../../../services/team.service";
 import type { TeamCharacterDto, TeamDto } from "../../../interface/IAddTeam";
 import TeamHealthDashboard from "./TeamHealthDashboard";
+import PageNavigation from "../../navigation/PageNavigation";
+import { readOrigin, withOrigin } from "../../navigation/navigationPaths";
 import "./team.scss";
 
 const ALLOWED_TEAM_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
@@ -25,6 +27,7 @@ type HpSave = {
 export default function Team() {
   const { t } = useTranslation();
   const { uuid } = useParams();
+  const { search } = useLocation();
   const { user } = useAuth();
   const { isAdmin, manageCharactersEnabled } = useAdminControls();
   const [team, setTeam] = useState<TeamDto | null>(null);
@@ -254,7 +257,10 @@ export default function Team() {
     if (file) void uploadIllustrationFile(file);
   }
 
-  return (
+  const fromDashboard = isAdmin && readOrigin(search) === "/dashboard";
+
+  return (<>
+    <PageNavigation to={fromDashboard ? "/dashboard" : "/teams"} label={t(fromDashboard ? "navigation.backToDashboard" : "teams.returnToTeams")} />
     <div className="page">
       {loading && (
         <div className="character-message loading">
@@ -268,7 +274,7 @@ export default function Team() {
           <h2>{t("common.errors.wentWrong")}</h2>
           <p>{error}</p>
           <p>
-            <Link to="/teams">{t("teams.returnToTeams")}</Link>
+            <button type="button" onClick={() => void fetchTeam()}>{t("common.actions.retry")}</button>
           </p>
         </div>
       )}
@@ -277,9 +283,6 @@ export default function Team() {
         <div className="character-message not-found">
           <h2>{t("teams.notFoundTitle")}</h2>
           <p>{t("teams.notFound", { uuid })}</p>
-          <p>
-            <Link to="/teams">{t("teams.returnToTeams")}</Link>
-          </p>
         </div>
       )}
 
@@ -287,7 +290,6 @@ export default function Team() {
         <section className="team-detail">
           <header className="team-detail__header">
             <div>
-              <Link className="team-detail__back" to="/teams">{t("teams.returnToTeams")}</Link>
               <h1>{team.name}</h1>
               <p>{t("teams.memberCount", { count: team.characters?.length ?? 0 })}</p>
             </div>
@@ -386,6 +388,7 @@ export default function Team() {
           ) : (
             <TeamHealthDashboard
               key={team.uuid}
+              teamHref={withOrigin(`/teams/${encodeURIComponent(team.uuid)}`, fromDashboard ? "/dashboard" : null)}
               members={team.characters.map((character) => ({
                 slug: character.slug,
                 name: character.name,
@@ -405,5 +408,5 @@ export default function Team() {
         </section>
       )}
     </div>
-  );
+  </>);
 }

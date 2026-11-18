@@ -8,6 +8,7 @@ import inventory from "../../src/services/inventory-table.service";
 import teams from "../../src/services/team.service";
 import accounts from "../../src/services/account.service";
 import inventions from "../../src/services/invention.service";
+import lightBook from "../../src/services/light-book.service";
 import decks from "../../src/services/hearthstone-deck.service";
 import { clearStoredTokens, setStoredTokens, toStoredTokens } from "../../src/services/token-storage";
 import contract from "../../contracts/openapi.json";
@@ -82,6 +83,7 @@ describe("generated frontend SDK against a real isolated FastAPI server", () => 
     expect(hero.portraitUrl).toBeUndefined();
     expect(hero.backgroundUrl).toBeNull();
     expect((await characters.list()).map(character => character.slug)).toContain(slug);
+    expect((await characters.list({ limit: 1, offset: 1 })).map(character => character.slug)).toEqual(["second-hero"]);
   });
 
   it("supports note create, edit, reorder, duplicate errors and empty delete responses", async () => {
@@ -125,6 +127,28 @@ describe("generated frontend SDK against a real isolated FastAPI server", () => 
     expect(await inventions.remove(created.id)).toBeUndefined();
     await inventions.setEnabled(slug, false);
     await expect(inventions.draw(slug)).rejects.toMatchObject({ response: { status: 403 } });
+  });
+
+  it("configures the Holy Book and masks only unrevealed words in the global catalogue", async () => {
+    const credentials = { username: "catalogue-player", password: "local-catalogue-password" };
+    const player = await accounts.create({ ...credentials, role: "player" });
+    await characters.patch(slug, { ownerUserId: player.id });
+    const hero = await characters.getBySlug(slug);
+    expect(await lightBook.listWords()).toEqual([]);
+    expect(await lightBook.setSlots(slug, 3)).toEqual({ slotCount: 3 });
+    expect((await lightBook.listSettings())[hero.id]).toEqual({ slotCount: 3 });
+    const dawn = await lightBook.createWord("Aurore", "Une lueur à l’horizon");
+    const shield = await lightBook.createWord("Garde", "");
+    await lightBook.unlockWord(slug, dawn.id);
+    expect(await lightBook.listWords()).toEqual([dawn, shield]);
+    try {
+      await login(credentials);
+      expect(await lightBook.listWords()).toEqual([dawn, null]);
+      expect(await lightBook.get(slug)).toEqual({ slotCount: 3, words: [dawn] });
+      await expect(lightBook.unlockWord(slug, shield.id)).rejects.toMatchObject({ response: { status: 403 } });
+    } finally {
+      await login();
+    }
   });
 
   it("supports deck variants, composition, draw/reset and real five-card packs", async () => {

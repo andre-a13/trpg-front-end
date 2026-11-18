@@ -1,0 +1,47 @@
+.trpg-page-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .4rem .8rem;
+  padding: .35rem clamp(.75rem, 3vw, 2rem);
+  border-bottom: 1px solid #f3ead71a;
+  background: #1b1e1f;
+  color: #f3ead7;
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .4rem;
+    margin-inline-start: auto;
+  }
+
+  a,
+  &__retry {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    min-height: 2.35rem;
+    padding: .25rem .5rem;
+    border-radius: .35rem;
+    color: inherit;
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  &__retry {
+    border: 0;
+    background: transparent;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  a:hover,
+  &__retry:hover { background: #f3ead714; }
+
+  a:focus-visible,
+  &__retry:focus-visible { outline: 2px solid #e1c992; outline-offset: 1px; }
+}

@@ -25,9 +25,13 @@ import Modal, { type ModalHandle } from "../ui/modal/Modal";
 import inventoryTableService from "../../services/inventory-table.service";
 import DeckModule from "../hearthstone-deck/DeckModule";
 import InventionsModule from "../inventions/InventionsModule";
+import LightBookModule from "../light-book/LightBookModule";
+import type { LightBookResponse } from "../../api/generated/types.gen";
 
 interface CharacterCardProps {
     character: Character;
+    sheetHref: string;
+    lightBook: LightBookResponse | null;
     portraitUrl?: string;
     className?: string;
     refresh: () => void;
@@ -38,6 +42,8 @@ interface CharacterCardProps {
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({
     character,
+    sheetHref,
+    lightBook,
     className,
     portraitUrl,
     refresh,
@@ -69,6 +75,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         bringModuleToFront,
         resetLayout,
     } = useCharacterSheetLayout(character.slug, categoryModuleIds);
+    const lightBookLayout = layout["light-book"];
+    const workbenchStyle = lightBook
+        ? { "--light-book-bottom": `${lightBookLayout.y + lightBookLayout.height + 16}px` } as React.CSSProperties
+        : undefined;
     const {
         stats,
         primarySkills,
@@ -249,7 +259,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 </div>
             </header>
 
-            <div className="ccard-workbench" ref={workbenchRef}>
+            <div className="ccard-workbench" ref={workbenchRef} style={workbenchStyle}>
                 <SheetModule id="identity" title={t("characterCard.modules.identity")} layout={layout.identity} {...moduleControls}>
                     <Identity race={character.race} firstTeam={character.teams[0]} />
                 </SheetModule>
@@ -301,13 +311,19 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
                 {character.hearthstomancer.configured && (
                     <SheetModule id="deck" title={t("characterCard.modules.deck")} layout={layout.deck} {...moduleControls}>
-                        <DeckModule slug={character.slug} />
+                        <DeckModule slug={character.slug} sheetHref={sheetHref} />
                     </SheetModule>
                 )}
 
                 {character.invengineerEnabled && (
                     <SheetModule id="inventions" title={t("characterCard.modules.inventions")} layout={layout.inventions} {...moduleControls}>
                         <InventionsModule key={character.id} characterId={character.id} slug={character.slug} />
+                    </SheetModule>
+                )}
+
+                {lightBook && (
+                    <SheetModule id="light-book" title={t("lightBook.title")} layout={lightBookLayout} {...moduleControls}>
+                        <LightBookModule book={lightBook} sheetHref={sheetHref} />
                     </SheetModule>
                 )}
 
