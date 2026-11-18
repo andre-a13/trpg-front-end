@@ -1362,6 +1362,74 @@ export type InventoryContentUpdate = {
 };
 
 /**
+ * LightBookResponse
+ */
+export type LightBookResponse = {
+    /**
+     * Slotcount
+     *
+     * Null when the collection is private
+     */
+    slotCount: number | null;
+    /**
+     * Words
+     */
+    words: Array<LightWordResponse>;
+};
+
+/**
+ * LightBookSettingsResponse
+ */
+export type LightBookSettingsResponse = {
+    /**
+     * Slotcount
+     */
+    slotCount: number;
+};
+
+/**
+ * LightBookSettingsUpdate
+ */
+export type LightBookSettingsUpdate = {
+    /**
+     * Slotcount
+     */
+    slotCount: number;
+};
+
+/**
+ * LightWordCreate
+ */
+export type LightWordCreate = {
+    /**
+     * Description
+     */
+    description?: string;
+    /**
+     * Name
+     */
+    name: string;
+};
+
+/**
+ * LightWordResponse
+ */
+export type LightWordResponse = {
+    /**
+     * Description
+     */
+    description: string;
+    /**
+     * Id
+     */
+    id: number;
+    /**
+     * Name
+     */
+    name: string;
+};
+
+/**
  * ReorderEntry
  */
 export type ReorderEntry = {
@@ -2833,6 +2901,132 @@ export type InventoryItemsUpdateResponses = {
 
 export type InventoryItemsUpdateResponse = InventoryItemsUpdateResponses[keyof InventoryItemsUpdateResponses];
 
+export type LightBooksGetData = {
+    body?: never;
+    path: {
+        /**
+         * Slug
+         */
+        slug: string;
+    };
+    query?: never;
+    url: '/characters/{slug}/light-book';
+};
+
+export type LightBooksGetErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ApiError;
+    /**
+     * Not Found
+     */
+    404: ApiError;
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type LightBooksGetError = LightBooksGetErrors[keyof LightBooksGetErrors];
+
+export type LightBooksGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: LightBookResponse;
+};
+
+export type LightBooksGetResponse = LightBooksGetResponses[keyof LightBooksGetResponses];
+
+export type LightBooksSetSettingsData = {
+    body: LightBookSettingsUpdate;
+    path: {
+        /**
+         * Slug
+         */
+        slug: string;
+    };
+    query?: never;
+    url: '/characters/{slug}/light-book/settings';
+};
+
+export type LightBooksSetSettingsErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ApiError;
+    /**
+     * Forbidden
+     */
+    403: ApiError;
+    /**
+     * Not Found
+     */
+    404: ApiError;
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type LightBooksSetSettingsError = LightBooksSetSettingsErrors[keyof LightBooksSetSettingsErrors];
+
+export type LightBooksSetSettingsResponses = {
+    /**
+     * Successful Response
+     */
+    200: LightBookSettingsResponse;
+};
+
+export type LightBooksSetSettingsResponse = LightBooksSetSettingsResponses[keyof LightBooksSetSettingsResponses];
+
+export type LightBooksUnlockWordData = {
+    body?: never;
+    path: {
+        /**
+         * Slug
+         */
+        slug: string;
+        /**
+         * Word Id
+         */
+        word_id: number;
+    };
+    query?: never;
+    url: '/characters/{slug}/light-book/words/{word_id}';
+};
+
+export type LightBooksUnlockWordErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ApiError;
+    /**
+     * Forbidden
+     */
+    403: ApiError;
+    /**
+     * Not Found
+     */
+    404: ApiError;
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type LightBooksUnlockWordError = LightBooksUnlockWordErrors[keyof LightBooksUnlockWordErrors];
+
+export type LightBooksUnlockWordResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type LightBooksUnlockWordResponse = LightBooksUnlockWordResponses[keyof LightBooksUnlockWordResponses];
+
 export type CharacterNotesCreateData = {
     body: CharacterNoteCreate;
     path: {
@@ -3162,6 +3356,103 @@ export type InventionsDeleteResponses = {
 };
 
 export type InventionsDeleteResponse = InventionsDeleteResponses[keyof InventionsDeleteResponses];
+
+export type LightBooksListSettingsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/light/books/settings';
+};
+
+export type LightBooksListSettingsErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ApiError;
+    /**
+     * Forbidden
+     */
+    403: ApiError;
+};
+
+export type LightBooksListSettingsError = LightBooksListSettingsErrors[keyof LightBooksListSettingsErrors];
+
+export type LightBooksListSettingsResponses = {
+    /**
+     * Response Lightbookslistsettings
+     *
+     * Successful Response
+     */
+    200: {
+        [key: string]: LightBookSettingsResponse;
+    };
+};
+
+export type LightBooksListSettingsResponse = LightBooksListSettingsResponses[keyof LightBooksListSettingsResponses];
+
+export type LightWordsListData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/light/words';
+};
+
+export type LightWordsListErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ApiError;
+};
+
+export type LightWordsListError = LightWordsListErrors[keyof LightWordsListErrors];
+
+export type LightWordsListResponses = {
+    /**
+     * Response Lightwordslist
+     *
+     * Successful Response
+     */
+    200: Array<LightWordResponse | null>;
+};
+
+export type LightWordsListResponse = LightWordsListResponses[keyof LightWordsListResponses];
+
+export type LightWordsCreateData = {
+    body: LightWordCreate;
+    path?: never;
+    query?: never;
+    url: '/light/words';
+};
+
+export type LightWordsCreateErrors = {
+    /**
+     * Unauthorized
+     */
+    401: ApiError;
+    /**
+     * Forbidden
+     */
+    403: ApiError;
+    /**
+     * Conflict
+     */
+    409: ApiError;
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type LightWordsCreateError = LightWordsCreateErrors[keyof LightWordsCreateErrors];
+
+export type LightWordsCreateResponses = {
+    /**
+     * Successful Response
+     */
+    201: LightWordResponse;
+};
+
+export type LightWordsCreateResponse = LightWordsCreateResponses[keyof LightWordsCreateResponses];
 
 export type TeamsListData = {
     body?: never;

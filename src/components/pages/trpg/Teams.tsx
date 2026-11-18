@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { UserRound } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { useAdminControls } from "../../../admin/useAdminControls";
 import teamService from "../../../services/team.service";
+import { characterPath } from "../../navigation/navigationPaths";
+import PageNavigation from "../../navigation/PageNavigation";
+import LanguageSwitch from "../../language-switch/LanguageSwitch";
 import type { TeamDto } from "../../../interface/IAddTeam";
 import "./teams.scss";
 
@@ -63,32 +67,33 @@ export default function Teams() {
   }
 
   return (
-    <div className="page">
-      {loading && (
-        <div className="character-message loading">
-          <div className="spinner" aria-hidden="true" />
-          <p>{t("teams.loadingList")}</p>
-        </div>
-      )}
-
-      {error && !loading && (
-        <div className="character-message error">
-          <h2>{t("common.errors.wentWrong")}</h2>
-          <p>{error}</p>
-          <p>
-            <Link to="/">{t("common.actions.returnHome")}</Link>
-          </p>
-        </div>
-      )}
-
-      {!loading && !error && (
+    <>
+      <PageNavigation to="/" label={t("navigation.home")} />
+      <main className="page teams-page">
         <section className="teams-list">
           <header className="teams-list__header">
             <h1>{t("teams.title")}</h1>
-            {isAdmin && manageCharactersEnabled && <Link className="teams-list__create" to="/teams/create">{t("teams.create")}</Link>}
+            <div className="teams-list__actions">
+              <Link className="teams-list__text-link" to="/characters">{t("navigation.characters")}</Link>
+              {isAdmin && manageCharactersEnabled && <Link className="teams-list__create" to="/teams/create">{t("teams.create")}</Link>}
+            </div>
           </header>
 
-          {teams.length === 0 ? (
+          {loading && (
+            <div className="character-message loading">
+              <div className="spinner" aria-hidden="true" />
+              <p>{t("teams.loadingList")}</p>
+            </div>
+          )}
+
+          {error && !loading && (
+            <div className="character-message error" role="alert">
+              <h2>{t("common.errors.wentWrong")}</h2>
+              <p>{error}</p>
+            </div>
+          )}
+
+          {!loading && !error && (teams.length === 0 ? (
             <p className="teams-list__empty">{t("teams.empty")}</p>
           ) : (
             <>
@@ -116,8 +121,11 @@ export default function Teams() {
 
                             return (
                               <div className="team-card__character-row" key={character.id}>
-                                <Link to={`/characters/${character.slug}`}>
-                                  <img src={portraitUrl} alt="" />
+                                <Link to={characterPath(character.slug, "/teams")}>
+                                  <span className="team-card__portrait" aria-hidden="true">
+                                    <UserRound size={16} />
+                                    <img src={portraitUrl} alt="" onError={(event) => { event.currentTarget.hidden = true; }} />
+                                  </span>
                                   <span>
                                     <strong>{character.name}</strong>
                                     <span className="team-card__race">{character.race}</span>
@@ -155,9 +163,13 @@ export default function Teams() {
                 ))}
               </div>
             </>
-          )}
+          ))}
+
+          <footer className="teams-list__footer">
+            <LanguageSwitch />
+          </footer>
         </section>
-      )}
-    </div>
+      </main>
+    </>
   );
 }

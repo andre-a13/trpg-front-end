@@ -2,15 +2,18 @@ import { type FormEvent, useState } from "react";
 import axios from "axios";
 import { UserPlus } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { useAuth } from "../../../auth/useAuth";
 import CampfireHomeButton from "../../navigation/CampfireHomeButton";
+import { authDestination, authPath } from "../../navigation/navigationPaths";
 import "../../../auth/auth.scss";
 
 export default function Register() {
   const { t } = useTranslation();
   const { isAuthenticated, register } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const requested = searchParams.get("next");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<string | null>(null);
@@ -31,7 +34,7 @@ export default function Register() {
       if (isAuthenticated) {
         setStatus(t("auth.register.status.created"));
       } else {
-        navigate("/teams", { replace: true });
+        navigate(authDestination(requested), { replace: true });
       }
     } catch (err: unknown) {
       if (axios.isAxiosError(err) && err.response?.status === 401) {
@@ -92,7 +95,7 @@ export default function Register() {
         {error && <p className="auth-panel__message auth-panel__message--error">{error}</p>}
 
         <p className="auth-panel__switch">
-          {t("auth.register.switchPrefix")} <Link to="/login">{t("auth.register.switchLink")}</Link>
+          {t("auth.register.switchPrefix")} <Link to={authPath("/login", requested)}>{t("auth.register.switchLink")}</Link>
         </p>
       </section>
     </main>

@@ -46,13 +46,21 @@
   margin-top: 0.75rem;
 }
 
-.trpg-form__next-actions a {
+.trpg-form__next-actions a,
+.trpg-form__next-actions button {
   padding: 0.42rem 0.65rem;
   border-radius: 6px;
   background: rgba(124, 63, 29, 0.1);
   color: var(--accent);
   font-weight: 760;
   text-decoration: none;
+}
+
+.trpg-form__next-actions button {
+  border: 0;
+  font: inherit;
+  font-weight: 760;
+  cursor: pointer;
 }
 
 .trpg-form__actions {

@@ -1,4 +1,51 @@
 {
+  "lightBook": {
+    "title": "Holy Book",
+    "knownWords": "Known words",
+    "noKnownWords": "No words unlocked.",
+    "manage": "Manage words of power",
+    "wordName": "Word of power",
+    "wordDescription": "Optional description",
+    "availableWord": "Word to unlock",
+    "chooseWord": "Choose a word",
+    "noAvailableWords": "No words to unlock",
+    "createWord": "Create word",
+    "unlockWord": "Unlock for this character",
+    "wordCreated": "Word added to the catalogue.",
+    "wordUnlocked": "Word unlocked for this character.",
+    "retry": "Try again",
+    "errors": {
+      "load": "The Holy Book is temporarily unavailable.",
+      "catalogue": "Could not load the words of power.",
+      "create": "Could not create this word.",
+      "duplicate": "This word already exists.",
+      "unlock": "Could not unlock this word.",
+      "characters": "Could not load the characters."
+    },
+    "catalogue": {
+      "title": "Words of Power",
+      "page": "Page {{number}}",
+      "pageRange": "Pages {{start}}–{{end}}",
+      "hiddenWord": "Unknown word",
+      "empty": "The catalogue is empty.",
+      "navigation": "Browse catalogue pages",
+      "previous": "Previous",
+      "next": "Next",
+      "character": "Character",
+      "chooseCharacter": "Choose a character"
+    },
+    "settings": {
+      "title": "Holy Book slots",
+      "character": "Character",
+      "slots": "Slots",
+      "slotCountFor": "Slots for {{character}}",
+      "save": "Save",
+      "saved": "Slot count saved.",
+      "error": "Could not save the slot count.",
+      "loadError": "Could not load Holy Book settings.",
+      "noCharacters": "No characters."
+    }
+  },
   "common": {
     "actions": {
       "add": "Add",
@@ -9,6 +56,7 @@
       "edit": "Edit",
       "open": "Open",
       "returnHome": "Return to home",
+      "retry": "Try again",
       "save": "Save"
     },
     "errors": {
@@ -114,13 +162,24 @@
   },
   "navigation": {
     "home": "Return to homepage",
-    "app": "TRPG navigation",
+    "page": "Page navigation",
+    "pagination": "Pagination",
     "dashboard": "Dashboard",
     "teams": "Teams",
+    "characters": "Characters",
+    "charactersEmpty": "No characters available.",
+    "charactersError": "Could not load characters.",
+    "forge": "Forge",
+    "printer": "Printer",
+    "backToCompany": "Back to the team",
+    "backToDashboard": "Back to the dashboard",
+    "backToSheet": "Back to the character sheet",
+    "backToCharacters": "Back to characters",
+    "previous": "Previous",
+    "next": "Next",
+    "notFound": "Page not found",
     "newCharacter": "New character",
-    "newTeam": "New team",
-    "logout": "Logout {{username}}",
-    "logoutShort": "Logout"
+    "newTeam": "New team"
   },
   "auth": {
     "fields": {

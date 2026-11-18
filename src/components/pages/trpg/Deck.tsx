@@ -1,6 +1,5 @@
 import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  ArrowLeft,
   BarChart3,
   CheckCircle2,
   Gamepad2,
@@ -17,8 +16,9 @@ import {
   FileUp,
 } from "lucide-react";
 import axios from "axios";
-import { Link, useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../../auth/useAuth";
 import characterService from "../../../services/character.service";
 import hearthstoneDeckService from "../../../services/hearthstone-deck.service";
 import type {
@@ -30,6 +30,8 @@ import type {
 } from "../../../types/api";
 import HearthstoneCard from "../../hearthstone-deck/HearthstoneCard";
 import DeckImportModal from "../../hearthstone-deck/DeckImportModal";
+import PageNavigation from "../../navigation/PageNavigation";
+import { characterPath, characterToolReturn } from "../../navigation/navigationPaths";
 import MinimalDeckList, { MinimalDrawnList } from "../../hearthstone-deck/MinimalDeckList";
 import PackOpeningModal, { type PackOpeningHandle } from "../../hearthstone-deck/PackOpeningModal";
 import {
@@ -162,6 +164,20 @@ function nullableNumber(raw: string) {
 export default function DeckPage() {
   const { t } = useTranslation();
   const { slug = "" } = useParams();
+  const { search } = useLocation();
+  const { user } = useAuth();
+  const backTo = characterToolReturn(search, user?.role === "admin", "deck", slug) ?? characterPath(slug, null, "deck");
+
+  return (
+    <>
+      <PageNavigation to={backTo} label={t("navigation.backToSheet")} />
+      <DeckContent key={slug} slug={slug} />
+    </>
+  );
+}
+
+function DeckContent({ slug }: { slug: string }) {
+  const { t } = useTranslation();
   const [characterName, setCharacterName] = useState(slug);
   const [deck, setDeck] = useState<DeckStateDto | null>(null);
   const [draft, setDraft] = useState<DraftDefinition[]>([]);
@@ -405,7 +421,6 @@ export default function DeckPage() {
           <p>{error?.message ?? t("hearthstomancer.errors.load")}</p>
           <div className="hs-deckError__actions">
             <button type="button" onClick={() => void refresh()}>{t("hearthstomancer.errors.retry")}</button>
-            <Link className="hs-button" to={`/characters/${slug}`}>{t("hearthstomancer.actions.backToSheet")}</Link>
           </div>
         </div>
       </section>
@@ -419,7 +434,6 @@ export default function DeckPage() {
     >
       <header className="hs-deckPage__header">
         <div>
-          <Link to={`/characters/${slug}`} className="hs-deckPage__back"><ArrowLeft size={16} /> {t("hearthstomancer.actions.backToSheet")}</Link>
           <h1>{t("hearthstomancer.title", { name: characterName })}</h1>
         </div>
         <div className="hs-deckPage__headerActions">

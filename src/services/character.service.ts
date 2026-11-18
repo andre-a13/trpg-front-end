@@ -17,10 +17,21 @@ async function getBySlug( slug : string )
     return new Character(res.data);
 }
 
-async function list()
+async function list(pagination?: { limit: number; offset: number })
 {
-    const res = await charactersList(apiOptions);
+    const res = await charactersList({ ...apiOptions, query: pagination });
     return res.data.map((item) => new Character(item));
+}
+
+async function listAll(): Promise<Character[]>
+{
+    const limit = 50;
+    const characters: Character[] = [];
+    for (let offset = 0; ; offset += limit) {
+        const page = await list({ limit, offset });
+        characters.push(...page);
+        if (page.length < limit) return characters;
+    }
 }
 
 async function patch( slug : string, body : IUpdateCharacter )
@@ -87,6 +98,7 @@ export default {
     create,
     getBySlug,
     list,
+    listAll,
     patch,
     uploadPortrait,
     uploadBackground

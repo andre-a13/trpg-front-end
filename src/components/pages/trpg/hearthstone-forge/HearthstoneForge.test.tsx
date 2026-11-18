@@ -188,7 +188,7 @@ describe("HearthstoneForge", () => {
     playPhase("Poursuivre l'impression");
     playPhase("Achever l'impression");
     fireEvent.click(screen.getByRole("button", { name: "Inspecter le tirage" }));
-    expect(screen.getByRole("button", { name: "Revenir à l'imprimerie" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Retour à la Forge" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Retenter la même carte" }));
 
     expect(screen.getByRole("heading", { name: "Composez la carte" })).toBeInTheDocument();

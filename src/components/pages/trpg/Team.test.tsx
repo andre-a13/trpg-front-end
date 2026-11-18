@@ -71,7 +71,7 @@ describe("team health dashboard", () => {
     expect((await card()).getByRole("progressbar")).toHaveAttribute("aria-valuemax", "15");
     expect((await card("Borin")).getByText("État critique")).toBeInTheDocument();
     expect((await card("Cerys")).getByText("Hors combat")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Aria" })).toHaveAttribute("href", "/characters/aria");
+    expect(screen.getByRole("link", { name: "Aria" })).toHaveAttribute("href", "/characters/aria?from=%2Fteams%2Fteam-1");
     expect(context.getTeam).toHaveBeenCalledTimes(1);
     expect(context.patchCharacter).not.toHaveBeenCalled();
   });

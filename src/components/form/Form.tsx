@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
@@ -6,11 +6,13 @@ import accountService from "../../services/account.service";
 import characterService from "../../services/character.service";
 import type { IAddCharacter } from "../../interface/IAddCharacter";
 import type { AccountDto } from "../../types/api";
+import { characterPath } from "../navigation/navigationPaths";
 
 type Stats = { corps: number; mental: number; social: number };
 
 export default function Form() {
   const { t } = useTranslation();
+  const nameInput = useRef<HTMLInputElement>(null);
   const [name, setName] = useState("");
   const [race, setRace] = useState("");
   const [slug, setSlug] = useState("");
@@ -88,7 +90,7 @@ export default function Form() {
       const res = await characterService.create(payload);
       const data = res.data;
       setStatus(t("createCharacter.created", { id: data.id, name: data.name }));
-      setCreatedCharacter({ id: data.id, name: data.name, slug });
+      setCreatedCharacter({ id: data.id, name: data.name, slug: data.slug });
       setName("");
       setRace("");
       setSlug("");
@@ -120,6 +122,7 @@ export default function Form() {
           <label htmlFor="character-name">{t("createCharacter.name")}</label>
           <input
             id="character-name"
+            ref={nameInput}
             value={name}
             onChange={(e) => {
               const nextName = e.target.value;
@@ -207,8 +210,8 @@ export default function Form() {
           <strong>{status}</strong>
           {createdCharacter && (
             <div className="trpg-form__next-actions">
-              <Link to={`/characters/${createdCharacter.slug}`}>{t("createCharacter.next.openSheet")}</Link>
-              <Link to="/characters/new">{t("createCharacter.next.createAnother")}</Link>
+              <Link to={characterPath(createdCharacter.slug, "/dashboard")}>{t("createCharacter.next.openSheet")}</Link>
+              <button type="button" onClick={() => { setCreatedCharacter(null); setStatus(null); nameInput.current?.focus(); }}>{t("createCharacter.next.createAnother")}</button>
               <Link to="/teams">{t("createCharacter.next.returnTeams")}</Link>
             </div>
           )}

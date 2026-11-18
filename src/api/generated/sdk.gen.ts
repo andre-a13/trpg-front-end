@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AccountsCreateData, AccountsCreateErrors, AccountsCreateResponses, AccountsListData, AccountsListResponses, AccountsUpdateData, AccountsUpdateErrors, AccountsUpdateResponses, AuthLoginData, AuthLoginErrors, AuthLoginResponses, AuthLogoutData, AuthLogoutResponses, AuthMeData, AuthMeResponses, AuthRefreshData, AuthRefreshResponses, AuthRegisterData, AuthRegisterErrors, AuthRegisterResponses, CharacterNotesCreateData, CharacterNotesCreateErrors, CharacterNotesCreateResponses, CharacterNotesDeleteData, CharacterNotesDeleteErrors, CharacterNotesDeleteResponses, CharacterNotesReorderData, CharacterNotesReorderErrors, CharacterNotesReorderResponses, CharacterNotesUpdateData, CharacterNotesUpdateErrors, CharacterNotesUpdateResponses, CharactersCreateBackgroundUploadData, CharactersCreateBackgroundUploadErrors, CharactersCreateBackgroundUploadResponses, CharactersCreateData, CharactersCreateErrors, CharactersCreatePortraitUploadData, CharactersCreatePortraitUploadErrors, CharactersCreatePortraitUploadResponses, CharactersCreateResponses, CharactersGetData, CharactersGetErrors, CharactersGetResponses, CharactersListData, CharactersListErrors, CharactersListResponses, CharactersUpdateData, CharactersUpdateErrors, CharactersUpdateResponses, DecksCommitImportData, DecksCommitImportErrors, DecksCommitImportResponses, DecksDiscardData, DecksDiscardErrors, DecksDiscardResponses, DecksDrawData, DecksDrawErrors, DecksDrawResponses, DecksGetData, DecksGetErrors, DecksGetResponses, DecksOpenPackData, DecksOpenPackErrors, DecksOpenPackResponses, DecksPlayData, DecksPlayErrors, DecksPlayResponses, DecksPreviewImportData, DecksPreviewImportErrors, DecksPreviewImportResponses, DecksRemoveCopyData, DecksRemoveCopyErrors, DecksRemoveCopyResponses, DecksReplaceCompositionData, DecksReplaceCompositionErrors, DecksReplaceCompositionResponses, DecksResetData, DecksResetErrors, DecksResetResponses, DecksSavePackData, DecksSavePackErrors, DecksSavePackResponses, DecksSetEnabledData, DecksSetEnabledErrors, DecksSetEnabledResponses, DecksUndoPlayData, DecksUndoPlayErrors, DecksUndoPlayResponses, HearthstoneCardsListData, HearthstoneCardsListErrors, HearthstoneCardsListResponses, InvengineerSetEnabledData, InvengineerSetEnabledErrors, InvengineerSetEnabledResponses, InventionsCreateData, InventionsCreateErrors, InventionsCreateResponses, InventionsDeleteData, InventionsDeleteErrors, InventionsDeleteResponses, InventionsDrawData, InventionsDrawErrors, InventionsDrawResponses, InventionsGetStateData, InventionsGetStateErrors, InventionsGetStateResponses, InventionsListData, InventionsListErrors, InventionsListResponses, InventoryCategoriesCreateData, InventoryCategoriesCreateErrors, InventoryCategoriesCreateResponses, InventoryCategoriesDeleteData, InventoryCategoriesDeleteErrors, InventoryCategoriesDeleteResponses, InventoryCategoriesReorderData, InventoryCategoriesReorderErrors, InventoryCategoriesReorderResponses, InventoryCategoriesUpdateData, InventoryCategoriesUpdateErrors, InventoryCategoriesUpdateResponses, InventoryItemsCreateData, InventoryItemsCreateErrors, InventoryItemsCreateResponses, InventoryItemsDeleteData, InventoryItemsDeleteErrors, InventoryItemsDeleteResponses, InventoryItemsReorderData, InventoryItemsReorderErrors, InventoryItemsReorderResponses, InventoryItemsUpdateData, InventoryItemsUpdateErrors, InventoryItemsUpdateResponses, SystemHealthData, SystemHealthResponses, SystemRootData, SystemRootResponses, TeamsAddMemberData, TeamsAddMemberErrors, TeamsAddMemberResponses, TeamsCreateData, TeamsCreateErrors, TeamsCreateIllustrationUploadData, TeamsCreateIllustrationUploadErrors, TeamsCreateIllustrationUploadResponses, TeamsCreateResponses, TeamsGetData, TeamsGetErrors, TeamsGetResponses, TeamsListData, TeamsListErrors, TeamsListResponses, TeamsRemoveMemberData, TeamsRemoveMemberErrors, TeamsRemoveMemberResponses, TeamsUpdateData, TeamsUpdateErrors, TeamsUpdateIllustrationData, TeamsUpdateIllustrationErrors, TeamsUpdateIllustrationResponses, TeamsUpdateResponses } from './types.gen';
+import type { AccountsCreateData, AccountsCreateErrors, AccountsCreateResponses, AccountsListData, AccountsListResponses, AccountsUpdateData, AccountsUpdateErrors, AccountsUpdateResponses, AuthLoginData, AuthLoginErrors, AuthLoginResponses, AuthLogoutData, AuthLogoutResponses, AuthMeData, AuthMeResponses, AuthRefreshData, AuthRefreshResponses, AuthRegisterData, AuthRegisterErrors, AuthRegisterResponses, CharacterNotesCreateData, CharacterNotesCreateErrors, CharacterNotesCreateResponses, CharacterNotesDeleteData, CharacterNotesDeleteErrors, CharacterNotesDeleteResponses, CharacterNotesReorderData, CharacterNotesReorderErrors, CharacterNotesReorderResponses, CharacterNotesUpdateData, CharacterNotesUpdateErrors, CharacterNotesUpdateResponses, CharactersCreateBackgroundUploadData, CharactersCreateBackgroundUploadErrors, CharactersCreateBackgroundUploadResponses, CharactersCreateData, CharactersCreateErrors, CharactersCreatePortraitUploadData, CharactersCreatePortraitUploadErrors, CharactersCreatePortraitUploadResponses, CharactersCreateResponses, CharactersGetData, CharactersGetErrors, CharactersGetResponses, CharactersListData, CharactersListErrors, CharactersListResponses, CharactersUpdateData, CharactersUpdateErrors, CharactersUpdateResponses, DecksCommitImportData, DecksCommitImportErrors, DecksCommitImportResponses, DecksDiscardData, DecksDiscardErrors, DecksDiscardResponses, DecksDrawData, DecksDrawErrors, DecksDrawResponses, DecksGetData, DecksGetErrors, DecksGetResponses, DecksOpenPackData, DecksOpenPackErrors, DecksOpenPackResponses, DecksPlayData, DecksPlayErrors, DecksPlayResponses, DecksPreviewImportData, DecksPreviewImportErrors, DecksPreviewImportResponses, DecksRemoveCopyData, DecksRemoveCopyErrors, DecksRemoveCopyResponses, DecksReplaceCompositionData, DecksReplaceCompositionErrors, DecksReplaceCompositionResponses, DecksResetData, DecksResetErrors, DecksResetResponses, DecksSavePackData, DecksSavePackErrors, DecksSavePackResponses, DecksSetEnabledData, DecksSetEnabledErrors, DecksSetEnabledResponses, DecksUndoPlayData, DecksUndoPlayErrors, DecksUndoPlayResponses, HearthstoneCardsListData, HearthstoneCardsListErrors, HearthstoneCardsListResponses, InvengineerSetEnabledData, InvengineerSetEnabledErrors, InvengineerSetEnabledResponses, InventionsCreateData, InventionsCreateErrors, InventionsCreateResponses, InventionsDeleteData, InventionsDeleteErrors, InventionsDeleteResponses, InventionsDrawData, InventionsDrawErrors, InventionsDrawResponses, InventionsGetStateData, InventionsGetStateErrors, InventionsGetStateResponses, InventionsListData, InventionsListErrors, InventionsListResponses, InventoryCategoriesCreateData, InventoryCategoriesCreateErrors, InventoryCategoriesCreateResponses, InventoryCategoriesDeleteData, InventoryCategoriesDeleteErrors, InventoryCategoriesDeleteResponses, InventoryCategoriesReorderData, InventoryCategoriesReorderErrors, InventoryCategoriesReorderResponses, InventoryCategoriesUpdateData, InventoryCategoriesUpdateErrors, InventoryCategoriesUpdateResponses, InventoryItemsCreateData, InventoryItemsCreateErrors, InventoryItemsCreateResponses, InventoryItemsDeleteData, InventoryItemsDeleteErrors, InventoryItemsDeleteResponses, InventoryItemsReorderData, InventoryItemsReorderErrors, InventoryItemsReorderResponses, InventoryItemsUpdateData, InventoryItemsUpdateErrors, InventoryItemsUpdateResponses, LightBooksGetData, LightBooksGetErrors, LightBooksGetResponses, LightBooksListSettingsData, LightBooksListSettingsErrors, LightBooksListSettingsResponses, LightBooksSetSettingsData, LightBooksSetSettingsErrors, LightBooksSetSettingsResponses, LightBooksUnlockWordData, LightBooksUnlockWordErrors, LightBooksUnlockWordResponses, LightWordsCreateData, LightWordsCreateErrors, LightWordsCreateResponses, LightWordsListData, LightWordsListErrors, LightWordsListResponses, SystemHealthData, SystemHealthResponses, SystemRootData, SystemRootResponses, TeamsAddMemberData, TeamsAddMemberErrors, TeamsAddMemberResponses, TeamsCreateData, TeamsCreateErrors, TeamsCreateIllustrationUploadData, TeamsCreateIllustrationUploadErrors, TeamsCreateIllustrationUploadResponses, TeamsCreateResponses, TeamsGetData, TeamsGetErrors, TeamsGetResponses, TeamsListData, TeamsListErrors, TeamsListResponses, TeamsRemoveMemberData, TeamsRemoveMemberErrors, TeamsRemoveMemberResponses, TeamsUpdateData, TeamsUpdateErrors, TeamsUpdateIllustrationData, TeamsUpdateIllustrationErrors, TeamsUpdateIllustrationResponses, TeamsUpdateResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -433,6 +433,33 @@ export const inventoryItemsUpdate = <ThrowOnError extends boolean = false>(optio
 });
 
 /**
+ * Get Light Book
+ */
+export const lightBooksGet = <ThrowOnError extends boolean = false>(options: Options<LightBooksGetData, ThrowOnError>): RequestResult<LightBooksGetResponses, LightBooksGetErrors, ThrowOnError> => (options.client ?? client).get<LightBooksGetResponses, LightBooksGetErrors, ThrowOnError>({
+    responseType: 'json',
+    url: '/characters/{slug}/light-book',
+    ...options
+});
+
+/**
+ * Set Light Book Settings
+ */
+export const lightBooksSetSettings = <ThrowOnError extends boolean = false>(options: Options<LightBooksSetSettingsData, ThrowOnError>): RequestResult<LightBooksSetSettingsResponses, LightBooksSetSettingsErrors, ThrowOnError> => (options.client ?? client).put<LightBooksSetSettingsResponses, LightBooksSetSettingsErrors, ThrowOnError>({
+    responseType: 'json',
+    url: '/characters/{slug}/light-book/settings',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Unlock Light Word
+ */
+export const lightBooksUnlockWord = <ThrowOnError extends boolean = false>(options: Options<LightBooksUnlockWordData, ThrowOnError>): RequestResult<LightBooksUnlockWordResponses, LightBooksUnlockWordErrors, ThrowOnError> => (options.client ?? client).put<LightBooksUnlockWordResponses, LightBooksUnlockWordErrors, ThrowOnError>({ url: '/characters/{slug}/light-book/words/{word_id}', ...options });
+
+/**
  * Create Character Note
  */
 export const characterNotesCreate = <ThrowOnError extends boolean = false>(options: Options<CharacterNotesCreateData, ThrowOnError>): RequestResult<CharacterNotesCreateResponses, CharacterNotesCreateErrors, ThrowOnError> => (options.client ?? client).post<CharacterNotesCreateResponses, CharacterNotesCreateErrors, ThrowOnError>({
@@ -533,6 +560,37 @@ export const inventionsCreate = <ThrowOnError extends boolean = false>(options: 
  * Remove Invention
  */
 export const inventionsDelete = <ThrowOnError extends boolean = false>(options: Options<InventionsDeleteData, ThrowOnError>): RequestResult<InventionsDeleteResponses, InventionsDeleteErrors, ThrowOnError> => (options.client ?? client).delete<InventionsDeleteResponses, InventionsDeleteErrors, ThrowOnError>({ url: '/inventions/{invention_id}', ...options });
+
+/**
+ * List Light Book Settings
+ */
+export const lightBooksListSettings = <ThrowOnError extends boolean = false>(options?: Options<LightBooksListSettingsData, ThrowOnError>): RequestResult<LightBooksListSettingsResponses, LightBooksListSettingsErrors, ThrowOnError> => (options?.client ?? client).get<LightBooksListSettingsResponses, LightBooksListSettingsErrors, ThrowOnError>({
+    responseType: 'json',
+    url: '/light/books/settings',
+    ...options
+});
+
+/**
+ * List Light Words
+ */
+export const lightWordsList = <ThrowOnError extends boolean = false>(options?: Options<LightWordsListData, ThrowOnError>): RequestResult<LightWordsListResponses, LightWordsListErrors, ThrowOnError> => (options?.client ?? client).get<LightWordsListResponses, LightWordsListErrors, ThrowOnError>({
+    responseType: 'json',
+    url: '/light/words',
+    ...options
+});
+
+/**
+ * Create Light Word
+ */
+export const lightWordsCreate = <ThrowOnError extends boolean = false>(options: Options<LightWordsCreateData, ThrowOnError>): RequestResult<LightWordsCreateResponses, LightWordsCreateErrors, ThrowOnError> => (options.client ?? client).post<LightWordsCreateResponses, LightWordsCreateErrors, ThrowOnError>({
+    responseType: 'json',
+    url: '/light/words',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * List Teams
